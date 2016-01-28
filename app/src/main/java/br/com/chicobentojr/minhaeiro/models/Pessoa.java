@@ -1,4 +1,4 @@
-package br.com.chicobentojr.minhaeiro.model;
+package br.com.chicobentojr.minhaeiro.models;
 
 import java.io.Serializable;
 
