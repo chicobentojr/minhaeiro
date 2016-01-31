@@ -8,20 +8,34 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="br.com.chicobentojr.minhaeiro.activity.LoginActivity">
+    tools:context="br.com.chicobentojr.minhaeiro.activity.CadastroActivity">
 
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/EditTextLabel">
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/txtNome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:hint="@string/txtNomeHint"
+            android:inputType="textCapWords"
+            android:maxLines="1"
+            android:singleLine="true" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/txtLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:hint="@string/txtLoginHint"
             android:inputType="text"
             android:maxLines="1"
@@ -31,43 +45,45 @@
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/EditTextLabel">
+        android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/txtSenha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/txtSenhaHint"
-            android:imeOptions="actionGo"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:singleLine="true" />
+
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/txtConfirmaSenha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/txtConfirmaSenhaHint"
             android:inputType="textPassword"
             android:maxLines="1"
             android:singleLine="true" />
 
     </android.support.design.widget.TextInputLayout>
 
-    <Button
-        android:id="@+id/btnEntrar"
-        style="?android:textAppearanceSmall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:onClick="entrar"
-        android:text="@string/btnEntrar"
-        android:textStyle="bold" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <Button
             android:id="@+id/btnCadastrar"
-            style="?android:buttonBarButtonStyle"
+            style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/primary_dark"
             android:layout_marginTop="16dp"
             android:onClick="cadastrar"
-            android:text="@string/btnAbrirCadastro"
+            android:text="@string/btnCadastrar"
             android:layout_alignParentBottom="true"
             android:textStyle="bold" />
     </RelativeLayout>

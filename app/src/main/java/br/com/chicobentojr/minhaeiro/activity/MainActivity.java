@@ -1,13 +1,10 @@
 package br.com.chicobentojr.minhaeiro.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,13 +12,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import br.com.chicobentojr.minhaeiro.R;
 import br.com.chicobentojr.minhaeiro.utils.Preferencias;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     TextView lblUsuarioNome;
     View navHeader;
@@ -29,17 +26,18 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        this.iniciarLayout();
+        if (Preferencias.usuarioConectado()) {
+            setContentView(R.layout.activity_main);
+            this.iniciarLayout();
 
-        if(Preferencias.usuarioConectado()){
+
             lblUsuarioNome = (TextView) navHeader.findViewById(R.id.lblUsuarioNome);
             TextView lbl = (TextView) findViewById(R.id.lblHelloWorld);
             lbl.setText(Preferencias.obter(Preferencias.AUTENTICACAO));
             lblUsuarioNome.setText(Preferencias.obter(Preferencias.USUARIO_NOME));
-        }
-        else{
-            startActivity(new Intent(this,LoginActivity.class));
+        } else {
+            this.finish();
+            startActivity(new Intent(this, LoginActivity.class));
         }
     }
 
@@ -61,7 +59,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_settings:
                 return true;
         }
@@ -71,7 +69,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.nav_camera:
                 break;
             case R.id.nav_gallery:
@@ -93,7 +91,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void iniciarLayout(){
+    public void iniciarLayout() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -111,7 +109,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    public void deslogar(){
+    public void deslogar() {
         Preferencias.limpar();
         startActivity(new Intent(this, LoginActivity.class));
     }

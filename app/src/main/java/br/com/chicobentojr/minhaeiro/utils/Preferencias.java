@@ -4,8 +4,6 @@ package br.com.chicobentojr.minhaeiro.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import br.com.chicobentojr.minhaeiro.R;
-
 /**
  * Created by Francisco on 30/01/2016.
  */

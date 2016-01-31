@@ -23,5 +23,16 @@
     <string name="txtLoginHint">Login</string>
     <string name="txtSenhaHint">Senha</string>
     <string name="btnEntrar">Entrar</string>
+    <string name="btnAbrirCadastro">Não tem conta? Clique aqui!</string>
+    <string name="title_activity_cadastro">Cadastro</string>
+    <string name="txtNomeHint">Nome</string>
     <string name="btnCadastrar">Cadastrar</string>
+    <string name="txtConfirmaSenhaHint">Confirmação de Senha</string>
+
+    <string name="nome_vazio_erro">O Nome é obrigatório</string>
+    <string name="login_vazio_erro">O Login é obrigatório</string>
+    <string name="senha_vazio_erro">A Senha é obrigatória</string>
+    <string name="confirma_senha_vazio_erro">A Confirmação de Senha é obrigatória</string>
+    <string name="confirma_senha_invalida_erro">A Confirmação de Senha está diferente da Senha</string>
+    <string name="title_activity_cadastro2">Cadastro</string>
 </resources>
