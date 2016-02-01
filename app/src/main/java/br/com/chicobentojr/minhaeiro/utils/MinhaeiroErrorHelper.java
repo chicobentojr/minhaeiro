@@ -12,6 +12,8 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 
+import br.com.chicobentojr.minhaeiro.activity.LoginActivity;
+
 /**
  * Created by Francisco on 31/01/2016.
  */
@@ -26,6 +28,8 @@ public class MinhaeiroErrorHelper {
     private static final String NETWORK = "Ocorreu um erro na sua conexão";
     private static final String PARSE = "Ocorreu um erro na conversão";
     private static final String DEFAULT = "Ocorreu um erro na operação";
+
+    private static final String ERROR_LOGIN = "Usuário não encontrado. Verifique se seus dados estão corretos";
 
     public static String getMessage(VolleyError error){
         if (error instanceof TimeoutError) {
@@ -47,6 +51,11 @@ public class MinhaeiroErrorHelper {
 
     public static void alertar(VolleyError error,Context context){
         String mensagem = MinhaeiroErrorHelper.getMessage(error);
+        if(mensagem.equals(PARSE)){
+            if(context instanceof LoginActivity){
+                mensagem = ERROR_LOGIN;
+            }
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(DIALOG_TITLE)
                 .setMessage(mensagem)
