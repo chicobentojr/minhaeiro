@@ -2,7 +2,6 @@ package br.com.chicobentojr.minhaeiro.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,7 +25,7 @@ import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
 import br.com.chicobentojr.minhaeiro.utils.AppController;
 import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
 import br.com.chicobentojr.minhaeiro.utils.MinhaeiroRetryPolicy;
-import br.com.chicobentojr.minhaeiro.utils.Preferencias;
+import br.com.chicobentojr.minhaeiro.utils.P;
 
 public class PerfilActivity extends AppCompatActivity implements TextView.OnEditorActionListener {
 
@@ -115,19 +114,21 @@ public class PerfilActivity extends AppCompatActivity implements TextView.OnEdit
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.PUT,
-                ApiRoutes.montar(Preferencias.obter(Preferencias.AUTENTICACAO),"usuario",Preferencias.obter(Preferencias.USUARIO_ID)),
+                ApiRoutes.montar(P.obter(P.AUTENTICACAO),"usuario", P.obter(P.USUARIO_ID)),
                 new JSONObject(usuario.toParams()),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            Preferencias.inserir(Preferencias.USUARIO_ID, response.getString("usuario_id"));
-                            Preferencias.inserir(Preferencias.USUARIO_NOME, response.getString("nome"));
-                            Preferencias.inserir(Preferencias.AUTENTICACAO, response.getString("autenticacao"));
-                            Preferencias.conectarUsuario(true);
+                            P.inserir(P.USUARIO_ID, response.getString("usuario_id"));
+                            P.inserir(P.USUARIO_NOME, response.getString("nome"));
+                            P.inserir(P.AUTENTICACAO, response.getString("autenticacao"));
+                            P.conectarUsuario(true);
 
                             progressDialog.hide();
-                            Snackbar.make(txtNome,"Perfil atualizado com sucesso!",Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(txtNome,"Perfil atualizado com sucesso!",Snackbar.LENGTH_LONG)
+                                    .setAction("Ok",null)
+                                    .show();
 
                         } catch (JSONException e) {
                             e.printStackTrace();

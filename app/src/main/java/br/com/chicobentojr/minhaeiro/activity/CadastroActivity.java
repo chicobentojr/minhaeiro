@@ -3,14 +3,12 @@ package br.com.chicobentojr.minhaeiro.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -25,7 +23,7 @@ import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
 import br.com.chicobentojr.minhaeiro.utils.AppController;
 import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
 import br.com.chicobentojr.minhaeiro.utils.MinhaeiroRetryPolicy;
-import br.com.chicobentojr.minhaeiro.utils.Preferencias;
+import br.com.chicobentojr.minhaeiro.utils.P;
 
 public class CadastroActivity extends AppCompatActivity implements TextView.OnEditorActionListener {
 
@@ -115,10 +113,10 @@ public class CadastroActivity extends AppCompatActivity implements TextView.OnEd
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            Preferencias.inserir(Preferencias.USUARIO_ID, response.getString("usuario_id"));
-                            Preferencias.inserir(Preferencias.USUARIO_NOME, response.getString("nome"));
-                            Preferencias.inserir(Preferencias.AUTENTICACAO, response.getString("autenticacao"));
-                            Preferencias.conectarUsuario(true);
+                            P.inserir(P.USUARIO_ID, response.getString("usuario_id"));
+                            P.inserir(P.USUARIO_NOME, response.getString("nome"));
+                            P.inserir(P.AUTENTICACAO, response.getString("autenticacao"));
+                            P.conectarUsuario(true);
 
                             progressDialog.hide();
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));

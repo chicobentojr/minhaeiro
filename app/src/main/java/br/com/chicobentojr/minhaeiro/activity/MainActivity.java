@@ -16,7 +16,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import br.com.chicobentojr.minhaeiro.R;
-import br.com.chicobentojr.minhaeiro.utils.Preferencias;
+import br.com.chicobentojr.minhaeiro.utils.P;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -26,15 +26,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Preferencias.usuarioConectado()) {
+        if (P.usuarioConectado()) {
             setContentView(R.layout.activity_main);
             this.iniciarLayout();
 
 
             lblUsuarioNome = (TextView) navHeader.findViewById(R.id.lblUsuarioNome);
             TextView lbl = (TextView) findViewById(R.id.lblHelloWorld);
-            lbl.setText(Preferencias.obter(Preferencias.AUTENTICACAO));
-            lblUsuarioNome.setText(Preferencias.obter(Preferencias.USUARIO_NOME));
+            lbl.setText(P.obter(P.AUTENTICACAO));
+            lblUsuarioNome.setText(P.obter(P.USUARIO_NOME));
         } else {
             this.finish();
             startActivity(new Intent(this, LoginActivity.class));
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void deslogar() {
-        Preferencias.limpar();
+        P.limpar();
         startActivity(new Intent(this, LoginActivity.class));
     }
 

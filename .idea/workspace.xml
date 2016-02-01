@@ -29,12 +29,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c360728a-a87a-4e0c-b6ff-f9c8dc3e751e" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/br/com/chicobentojr/minhaeiro/utils/ApiRoutes.java" afterPath="$PROJECT_DIR$/app/src/main/java/br/com/chicobentojr/minhaeiro/utils/ApiRoutes.java" />
+      <change type="MOVED" beforePath="C:\Workspace\minhaeiro\app\src\main\java\br\com\chicobentojr\minhaeiro\utils\Preferencias.java" afterPath="$PROJECT_DIR$/app/src/main/java/br/com/chicobentojr/minhaeiro/utils/P.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/br/com/chicobentojr/minhaeiro/activity/CadastroActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/br/com/chicobentojr/minhaeiro/activity/CadastroActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/br/com/chicobentojr/minhaeiro/activity/LoginActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/br/com/chicobentojr/minhaeiro/activity/LoginActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/br/com/chicobentojr/minhaeiro/activity/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/br/com/chicobentojr/minhaeiro/activity/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/menu/activity_main_drawer.xml" afterPath="$PROJECT_DIR$/app/src/main/res/menu/activity_main_drawer.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/dex-cache/cache.xml" afterPath="$PROJECT_DIR$/build/intermediates/dex-cache/cache.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/br/com/chicobentojr/minhaeiro/activity/PerfilActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/br/com/chicobentojr/minhaeiro/activity/PerfilActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="minhaeiro.iws" />
@@ -99,13 +98,13 @@
       <file leaf-file-name="PerfilActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/chicobentojr/minhaeiro/activity/PerfilActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.0725807">
-              <caret line="137" column="60" selection-start-line="137" selection-start-column="60" selection-end-line="137" selection-end-column="60" />
+            <state vertical-scroll-proportion="0.32960895">
+              <caret line="116" column="41" selection-start-line="116" selection-start-column="41" selection-end-line="116" selection-end-column="41" />
               <folding>
-                <element signature="e#4293#5180#0" expanded="true" />
-                <element signature="e#5179#5180#0" expanded="true" />
-                <element signature="e#5182#5432#0" expanded="true" />
-                <element signature="e#5431#5432#0" expanded="true" />
+                <element signature="e#4208#5113#0" expanded="true" />
+                <element signature="e#5112#5113#0" expanded="true" />
+                <element signature="e#5115#5365#0" expanded="true" />
+                <element signature="e#5364#5365#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -121,21 +120,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/chicobentojr/minhaeiro/activity/MainActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="83" column="39" selection-start-line="83" selection-start-column="39" selection-end-line="83" selection-end-column="39" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="CadastroActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/chicobentojr/minhaeiro/activity/CadastroActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="156" column="5" selection-start-line="31" selection-start-column="4" selection-end-line="156" selection-end-column="5" />
+              <caret line="154" column="5" selection-start-line="29" selection-start-column="4" selection-end-line="154" selection-end-column="5" />
               <folding>
                 <element signature="method#onCreate#0;class#CadastroActivity#0" expanded="false" />
                 <element signature="method#cadastrar#0;class#CadastroActivity#0" expanded="false" />
@@ -2188,10 +2177,10 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32998326" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.6532663" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.6532663" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32980332" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32998326" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32998326" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32998326" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -2309,7 +2298,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/chicobentojr/minhaeiro/utils/Preferencias.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/chicobentojr/minhaeiro/utils/P.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="21" column="93" selection-start-line="21" selection-start-column="93" selection-end-line="21" selection-end-column="93" />
@@ -2634,26 +2623,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/chicobentojr/minhaeiro/utils/Preferencias.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/chicobentojr/minhaeiro/utils/P.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="25" column="38" selection-start-line="25" selection-start-column="38" selection-end-line="25" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/chicobentojr/minhaeiro/activity/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="83" column="39" selection-start-line="83" selection-start-column="39" selection-end-line="83" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/chicobentojr/minhaeiro/utils/ApiRoutes.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="19" column="40" selection-start-line="19" selection-start-column="40" selection-end-line="19" selection-end-column="40" />
           <folding />
         </state>
       </provider>
@@ -2696,7 +2669,7 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/chicobentojr/minhaeiro/activity/CadastroActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="156" column="5" selection-start-line="31" selection-start-column="4" selection-end-line="156" selection-end-column="5" />
+          <caret line="154" column="5" selection-start-line="29" selection-start-column="4" selection-end-line="154" selection-end-column="5" />
           <folding>
             <element signature="method#onCreate#0;class#CadastroActivity#0" expanded="false" />
             <element signature="method#cadastrar#0;class#CadastroActivity#0" expanded="false" />
@@ -2707,15 +2680,31 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/chicobentojr/minhaeiro/activity/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.46397188">
+          <caret line="83" column="39" selection-start-line="83" selection-start-column="39" selection-end-line="83" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/chicobentojr/minhaeiro/utils/ApiRoutes.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="19" column="40" selection-start-line="19" selection-start-column="40" selection-end-line="19" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/br/com/chicobentojr/minhaeiro/activity/PerfilActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.0725807">
-          <caret line="137" column="60" selection-start-line="137" selection-start-column="60" selection-end-line="137" selection-end-column="60" />
+        <state vertical-scroll-proportion="0.32960895">
+          <caret line="116" column="41" selection-start-line="116" selection-start-column="41" selection-end-line="116" selection-end-column="41" />
           <folding>
-            <element signature="e#4293#5180#0" expanded="true" />
-            <element signature="e#5179#5180#0" expanded="true" />
-            <element signature="e#5182#5432#0" expanded="true" />
-            <element signature="e#5431#5432#0" expanded="true" />
+            <element signature="e#4208#5113#0" expanded="true" />
+            <element signature="e#5112#5113#0" expanded="true" />
+            <element signature="e#5115#5365#0" expanded="true" />
+            <element signature="e#5364#5365#0" expanded="true" />
           </folding>
         </state>
       </provider>

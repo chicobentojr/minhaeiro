@@ -7,7 +7,7 @@ import android.content.SharedPreferences;
 /**
  * Created by Francisco on 30/01/2016.
  */
-public class Preferencias {
+public class P {
 
     public static final String PREF_KEY = "br.com.chicobentojr.minhaeiro.shared_preferences";
 
