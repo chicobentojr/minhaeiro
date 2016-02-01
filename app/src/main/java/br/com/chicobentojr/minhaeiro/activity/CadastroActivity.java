@@ -23,6 +23,8 @@ import br.com.chicobentojr.minhaeiro.R;
 import br.com.chicobentojr.minhaeiro.models.Usuario;
 import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
 import br.com.chicobentojr.minhaeiro.utils.AppController;
+import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
+import br.com.chicobentojr.minhaeiro.utils.MinhaeiroRetryPolicy;
 import br.com.chicobentojr.minhaeiro.utils.Preferencias;
 
 public class CadastroActivity extends AppCompatActivity implements TextView.OnEditorActionListener {
@@ -129,11 +131,10 @@ public class CadastroActivity extends AppCompatActivity implements TextView.OnEd
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressDialog.hide();
-                Snackbar.make(txtLogin, "Aconteceu um erro na operação", Snackbar.LENGTH_LONG).show();
-                //Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                MinhaeiroErrorHelper.alertar(error, CadastroActivity.this);
             }
         });
-        request.setRetryPolicy(new DefaultRetryPolicy(60000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request.setRetryPolicy(MinhaeiroRetryPolicy.getInstance());
         AppController.getInstance().addToRequestQueue(request);
     }
 

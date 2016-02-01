@@ -1,5 +1,6 @@
 package br.com.chicobentojr.minhaeiro.activity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ import br.com.chicobentojr.minhaeiro.R;
 import br.com.chicobentojr.minhaeiro.models.Usuario;
 import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
 import br.com.chicobentojr.minhaeiro.utils.AppController;
+import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
+import br.com.chicobentojr.minhaeiro.utils.MinhaeiroRetryPolicy;
 import br.com.chicobentojr.minhaeiro.utils.Preferencias;
 
 public class LoginActivity extends AppCompatActivity implements TextView.OnEditorActionListener {
@@ -45,14 +48,41 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
         progressDialog.setCanceledOnTouchOutside(false);
     }
 
-    public void entrar(View v) {
+    public void entrar(View v){
+        limparErros();
+
+        String login = txtLogin.getText().toString();
+        String senha = txtSenha.getText().toString();
+
+        boolean valido = true;
+        View focusView = null;
+
+        if(login.isEmpty()){
+            txtLogin.setError(getString(R.string.login_vazio_erro));
+            focusView = txtLogin;
+            valido = false;
+        }
+        else if(senha.isEmpty()){
+            txtSenha.setError(getString(R.string.senha_vazio_erro));
+            focusView = txtSenha;
+            valido = false;
+        }
+
+        if (!valido) {
+            focusView.requestFocus();
+        } else {
+            realizarLogin(login, senha);
+        }
+    }
+
+    public void realizarLogin(String login, String senha) {
         progressDialog.setMessage("Carregando...");
         progressDialog.show();
 
         final Usuario usuario = new Usuario();
 
-        usuario.login = txtLogin.getText().toString();
-        usuario.senha = txtSenha.getText().toString();
+        usuario.login = login;
+        usuario.senha = senha;
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
@@ -78,53 +108,20 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressDialog.hide();
-                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                MinhaeiroErrorHelper.alertar(error,LoginActivity.this);
             }
         });
-        request.setRetryPolicy(new DefaultRetryPolicy(60000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request.setRetryPolicy(MinhaeiroRetryPolicy.getInstance());
         AppController.getInstance().addToRequestQueue(request);
     }
 
-    public void cadastrar(View v) {
+    public void abrirCadastro(View v) {
         startActivity(new Intent(this, CadastroActivity.class));
-//        progressDialog.setMessage("Carregando...");
-//        progressDialog.show();
-//
-//        final Usuario usuario = new Usuario();
-//
-//        usuario.nome = txtLogin.getText().toString();
-//        usuario.login = txtLogin.getText().toString();
-//        usuario.senha = txtSenha.getText().toString();
-//
-//        JsonObjectRequest request = new JsonObjectRequest(
-//                Request.Method.POST,
-//                ApiRoutes.Usuario.CADASTRAR,
-//                new JSONObject(usuario.toParams()),
-//                new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        try {
-//                            Preferencias.inserir(Preferencias.USUARIO_ID, response.getString("usuario_id"));
-//                            Preferencias.inserir(Preferencias.USUARIO_NOME, response.getString("nome"));
-//                            Preferencias.inserir(Preferencias.AUTENTICACAO, response.getString("autenticacao"));
-//                            Preferencias.conectarUsuario(true);
-//
-//                            progressDialog.hide();
-//                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-//
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                },new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        progressDialog.hide();
-//                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-//                    }
-//            });
-//        request.setRetryPolicy(new DefaultRetryPolicy(60000,DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-//        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    public void limparErros(){
+        txtLogin.setError(null);
+        txtSenha.setError(null);
     }
 
     @Override

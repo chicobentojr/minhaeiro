@@ -34,5 +34,4 @@
     <string name="senha_vazio_erro">A Senha é obrigatória</string>
     <string name="confirma_senha_vazio_erro">A Confirmação de Senha é obrigatória</string>
     <string name="confirma_senha_invalida_erro">A Confirmação de Senha está diferente da Senha</string>
-    <string name="title_activity_cadastro2">Cadastro</string>
 </resources>
