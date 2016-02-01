@@ -80,7 +80,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_share:
                 break;
-            case R.id.nav_send:
+            case R.id.nav_perfil:
+                startActivity(new Intent(this,PerfilActivity.class));
                 break;
             case R.id.nav_sair:
                 this.deslogar();

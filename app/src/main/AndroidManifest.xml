@@ -25,9 +25,7 @@
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/title_activity_login"
-            android:launchMode="singleInstance">
-
-        </activity>
+            android:launchMode="singleInstance"></activity>
         <activity
             android:name=".activity.CadastroActivity"
             android:label="@string/title_activity_cadastro"
@@ -36,6 +34,15 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.chicobentojr.minhaeiro.activity.LoginActivity" />
+        </activity>
+        <activity
+            android:name=".activity.PerfilActivity"
+            android:label="@string/title_activity_perfil"
+            android:launchMode="singleInstance"
+            android:parentActivityName=".activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.chicobentojr.minhaeiro.activity.MainActivity" />
         </activity>
     </application>
 
