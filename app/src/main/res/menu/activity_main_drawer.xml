@@ -28,11 +28,11 @@
                 android:title="Share" />
             <item
                 android:id="@+id/nav_perfil"
-                android:icon="@drawable/ic_menu_manage"
+                android:icon="@drawable/ic_menu_perfil"
                 android:title="Perfil" />
             <item
                 android:id="@+id/nav_sair"
-                android:icon="@drawable/ic_menu_manage"
+                android:icon="@drawable/ic_menu_sair"
                 android:title="Sair" />
         </menu>
     </item>
