@@ -1,5 +1,6 @@
 package br.com.chicobentojr.minhaeiro.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,19 +10,44 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+
+import java.util.ArrayList;
+
 import br.com.chicobentojr.minhaeiro.R;
+import br.com.chicobentojr.minhaeiro.adapters.MovimentacaoAdapter;
+import br.com.chicobentojr.minhaeiro.models.Movimentacao;
+import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
+import br.com.chicobentojr.minhaeiro.utils.AppController;
+import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
 import br.com.chicobentojr.minhaeiro.utils.P;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    TextView lblUsuarioNome;
-    View navHeader;
+    private TextView lblUsuarioNome;
+    private View navHeader;
+    private ProgressDialog progressDialog;
+    private Movimentacao[] movimentacoes;
+
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +56,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             setContentView(R.layout.activity_main);
             this.iniciarLayout();
 
+            recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+            recyclerView.setHasFixedSize(true);
+            layoutManager = new LinearLayoutManager(this);
+            recyclerView.setLayoutManager(layoutManager);
+//            adapter = new MovimentacaoAdapter(new String[]{
+//                    "Compra do Tênis de Beto",
+//                    "Passagem pra Portugal",
+//                    "Show do Eminem",
+//                    "PC para Trabalho",
+//                    "Novo Notebook para o Curso de TADS",
+//                    "Carro",
+//                    "Tirar Carteira de Motorista",
+//                    "Bolsa Nova para Notebook",
+//                    "Primeiro Andar para São José",
+//                    "Muro da Frente",
+//                    "Casa do Cachorro",
+//
+//            });
+            //recyclerView.setAdapter(adapter);
 
             lblUsuarioNome = (TextView) navHeader.findViewById(R.id.lblUsuarioNome);
-            TextView lbl = (TextView) findViewById(R.id.lblHelloWorld);
-            lbl.setText(P.obter(P.AUTENTICACAO));
             lblUsuarioNome.setText(P.obter(P.USUARIO_NOME));
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setCanceledOnTouchOutside(false);
+            carregarMovimentacoes();
         } else {
             this.finish();
             startActivity(new Intent(this, LoginActivity.class));
@@ -81,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_share:
                 break;
             case R.id.nav_perfil:
-                startActivity(new Intent(this,PerfilActivity.class));
+                startActivity(new Intent(this, PerfilActivity.class));
                 break;
             case R.id.nav_sair:
                 this.deslogar();
@@ -108,6 +154,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navHeader = navigationView.getHeaderView(0);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    public void carregarMovimentacoes() {
+        progressDialog.setMessage("Carregando...");
+        progressDialog.show();
+        StringRequest request = new StringRequest(
+                ApiRoutes.montar(P.obter(P.AUTENTICACAO), "movimentacao", P.obter(P.USUARIO_ID)),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        progressDialog.hide();
+                        Gson gson = new Gson();
+                        Log.i("TAG", response);
+                        movimentacoes = gson.fromJson(response, Movimentacao[].class);
+                        adapter = new MovimentacaoAdapter(movimentacoes);
+                        recyclerView.setAdapter(adapter);
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progressDialog.hide();
+                        MinhaeiroErrorHelper.alertar(error,MainActivity.this);
+                }}
+            );
+        AppController.getInstance().addToRequestQueue(request);
     }
 
     public void deslogar() {

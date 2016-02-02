@@ -7,7 +7,7 @@ public class Movimentacao implements Serializable {
     public int usuario_id;
     public int movimentacao_id;
     public int pessoa_id;
-    public Date movimentacao_data;
+    public String movimentacao_data;
     public double valor;
     public String observacao;
     public char tipo;
