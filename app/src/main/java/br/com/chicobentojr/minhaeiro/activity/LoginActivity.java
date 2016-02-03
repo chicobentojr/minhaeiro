@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -13,6 +14,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,7 +47,7 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
         progressDialog.setCanceledOnTouchOutside(false);
     }
 
-    public void entrar(View v){
+    public void entrar(View v) {
         limparErros();
 
         String login = txtLogin.getText().toString();
@@ -54,12 +56,11 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
         boolean valido = true;
         View focusView = null;
 
-        if(login.isEmpty()){
+        if (login.isEmpty()) {
             txtLogin.setError(getString(R.string.login_vazio_erro));
             focusView = txtLogin;
             valido = false;
-        }
-        else if(senha.isEmpty()){
+        } else if (senha.isEmpty()) {
             txtSenha.setError(getString(R.string.senha_vazio_erro));
             focusView = txtSenha;
             valido = false;
@@ -88,24 +89,21 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        try {
-                            P.inserir(P.USUARIO_ID, response.getString("usuario_id"));
-                            P.inserir(P.USUARIO_NOME, response.getString("nome"));
-                            P.inserir(P.AUTENTICACAO, response.getString("autenticacao"));
-                            P.conectarUsuario(true);
+                        Log.i("MINHAEIRO",response.toString());
+                        Gson gson = new Gson();
+                        Usuario usuarioResposta = gson.fromJson(response.toString(), Usuario.class);
+                        P.setUsuario(usuarioResposta);
 
-                            progressDialog.hide();
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        P.conectarUsuario(true);
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        progressDialog.hide();
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressDialog.hide();
-                MinhaeiroErrorHelper.alertar(error,LoginActivity.this);
+                MinhaeiroErrorHelper.alertar(error, LoginActivity.this);
             }
         });
         request.setRetryPolicy(MinhaeiroRetryPolicy.getInstance());
@@ -116,7 +114,7 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
         startActivity(new Intent(this, CadastroActivity.class));
     }
 
-    public void limparErros(){
+    public void limparErros() {
         txtLogin.setError(null);
         txtSenha.setError(null);
     }

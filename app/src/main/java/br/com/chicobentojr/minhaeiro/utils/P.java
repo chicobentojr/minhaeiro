@@ -4,6 +4,9 @@ package br.com.chicobentojr.minhaeiro.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import br.com.chicobentojr.minhaeiro.activity.LoginActivity;
+import br.com.chicobentojr.minhaeiro.models.Usuario;
+
 /**
  * Created by Francisco on 30/01/2016.
  */
@@ -13,28 +16,80 @@ public class P {
 
     public static final String USUARIO_ID = "shared_preference_usuario_id";
     public static final String USUARIO_NOME = "shared_preference_usuario_nome";
-    public static final String AUTENTICACAO = "shared_preference_autenticacao";
-    public static final String CONECTADO = "shared_preference_conectado";
+    public static final String USUARIO_LOGIN = "shared_preference_usuario_login";
+    public static final String USUARIO_AUTENTICACAO = "shared_preference_autenticacao";
+    public static final String USUARIO_CONECTADO = "shared_preference_conectado";
 
     public static SharedPreferences prefs = AppController.getContext().getSharedPreferences(PREF_KEY, Context.MODE_PRIVATE);
 
-    public static void inserir(String chave,String valor){
-        prefs.edit().putString(chave,valor).apply();
+    public static Usuario getUsuario() {
+        Usuario usuario = new Usuario();
+        usuario.usuario_id = prefs.getInt(USUARIO_ID, 0);
+        usuario.nome = prefs.getString(USUARIO_NOME, "");
+        usuario.login = prefs.getString(USUARIO_LOGIN, "");
+        usuario.autenticacao = prefs.getString(USUARIO_AUTENTICACAO,"");
+        return usuario;
+    }
+    public static void setUsuario(Usuario usuario){
+        prefs.edit()
+                .putInt(USUARIO_ID, usuario.usuario_id)
+                .putString(USUARIO_NOME, usuario.nome)
+                .putString(USUARIO_LOGIN,usuario.login)
+                .putString(USUARIO_AUTENTICACAO,usuario.autenticacao)
+                .apply();
     }
 
-    public static String obter(String chave){
-        return prefs.getString(chave,"");
-    }
-
-    public static void limpar(){
+    public static void limpar() {
         prefs.edit().clear().apply();
     }
 
-    public static void conectarUsuario(boolean conectar){
-        prefs.edit().putBoolean(CONECTADO,conectar).apply();
+    public static void conectarUsuario(boolean conectar) {
+        prefs.edit().putBoolean(USUARIO_CONECTADO, conectar).apply();
     }
 
-    public static boolean usuarioConectado(){
-        return prefs.getBoolean(CONECTADO,false);
+    public static boolean usuarioConectado() {
+        return prefs.getBoolean(USUARIO_CONECTADO, false);
     }
+
+    public static Integer usuario_id() {
+        return prefs.getInt(USUARIO_ID, 0);
+    }
+
+    public static void usuario_id(int usuario_id) {
+        prefs.edit().putInt(USUARIO_ID, usuario_id).apply();
+    }
+
+    public static String nome() {
+        return prefs.getString(USUARIO_NOME, "");
+    }
+
+    public static void nome(String nome) {
+        prefs.edit().putString(USUARIO_NOME, nome).apply();
+    }
+
+    public static String login() {
+        return prefs.getString(USUARIO_LOGIN, "");
+    }
+
+    public static void login(String login) {
+        prefs.edit().putString(USUARIO_LOGIN, login).apply();
+    }
+
+    public static String autenticacao() {
+        return prefs.getString(USUARIO_AUTENTICACAO, "");
+    }
+
+    public static void autenticacao(String autenticacao) {
+        prefs.edit().putString(USUARIO_AUTENTICACAO, autenticacao).apply();
+    }
+
+    public static void inserir(String chave, String valor) {
+        prefs.edit().putString(chave, valor).apply();
+    }
+
+    public static String obter(String chave) {
+        return prefs.getString(chave, "");
+    }
+
+
 }

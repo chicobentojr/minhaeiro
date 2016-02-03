@@ -13,6 +13,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,28 +62,23 @@ public class CadastroActivity extends AppCompatActivity implements TextView.OnEd
         boolean valido = true;
         View focusView = null;
 
-        if(nome.isEmpty()){
+        if (nome.isEmpty()) {
             txtNome.setError(getString(R.string.nome_vazio_erro));
             focusView = txtNome;
             valido = false;
-        }
-        else if(login.isEmpty()){
+        } else if (login.isEmpty()) {
             txtLogin.setError(getString(R.string.login_vazio_erro));
             focusView = txtLogin;
             valido = false;
-        }
-        else if(senha.isEmpty()){
+        } else if (senha.isEmpty()) {
             txtSenha.setError(getString(R.string.senha_vazio_erro));
             focusView = txtSenha;
             valido = false;
-        }
-        else if(confirmaSenha.isEmpty()){
+        } else if (confirmaSenha.isEmpty()) {
             txtConfirmaSenha.setError(getString(R.string.confirma_senha_vazio_erro));
             focusView = txtConfirmaSenha;
             valido = false;
-        }
-
-        else if(!senha.equals(confirmaSenha)){
+        } else if (!senha.equals(confirmaSenha)) {
             txtConfirmaSenha.setError(getString(R.string.confirma_senha_invalida_erro));
             focusView = txtConfirmaSenha;
             valido = false;
@@ -91,7 +87,7 @@ public class CadastroActivity extends AppCompatActivity implements TextView.OnEd
         if (!valido) {
             focusView.requestFocus();
         } else {
-            realizarCadastro(nome,login,senha);
+            realizarCadastro(nome, login, senha);
         }
     }
 
@@ -112,18 +108,13 @@ public class CadastroActivity extends AppCompatActivity implements TextView.OnEd
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        try {
-                            P.inserir(P.USUARIO_ID, response.getString("usuario_id"));
-                            P.inserir(P.USUARIO_NOME, response.getString("nome"));
-                            P.inserir(P.AUTENTICACAO, response.getString("autenticacao"));
-                            P.conectarUsuario(true);
+                        Gson gson = new Gson();
+                        Usuario usuarioResposta = gson.fromJson(response.toString(), Usuario.class);
+                        P.setUsuario(usuarioResposta);
+                        P.conectarUsuario(true);
 
-                            progressDialog.hide();
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        progressDialog.hide();
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     }
                 }, new Response.ErrorListener() {
             @Override

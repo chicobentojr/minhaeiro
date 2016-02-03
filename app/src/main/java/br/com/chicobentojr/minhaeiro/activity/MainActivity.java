@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             recyclerView.setLayoutManager(layoutManager);
 
             lblUsuarioNome = (TextView) navHeader.findViewById(R.id.lblUsuarioNome);
-            lblUsuarioNome.setText(P.obter(P.USUARIO_NOME));
+            lblUsuarioNome.setText(P.nome());
             progressDialog = new ProgressDialog(this);
             progressDialog.setCanceledOnTouchOutside(false);
             carregarMovimentacoes();
@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         progressDialog.setMessage("Carregando...");
         progressDialog.show();
         StringRequest request = new StringRequest(
-                ApiRoutes.montar(P.obter(P.AUTENTICACAO), "movimentacao", P.obter(P.USUARIO_ID)),
+                ApiRoutes.montar(P.autenticacao(), "movimentacao", P.usuario_id().toString()),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

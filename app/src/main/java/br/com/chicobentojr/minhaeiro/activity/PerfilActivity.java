@@ -15,6 +15,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,28 +64,23 @@ public class PerfilActivity extends AppCompatActivity implements TextView.OnEdit
         boolean valido = true;
         View focusView = null;
 
-        if(nome.isEmpty()){
+        if (nome.isEmpty()) {
             txtNome.setError(getString(R.string.nome_vazio_erro));
             focusView = txtNome;
             valido = false;
-        }
-        else if(login.isEmpty()){
+        } else if (login.isEmpty()) {
             txtLogin.setError(getString(R.string.login_vazio_erro));
             focusView = txtLogin;
             valido = false;
-        }
-        else if(senha.isEmpty()){
+        } else if (senha.isEmpty()) {
             txtSenha.setError(getString(R.string.senha_vazio_erro));
             focusView = txtSenha;
             valido = false;
-        }
-        else if(confirmaSenha.isEmpty()){
+        } else if (confirmaSenha.isEmpty()) {
             txtConfirmaSenha.setError(getString(R.string.confirma_senha_vazio_erro));
             focusView = txtConfirmaSenha;
             valido = false;
-        }
-
-        else if(!senha.equals(confirmaSenha)){
+        } else if (!senha.equals(confirmaSenha)) {
             txtConfirmaSenha.setError(getString(R.string.confirma_senha_invalida_erro));
             focusView = txtConfirmaSenha;
             valido = false;
@@ -95,7 +91,7 @@ public class PerfilActivity extends AppCompatActivity implements TextView.OnEdit
         } else {
             View view = this.getCurrentFocus();
             if (view != null) {
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
             atualizarPerfil(nome, login, senha);
@@ -114,25 +110,22 @@ public class PerfilActivity extends AppCompatActivity implements TextView.OnEdit
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.PUT,
-                ApiRoutes.montar(P.obter(P.AUTENTICACAO),"usuario", P.obter(P.USUARIO_ID)),
+                ApiRoutes.montar(P.autenticacao(), "usuario", P.usuario_id().toString()),
                 new JSONObject(usuario.toParams()),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        try {
-                            P.inserir(P.USUARIO_ID, response.getString("usuario_id"));
-                            P.inserir(P.USUARIO_NOME, response.getString("nome"));
-                            P.inserir(P.AUTENTICACAO, response.getString("autenticacao"));
-                            P.conectarUsuario(true);
 
-                            progressDialog.hide();
-                            Snackbar.make(txtNome,"Perfil atualizado com sucesso!",Snackbar.LENGTH_LONG)
-                                    .setAction("Ok",null)
-                                    .show();
+                        Gson gson = new Gson();
+                        Usuario usuarioResposta = gson.fromJson(response.toString(), Usuario.class);
+                        P.setUsuario(usuarioResposta);
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        P.conectarUsuario(true);
+
+                        progressDialog.hide();
+                        Snackbar.make(txtNome, "Perfil atualizado com sucesso!", Snackbar.LENGTH_LONG)
+                                .setAction("Ok", null)
+                                .show();
                     }
                 }, new Response.ErrorListener() {
             @Override
