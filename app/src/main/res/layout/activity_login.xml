@@ -50,23 +50,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:background="@color/accent"
         android:onClick="entrar"
         android:text="@string/btnEntrar"
+        android:textColor="@android:color/white"
         android:textStyle="bold" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <Button
             android:id="@+id/btnCadastrar"
             style="?android:buttonBarButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/primary_dark"
+            android:layout_alignParentBottom="true"
             android:layout_marginTop="16dp"
             android:onClick="abrirCadastro"
             android:text="@string/btnAbrirCadastro"
-            android:layout_alignParentBottom="true"
             android:textStyle="bold" />
     </RelativeLayout>
 

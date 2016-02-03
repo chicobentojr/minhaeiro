@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import br.com.chicobentojr.minhaeiro.R;
@@ -33,11 +35,17 @@ public class MovimentacaoAdapter extends RecyclerView.Adapter<MovimentacaoAdapte
 
     @Override
     public void onBindViewHolder(MovimentacaoAdapter.ViewHolder holder, int position) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
         Movimentacao movimentacao = movimentacoes[position];
-        holder.lblMovimentacaoDescricao.setText(movimentacao.observacao);
-        holder.lblMovimentacaoData.setText(movimentacao.movimentacao_data);
-        holder.lblMovimentacaoPessoa.setText(String.valueOf(movimentacao.pessoa_id));
-        holder.lblMovimentacaoValor.setText(String.valueOf(movimentacao.valor));
+        holder.lblMovimentacaoDescricao.setText(movimentacao.descricao);
+        try {
+            holder.lblMovimentacaoData.setText(sdf2.format(sdf.parse(movimentacao.movimentacao_data)));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        holder.lblMovimentacaoPessoa.setText(String.valueOf(movimentacao.Pessoa.nome));
+        holder.lblMovimentacaoValor.setText("R$ "+movimentacao.valor);
     }
 
     @Override

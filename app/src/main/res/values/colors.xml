@@ -20,11 +20,12 @@
     <!--<color name="icons">#FFFFFF</color>-->
     <!--<color name="divider">#B6B6B6</color>-->
 
-    <color name="item_movimentacao_background">#80CBC4</color>
+    <color name="item_movimentacao_background">#FFFFFF</color>
     <color name="item_movimentacao_pessoa">#0D47A1</color>
     <color name="item_movimentacao_data">#FF9100</color>
     <color name="item_movimentacao_valor">#1B5E20</color>
 
+    <color name="app_background">#FFF</color>
     <!-- Cores padrão do Projeto Default-->
     <!--<color name="colorPrimary">#3F51B5</color>-->
     <!--<color name="colorPrimaryDark">#303F9F</color>-->

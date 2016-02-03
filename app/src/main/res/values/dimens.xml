@@ -8,6 +8,8 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <dimen name="item_movimentacao_descricao_margin">16dp</dimen>
-    <dimen name="item_movimentacao_descricao_text_size">20sp</dimen>
-    <dimen name="item_movimentacao_secundario_text_size">16sp</dimen>
+    <dimen name="item_movimentacao_descricao_text_size">16sp</dimen>
+    <dimen name="item_movimentacao_secundario_text_size">13sp</dimen>
+
+    <dimen name="item_movimentacao_icon">40dp</dimen>
 </resources>

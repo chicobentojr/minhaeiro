@@ -35,6 +35,7 @@ import br.com.chicobentojr.minhaeiro.adapters.MovimentacaoAdapter;
 import br.com.chicobentojr.minhaeiro.models.Movimentacao;
 import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
 import br.com.chicobentojr.minhaeiro.utils.AppController;
+import br.com.chicobentojr.minhaeiro.utils.DividerItemDecoration;
 import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
 import br.com.chicobentojr.minhaeiro.utils.P;
 
@@ -58,23 +59,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
             recyclerView.setHasFixedSize(true);
+            recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL_LIST));
             layoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(layoutManager);
-//            adapter = new MovimentacaoAdapter(new String[]{
-//                    "Compra do Tênis de Beto",
-//                    "Passagem pra Portugal",
-//                    "Show do Eminem",
-//                    "PC para Trabalho",
-//                    "Novo Notebook para o Curso de TADS",
-//                    "Carro",
-//                    "Tirar Carteira de Motorista",
-//                    "Bolsa Nova para Notebook",
-//                    "Primeiro Andar para São José",
-//                    "Muro da Frente",
-//                    "Casa do Cachorro",
-//
-//            });
-            //recyclerView.setAdapter(adapter);
 
             lblUsuarioNome = (TextView) navHeader.findViewById(R.id.lblUsuarioNome);
             lblUsuarioNome.setText(P.obter(P.USUARIO_NOME));
