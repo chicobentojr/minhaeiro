@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Usuario implements Serializable {
@@ -12,6 +13,10 @@ public class Usuario implements Serializable {
     public String login;
     public String senha;
     public String autenticacao;
+
+    public ArrayList<Pessoa> Pessoa;
+    public ArrayList<Movimentacao> Movimentacao;
+    public ArrayList<Categoria> Categoria;
 
     public HashMap<String,String> toParams(){
         HashMap<String,String> params = new HashMap<>();
