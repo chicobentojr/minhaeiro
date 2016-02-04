@@ -57,6 +57,7 @@
             android:singleLine="true" />
 
     </android.support.design.widget.TextInputLayout>
+
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -75,16 +76,18 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <Button
             android:id="@+id/btnCadastrar"
             style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/primary_dark"
+            android:layout_alignParentBottom="true"
             android:layout_marginTop="16dp"
+            android:background="@color/accent"
             android:onClick="cadastrar"
             android:text="@string/btnCadastrar"
-            android:layout_alignParentBottom="true"
+            android:textColor="@android:color/white"
             android:textStyle="bold" />
     </RelativeLayout>
 

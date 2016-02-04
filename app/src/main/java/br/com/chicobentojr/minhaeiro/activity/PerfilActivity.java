@@ -32,9 +32,11 @@ public class PerfilActivity extends AppCompatActivity implements TextView.OnEdit
 
     private EditText txtNome;
     private EditText txtLogin;
-    private EditText txtSenha;
+    private EditText txtNovaSenha;
     private EditText txtConfirmaSenha;
     private ProgressDialog progressDialog;
+
+    private Usuario usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +46,18 @@ public class PerfilActivity extends AppCompatActivity implements TextView.OnEdit
 
         txtNome = (EditText) findViewById(R.id.txtNome);
         txtLogin = (EditText) findViewById(R.id.txtLogin);
-        txtSenha = (EditText) findViewById(R.id.txtSenha);
+        txtNovaSenha = (EditText) findViewById(R.id.txtNovaSenha);
         txtConfirmaSenha = (EditText) findViewById(R.id.txtConfirmaSenha);
 
         txtConfirmaSenha.setOnEditorActionListener(this);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCanceledOnTouchOutside(false);
+
+        usuario = P.getUsuario();
+
+        txtNome.setText(usuario.nome);
+        txtLogin.setText(usuario.login);
     }
 
     public void atualizar(View v) {
@@ -58,7 +65,7 @@ public class PerfilActivity extends AppCompatActivity implements TextView.OnEdit
 
         String nome = txtNome.getText().toString();
         String login = txtLogin.getText().toString();
-        String senha = txtSenha.getText().toString();
+        String novaSenha = txtNovaSenha.getText().toString();
         String confirmaSenha = txtConfirmaSenha.getText().toString();
 
         boolean valido = true;
@@ -72,15 +79,15 @@ public class PerfilActivity extends AppCompatActivity implements TextView.OnEdit
             txtLogin.setError(getString(R.string.login_vazio_erro));
             focusView = txtLogin;
             valido = false;
-        } else if (senha.isEmpty()) {
-            txtSenha.setError(getString(R.string.senha_vazio_erro));
-            focusView = txtSenha;
+        } else if (novaSenha.isEmpty()) {
+            txtNovaSenha.setError(getString(R.string.nova_senha_vazio_erro));
+            focusView = txtNovaSenha;
             valido = false;
         } else if (confirmaSenha.isEmpty()) {
             txtConfirmaSenha.setError(getString(R.string.confirma_senha_vazio_erro));
             focusView = txtConfirmaSenha;
             valido = false;
-        } else if (!senha.equals(confirmaSenha)) {
+        } else if (!novaSenha.equals(confirmaSenha)) {
             txtConfirmaSenha.setError(getString(R.string.confirma_senha_invalida_erro));
             focusView = txtConfirmaSenha;
             valido = false;
@@ -94,20 +101,18 @@ public class PerfilActivity extends AppCompatActivity implements TextView.OnEdit
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
-            atualizarPerfil(nome, login, senha);
+            Usuario usuario = new Usuario();
+            usuario.nome = nome;
+            usuario.login = login;
+            usuario.senha = novaSenha;
+
+            atualizarPerfil(usuario);
         }
     }
 
-    public void atualizarPerfil(String nome, String login, String senha) {
+    public void atualizarPerfil(Usuario usuario) {
         progressDialog.setMessage("Carregando...");
         progressDialog.show();
-
-        Usuario usuario = new Usuario();
-
-        usuario.nome = nome;
-        usuario.login = login;
-        usuario.senha = senha;
-
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.PUT,
                 ApiRoutes.montar(P.autenticacao(), "usuario", P.usuario_id().toString()),
@@ -115,11 +120,10 @@ public class PerfilActivity extends AppCompatActivity implements TextView.OnEdit
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-
                         Gson gson = new Gson();
                         Usuario usuarioResposta = gson.fromJson(response.toString(), Usuario.class);
-                        P.setUsuario(usuarioResposta);
 
+                        P.setUsuario(usuarioResposta);
                         P.conectarUsuario(true);
 
                         progressDialog.hide();
@@ -134,14 +138,13 @@ public class PerfilActivity extends AppCompatActivity implements TextView.OnEdit
                 MinhaeiroErrorHelper.alertar(error, PerfilActivity.this);
             }
         });
-        request.setRetryPolicy(MinhaeiroRetryPolicy.getInstance());
         AppController.getInstance().addToRequestQueue(request);
     }
 
     public void limparErros() {
         txtNome.setError(null);
         txtLogin.setError(null);
-        txtSenha.setError(null);
+        txtNovaSenha.setError(null);
         txtConfirmaSenha.setError(null);
     }
 

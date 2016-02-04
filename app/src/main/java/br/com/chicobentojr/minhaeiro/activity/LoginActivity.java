@@ -69,19 +69,17 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
         if (!valido) {
             focusView.requestFocus();
         } else {
-            realizarLogin(login, senha);
+            Usuario usuario = new Usuario();
+            usuario.login = login;
+            usuario.senha = senha;
+
+            realizarLogin(usuario);
         }
     }
 
-    public void realizarLogin(String login, String senha) {
+    public void realizarLogin(Usuario usuario) {
         progressDialog.setMessage("Carregando...");
         progressDialog.show();
-
-        final Usuario usuario = new Usuario();
-
-        usuario.login = login;
-        usuario.senha = senha;
-
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
                 ApiRoutes.Usuario.ENTRAR,

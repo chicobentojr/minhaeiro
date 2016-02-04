@@ -87,20 +87,18 @@ public class CadastroActivity extends AppCompatActivity implements TextView.OnEd
         if (!valido) {
             focusView.requestFocus();
         } else {
-            realizarCadastro(nome, login, senha);
+            Usuario usuario = new Usuario();
+            usuario.nome = nome;
+            usuario.login = login;
+            usuario.senha = senha;
+
+            realizarCadastro(usuario);
         }
     }
 
-    public void realizarCadastro(String nome, String login, String senha) {
+    public void realizarCadastro(Usuario usuario) {
         progressDialog.setMessage("Carregando...");
         progressDialog.show();
-
-        Usuario usuario = new Usuario();
-
-        usuario.nome = nome;
-        usuario.login = login;
-        usuario.senha = senha;
-
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
                 ApiRoutes.Usuario.CADASTRAR,
@@ -123,7 +121,6 @@ public class CadastroActivity extends AppCompatActivity implements TextView.OnEd
                 MinhaeiroErrorHelper.alertar(error, CadastroActivity.this);
             }
         });
-        request.setRetryPolicy(MinhaeiroRetryPolicy.getInstance());
         AppController.getInstance().addToRequestQueue(request);
     }
 

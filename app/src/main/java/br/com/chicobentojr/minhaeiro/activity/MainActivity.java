@@ -43,7 +43,9 @@ import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private TextView lblUsuarioNome;
+    private TextView lblUsuarioLogin;
     private View navHeader;
+
     private ProgressDialog progressDialog;
     private Movimentacao[] movimentacoes;
 
@@ -142,11 +144,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navHeader = navigationView.getHeaderView(0);
         navigationView.setNavigationItemSelectedListener(this);
         lblUsuarioNome = (TextView) navHeader.findViewById(R.id.lblUsuarioNome);
+        lblUsuarioLogin = (TextView) navHeader.findViewById(R.id.lblUsuarioLogin);
         lblUsuarioNome.setText(P.nome());
+        lblUsuarioLogin.setText(P.login());
     }
 
     public void carregarMovimentacoes() {
-        progressDialog.setMessage("Carregando...");
+        progressDialog.setMessage("Carregando Movimentações...");
         progressDialog.show();
         StringRequest request = new StringRequest(
                 ApiRoutes.montar(P.autenticacao(), "movimentacao", P.usuario_id().toString()),
