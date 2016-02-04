@@ -18,14 +18,14 @@ public class Usuario implements Serializable {
     public ArrayList<Movimentacao> Movimentacao;
     public ArrayList<Categoria> Categoria;
 
-    public HashMap<String,String> toParams(){
-        HashMap<String,String> params = new HashMap<>();
+    public HashMap<String, String> toParams() {
+        HashMap<String, String> params = new HashMap<>();
 
-        params.put("usuario_id",String.valueOf(this.usuario_id));
-        params.put("nome",this.nome);
-        params.put("login",this.login);
-        params.put("senha",this.senha);
-        params.put("autenticacao",this.autenticacao);
+        params.put("usuario_id", String.valueOf(this.usuario_id));
+        params.put("nome", this.nome);
+        params.put("login", this.login);
+        params.put("senha", this.senha);
+        params.put("autenticacao", this.autenticacao);
 
         return params;
     }

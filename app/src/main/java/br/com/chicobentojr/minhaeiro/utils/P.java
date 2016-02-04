@@ -4,6 +4,8 @@ package br.com.chicobentojr.minhaeiro.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.gson.Gson;
+
 import br.com.chicobentojr.minhaeiro.activity.LoginActivity;
 import br.com.chicobentojr.minhaeiro.models.Usuario;
 
@@ -13,6 +15,8 @@ import br.com.chicobentojr.minhaeiro.models.Usuario;
 public class P {
 
     public static final String PREF_KEY = "br.com.chicobentojr.minhaeiro.shared_preferences";
+
+    public static final String USUARIO_JSON = "shared_preference_usuario_JSON";
 
     public static final String USUARIO_ID = "shared_preference_usuario_id";
     public static final String USUARIO_NOME = "shared_preference_usuario_nome";
@@ -28,6 +32,12 @@ public class P {
         usuario.nome = prefs.getString(USUARIO_NOME, "");
         usuario.login = prefs.getString(USUARIO_LOGIN, "");
         usuario.autenticacao = prefs.getString(USUARIO_AUTENTICACAO,"");
+        return usuario;
+    }
+    public static Usuario getUsuario(String json) {
+        Usuario usuario = new Usuario();
+        Gson gson = new Gson();
+        usuario = gson.fromJson(json,Usuario.class);
         return usuario;
     }
     public static void setUsuario(Usuario usuario){
@@ -51,7 +61,7 @@ public class P {
         return prefs.getBoolean(USUARIO_CONECTADO, false);
     }
 
-    public static Integer usuario_id() {
+    public static int usuario_id() {
         return prefs.getInt(USUARIO_ID, 0);
     }
 

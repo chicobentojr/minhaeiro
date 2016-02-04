@@ -115,7 +115,7 @@ public class PerfilActivity extends AppCompatActivity implements TextView.OnEdit
         progressDialog.show();
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.PUT,
-                ApiRoutes.montar(P.autenticacao(), "usuario", P.usuario_id().toString()),
+                ApiRoutes.montar(P.autenticacao(), "usuario", P.usuario_id()),
                 new JSONObject(usuario.toParams()),
                 new Response.Listener<JSONObject>() {
                     @Override

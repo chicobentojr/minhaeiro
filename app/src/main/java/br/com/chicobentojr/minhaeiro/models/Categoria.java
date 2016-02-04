@@ -10,4 +10,9 @@ public class Categoria implements Serializable {
     public int categoria_id;
     public String nome;
     public int icone_id;
+
+    @Override
+    public String toString() {
+        return this.nome;
+    }
 }

@@ -11,49 +11,27 @@
     tools:context="br.com.chicobentojr.minhaeiro.activity.MovimentacaoCadastroActivity">
 
     <ScrollView
-        android:layout_weight="9"
         android:layout_width="match_parent"
-        android:layout_height="0dp">
+        android:layout_height="0dp"
+        android:layout_weight="9">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <android.support.design.widget.TextInputLayout
+
+            <Spinner
+                android:id="@+id/spnCategoria"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:prompt="@string/spnCategoriaPrompt" />
 
-                <EditText
-                    android:id="@+id/txtCategoria"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:hint="Categoria"
-                    android:inputType="number"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
+            <Spinner
+                android:id="@+id/spnPessoa"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/txtPessoa"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:hint="Pessoa"
-                    android:inputType="number"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-
-            </android.support.design.widget.TextInputLayout>
-
+                android:layout_height="wrap_content"
+                android:prompt="@string/spnPessoaPrompt" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -72,32 +50,41 @@
 
             </android.support.design.widget.TextInputLayout>
 
-
-            <android.support.design.widget.TextInputLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/txtMovimentacaoData"
-                    android:layout_width="match_parent"
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="@string/txtMovimentacaoDataHint"
-                    android:inputType="date" />
+                    android:layout_weight="0.5">
 
-            </android.support.design.widget.TextInputLayout>
+                    <EditText
+                        android:id="@+id/txtMovimentacaoValor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/txtValorHint"
+                        android:inputType="numberDecimal" />
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                </android.support.design.widget.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/txtMovimentacaoValor"
-                    android:layout_width="match_parent"
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="@string/txtValorHint"
-                    android:inputType="numberDecimal" />
+                    android:layout_weight="0.5">
 
-            </android.support.design.widget.TextInputLayout>
+                    <EditText
+                        android:id="@+id/txtMovimentacaoData"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/txtMovimentacaoDataHint"
+                        android:inputType="date" />
+
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -125,7 +112,9 @@
 
 
         </LinearLayout>
+
     </ScrollView>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -137,9 +126,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:background="@color/accent"
             android:onClick="cadastrar"
             android:text="@string/btnCadastrar"
-            android:textColor="@color/primary_dark"
+            android:textColor="@android:color/white"
             android:textStyle="bold" />
     </RelativeLayout>
+
 </LinearLayout>

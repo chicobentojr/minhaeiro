@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
                         Gson gson = new Gson();
                         Usuario usuarioResposta = gson.fromJson(response.toString(), Usuario.class);
                         P.setUsuario(usuarioResposta);
-
+                        P.inserir(P.USUARIO_JSON,response.toString());
                         P.conectarUsuario(true);
 
                         progressDialog.hide();

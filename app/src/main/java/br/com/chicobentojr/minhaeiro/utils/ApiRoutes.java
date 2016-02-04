@@ -13,7 +13,7 @@ public class ApiRoutes {
         }
         return url;
     }
-    public static String montar(String autenticacao, String controller, String usuario_id) {
+    public static String montar(String autenticacao, String controller, Integer usuario_id) {
         return ApiRoutes.URL_BASE  + autenticacao + "/" + controller + "/" + usuario_id;
     }
     public static String montar(String autenticacao, String controller, String usuario_id, String... params) {

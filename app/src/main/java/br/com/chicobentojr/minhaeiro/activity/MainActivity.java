@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         progressDialog.setMessage("Carregando Movimentações...");
         progressDialog.show();
         StringRequest request = new StringRequest(
-                ApiRoutes.montar(P.autenticacao(), "movimentacao", P.usuario_id().toString()),
+                ApiRoutes.montar(P.autenticacao(), "movimentacao", P.usuario_id()),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -16,7 +18,9 @@ import com.google.gson.Gson;
 import org.json.JSONObject;
 
 import br.com.chicobentojr.minhaeiro.R;
+import br.com.chicobentojr.minhaeiro.models.Categoria;
 import br.com.chicobentojr.minhaeiro.models.Movimentacao;
+import br.com.chicobentojr.minhaeiro.models.Pessoa;
 import br.com.chicobentojr.minhaeiro.models.Usuario;
 import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
 import br.com.chicobentojr.minhaeiro.utils.AppController;
@@ -26,8 +30,9 @@ import br.com.chicobentojr.minhaeiro.utils.P;
 
 public class MovimentacaoCadastroActivity extends AppCompatActivity {
 
-    private EditText txtCategoria;
-    private EditText txtPessoa;
+    private Usuario usuario;
+    private Spinner spnCategoria;
+    private Spinner spnPessoa;
     private EditText txtMovimentacaoData;
     private EditText txtMovimentacaoValor;
     private EditText txtDescricao;
@@ -41,8 +46,13 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movimentacao_cadastro);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        txtCategoria = (EditText) findViewById(R.id.txtCategoria);
-        txtPessoa = (EditText) findViewById(R.id.txtPessoa);
+        usuario = P.getUsuario(P.obter(P.USUARIO_JSON));
+
+        spnCategoria = (Spinner) findViewById(R.id.spnCategoria);
+        spnCategoria.setAdapter(new ArrayAdapter(this,android.R.layout.simple_spinner_item,usuario.Categoria));
+        spnPessoa = (Spinner) findViewById(R.id.spnPessoa);
+        spnPessoa.setAdapter(new ArrayAdapter(this,android.R.layout.simple_spinner_item,usuario.Pessoa));
+
         txtMovimentacaoData = (EditText) findViewById(R.id.txtMovimentacaoData);
         txtMovimentacaoValor = (EditText) findViewById(R.id.txtMovimentacaoValor);
         txtDescricao = (EditText) findViewById(R.id.txtDescricao);
@@ -58,8 +68,8 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity {
     public void cadastrar(View v) {
         limparErros();
 
-        int categoria_id = Integer.parseInt(txtCategoria.getText().toString());
-        int pessoa_id = Integer.parseInt(txtPessoa.getText().toString());
+        int categoria_id = ((Categoria)spnCategoria.getSelectedItem()).categoria_id;
+        int pessoa_id = ((Pessoa)spnPessoa.getSelectedItem()).pessoa_id;
         String movimentacao_data = txtMovimentacaoData.getText().toString();
         double valor = Double.parseDouble(txtMovimentacaoValor.getText().toString());
         String descricao = txtDescricao.getText().toString();
@@ -114,7 +124,7 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity {
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
-                ApiRoutes.montar(P.autenticacao(),"movimentacao",P.usuario_id().toString()),
+                ApiRoutes.montar(P.autenticacao(),"movimentacao",P.usuario_id()),
                 new JSONObject(movimentacao.toParams()),
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -136,8 +146,6 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity {
     }
 
     public void limparErros() {
-        txtCategoria.setError(null);
-        txtPessoa.setError(null);
         txtMovimentacaoData.setError(null);
         txtMovimentacaoValor.setError(null);
         txtDescricao.setError(null);
