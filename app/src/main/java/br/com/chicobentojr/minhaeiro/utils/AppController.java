@@ -38,6 +38,7 @@ public class AppController extends Application {
         getRequestQueue().add(request);
     }
     public <T> void addToRequestQueue(Request<T> request){
+        request.setRetryPolicy(MinhaeiroRetryPolicy.getInstance());
         request.setTag(TAG);
         getRequestQueue().add(request);
     }

@@ -36,4 +36,8 @@
     <string name="confirma_senha_vazio_erro">A Confirmação de Senha é obrigatória</string>
     <string name="confirma_senha_invalida_erro">A Confirmação de Senha está diferente da Senha</string>
     <string name="btnPerfil">Atualizar Perfil</string>
+    <string name="title_activity_movimentacao_cadastro">Cadastrar Movimentação</string>
+    <string name="txtDescricaoHint">Descrição</string>
+    <string name="txtMovimentacaoDataHint">Data</string>
+    <string name="txtValorHint">Valor</string>
 </resources>

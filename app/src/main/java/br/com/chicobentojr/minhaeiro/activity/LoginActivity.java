@@ -89,7 +89,6 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.i("MINHAEIRO",response.toString());
                         Gson gson = new Gson();
                         Usuario usuarioResposta = gson.fromJson(response.toString(), Usuario.class);
                         P.setUsuario(usuarioResposta);

@@ -65,8 +65,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             layoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(layoutManager);
 
-            lblUsuarioNome = (TextView) navHeader.findViewById(R.id.lblUsuarioNome);
-            lblUsuarioNome.setText(P.nome());
             progressDialog = new ProgressDialog(this);
             progressDialog.setCanceledOnTouchOutside(false);
             carregarMovimentacoes();
@@ -119,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(this, PerfilActivity.class));
                 break;
             case R.id.nav_sair:
-                this.deslogar();
+                this.sair();
                 break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -143,6 +141,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navHeader = navigationView.getHeaderView(0);
         navigationView.setNavigationItemSelectedListener(this);
+        lblUsuarioNome = (TextView) navHeader.findViewById(R.id.lblUsuarioNome);
+        lblUsuarioNome.setText(P.nome());
     }
 
     public void carregarMovimentacoes() {
@@ -155,7 +155,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     public void onResponse(String response) {
                         progressDialog.hide();
                         Gson gson = new Gson();
-                        Log.i("TAG", response);
                         movimentacoes = gson.fromJson(response, Movimentacao[].class);
                         adapter = new MovimentacaoAdapter(movimentacoes);
                         recyclerView.setAdapter(adapter);
@@ -171,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         AppController.getInstance().addToRequestQueue(request);
     }
 
-    public void deslogar() {
+    public void sair() {
         P.limpar();
         startActivity(new Intent(this, LoginActivity.class));
     }
@@ -180,8 +179,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         public void onClick(View v) {
-            Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+            /*Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();*/
+            startActivity(new Intent(MainActivity.this,MovimentacaoCadastroActivity.class));
         }
     }
 }
