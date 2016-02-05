@@ -45,4 +45,13 @@
 
     <string name="spnCategoriaPrompt">Categoria</string>
     <string name="spnPessoaPrompt">Pessoa</string>
+
+    <string-array name="tipo_movimentacao_texto">
+        <item>Crédito</item>
+        <item>Débito</item>
+    </string-array>
+    <string-array name="tipo_movimentacao_valor">
+        <item>C</item>
+        <item>D</item>
+    </string-array>
 </resources>

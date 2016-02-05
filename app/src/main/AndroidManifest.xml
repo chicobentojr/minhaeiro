@@ -46,6 +46,7 @@
         </activity>
         <activity
             android:name=".activity.MovimentacaoCadastroActivity"
+            android:windowSoftInputMode="stateHidden"
             android:label="@string/title_activity_movimentacao_cadastro"
             android:launchMode="singleInstance"
             android:parentActivityName=".activity.MainActivity">

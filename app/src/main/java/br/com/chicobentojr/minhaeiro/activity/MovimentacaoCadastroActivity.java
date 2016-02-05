@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -36,8 +39,8 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity {
     private EditText txtMovimentacaoData;
     private EditText txtMovimentacaoValor;
     private EditText txtDescricao;
-    private EditText txtMovimentacaoTipo;
-    private EditText txtRealizada;
+    private Spinner spnMovimentacaoTipo;
+    private Switch swtRealizada;
     private ProgressDialog progressDialog;
 
     @Override
@@ -56,10 +59,8 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity {
         txtMovimentacaoData = (EditText) findViewById(R.id.txtMovimentacaoData);
         txtMovimentacaoValor = (EditText) findViewById(R.id.txtMovimentacaoValor);
         txtDescricao = (EditText) findViewById(R.id.txtDescricao);
-        txtMovimentacaoTipo = (EditText) findViewById(R.id.txtMovimentacaoTipo);
-        txtRealizada = (EditText) findViewById(R.id.txtRealizada);
-
-        txtRealizada.setText(String.valueOf(false));
+        spnMovimentacaoTipo = (Spinner) findViewById(R.id.spnMovimentacaoTipo);
+        swtRealizada = (Switch) findViewById(R.id.swtRealizada);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCanceledOnTouchOutside(false);
@@ -73,8 +74,8 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity {
         String movimentacao_data = txtMovimentacaoData.getText().toString();
         double valor = Double.parseDouble(txtMovimentacaoValor.getText().toString());
         String descricao = txtDescricao.getText().toString();
-        char tipo = txtMovimentacaoTipo.getText().charAt(0);
-        boolean realizada = Boolean.valueOf(txtRealizada.getText().toString());
+        char tipo = getResources().getStringArray(R.array.tipo_movimentacao_valor)[spnMovimentacaoTipo.getSelectedItemPosition()].charAt(0);
+        boolean realizada = swtRealizada.isChecked();
 
         boolean valido = true;
         View focusView = null;
@@ -92,12 +93,12 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity {
             focusView = txtDescricao;
             valido = false;
         } else if (String.valueOf(tipo).isEmpty()) {
-            txtMovimentacaoTipo.setError("O Tipo é obrigatório");
-            focusView = txtMovimentacaoTipo;
+            //txtMovimentacaoTipo.setError("O Tipo é obrigatório");
+            //focusView = txtMovimentacaoTipo;
             valido = false;
         } else if (String.valueOf(realizada).isEmpty()) {
-            txtRealizada.setError("Esse campo é obrigatório");
-            focusView = txtRealizada;
+            //txtRealizada.setError("Esse campo é obrigatório");
+            //focusView = txtRealizada;
             valido = false;
         }
 
@@ -149,8 +150,8 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity {
         txtMovimentacaoData.setError(null);
         txtMovimentacaoValor.setError(null);
         txtDescricao.setError(null);
-        txtMovimentacaoTipo.setError(null);
-        txtRealizada.setError(null);
+        //txtMovimentacaoTipo.setError(null);
+        //txtRealizada.setError(null);
     }
 
 }

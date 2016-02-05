@@ -25,12 +25,16 @@
                 android:id="@+id/spnCategoria"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spinner_margin_vertical"
+                android:layout_marginTop="@dimen/spinner_margin_vertical"
                 android:prompt="@string/spnCategoriaPrompt" />
 
             <Spinner
                 android:id="@+id/spnPessoa"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spinner_margin_vertical"
+                android:layout_marginTop="@dimen/spinner_margin_vertical"
                 android:prompt="@string/spnPessoaPrompt" />
 
             <android.support.design.widget.TextInputLayout
@@ -41,10 +45,8 @@
                     android:id="@+id/txtDescricao"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
                     android:hint="@string/txtDescricaoHint"
-                    android:inputType="textAutoCorrect"
+                    android:inputType="textCapSentences"
                     android:maxLines="1"
                     android:singleLine="true" />
 
@@ -85,30 +87,30 @@
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
-
-            <android.support.design.widget.TextInputLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/txtMovimentacaoTipo"
-                    android:layout_width="match_parent"
+                <Spinner
+                    android:id="@+id/spnMovimentacaoTipo"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="Tipo" />
+                    android:layout_marginBottom="@dimen/spinner_margin_vertical"
+                    android:layout_marginTop="@dimen/spinner_margin_vertical"
+                    android:layout_weight="0.5"
+                    android:entries="@array/tipo_movimentacao_texto"
 
-            </android.support.design.widget.TextInputLayout>
+                    />
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/txtRealizada"
-                    android:layout_width="match_parent"
+                <Switch
+                    android:id="@+id/swtRealizada"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:textSize="@dimen/item_movimentacao_descricao_text_size"
                     android:hint="Realizada" />
-
-            </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
 
 
         </LinearLayout>
