@@ -69,11 +69,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             progressDialog = new ProgressDialog(this);
             progressDialog.setCanceledOnTouchOutside(false);
-            carregarMovimentacoes();
+            this.carregarMovimentacoes();
         } else {
             this.finish();
             startActivity(new Intent(this, LoginActivity.class));
         }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        this.carregarMovimentacoes();
     }
 
     @Override

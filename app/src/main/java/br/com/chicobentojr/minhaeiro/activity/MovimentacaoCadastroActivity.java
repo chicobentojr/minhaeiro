@@ -150,8 +150,6 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity {
         txtMovimentacaoData.setError(null);
         txtMovimentacaoValor.setError(null);
         txtDescricao.setError(null);
-        //txtMovimentacaoTipo.setError(null);
-        //txtRealizada.setError(null);
     }
 
 }
