@@ -14,6 +14,10 @@ import br.com.chicobentojr.minhaeiro.models.Usuario;
  */
 public class P {
 
+    public static final class REQUEST{
+        public static final int MOVIMENTACAO_CADASTRO = 1;
+    }
+
     public static final String PREF_KEY = "br.com.chicobentojr.minhaeiro.shared_preferences";
 
     public static final String USUARIO_JSON = "shared_preference_usuario_JSON";

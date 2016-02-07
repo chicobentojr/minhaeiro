@@ -5,12 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -28,7 +26,6 @@ import br.com.chicobentojr.minhaeiro.models.Usuario;
 import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
 import br.com.chicobentojr.minhaeiro.utils.AppController;
 import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
-import br.com.chicobentojr.minhaeiro.utils.MinhaeiroRetryPolicy;
 import br.com.chicobentojr.minhaeiro.utils.P;
 
 public class MovimentacaoCadastroActivity extends AppCompatActivity {
@@ -134,7 +131,10 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity {
                         Movimentacao movimentacaoResposta = gson.fromJson(response.toString(), Movimentacao.class);
 
                         progressDialog.hide();
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        Intent intentResposta = new Intent(getApplicationContext(), MainActivity.class);
+                        intentResposta.putExtra("movimentacao",movimentacaoResposta);
+                        setResult(RESULT_OK, intentResposta);
+                        finish();
                     }
                 }, new Response.ErrorListener() {
             @Override

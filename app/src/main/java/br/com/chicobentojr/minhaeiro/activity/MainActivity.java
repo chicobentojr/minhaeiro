@@ -13,22 +13,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import br.com.chicobentojr.minhaeiro.R;
 import br.com.chicobentojr.minhaeiro.adapters.MovimentacaoAdapter;
@@ -47,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private View navHeader;
 
     private ProgressDialog progressDialog;
-    private Movimentacao[] movimentacoes;
+    private ArrayList<Movimentacao> movimentacoes;
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -101,7 +97,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_settings:
+            case R.id.act_atualizar:
+                this.carregarMovimentacoes();
                 return true;
         }
 
@@ -165,18 +162,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     public void onResponse(String response) {
                         progressDialog.hide();
                         Gson gson = new Gson();
-                        movimentacoes = gson.fromJson(response, Movimentacao[].class);
+                        movimentacoes = new ArrayList<Movimentacao>(Arrays.asList(gson.fromJson(response, Movimentacao[].class)));
                         adapter = new MovimentacaoAdapter(movimentacoes);
                         recyclerView.setAdapter(adapter);
 
                     }
                 }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        progressDialog.hide();
-                        MinhaeiroErrorHelper.alertar(error,MainActivity.this);
-                }}
-            );
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressDialog.hide();
+                MinhaeiroErrorHelper.alertar(error, MainActivity.this);
+            }
+        }
+        );
         AppController.getInstance().addToRequestQueue(request);
     }
 
@@ -191,7 +189,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public void onClick(View v) {
             /*Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();*/
-            startActivity(new Intent(MainActivity.this,MovimentacaoCadastroActivity.class));
+            startActivityForResult(new Intent(MainActivity.this, MovimentacaoCadastroActivity.class), P.REQUEST.MOVIMENTACAO_CADASTRO);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == P.REQUEST.MOVIMENTACAO_CADASTRO) {
+            if (resultCode == RESULT_OK && data != null) {
+                Movimentacao movimentacao = (Movimentacao) data.getSerializableExtra("movimentacao");
+                movimentacoes.add(0, movimentacao);
+                adapter.notifyDataSetChanged();
+                Snackbar.make(recyclerView, "Movimentação cadastrada com sucesso!", Snackbar.LENGTH_LONG).show();
+            }
         }
     }
 }

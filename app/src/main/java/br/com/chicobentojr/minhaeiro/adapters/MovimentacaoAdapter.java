@@ -19,9 +19,9 @@ import br.com.chicobentojr.minhaeiro.models.Movimentacao;
  */
 public class MovimentacaoAdapter extends RecyclerView.Adapter<MovimentacaoAdapter.ViewHolder> {
 
-    private Movimentacao[] movimentacoes;
+    private ArrayList<Movimentacao> movimentacoes;
 
-    public MovimentacaoAdapter(Movimentacao[] movimentacoes) {
+    public MovimentacaoAdapter(ArrayList<Movimentacao> movimentacoes) {
         this.movimentacoes = movimentacoes;
     }
 
@@ -37,7 +37,7 @@ public class MovimentacaoAdapter extends RecyclerView.Adapter<MovimentacaoAdapte
     public void onBindViewHolder(MovimentacaoAdapter.ViewHolder holder, int position) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
-        Movimentacao movimentacao = movimentacoes[position];
+        Movimentacao movimentacao = movimentacoes.get(position);
         holder.lblMovimentacaoDescricao.setText(movimentacao.descricao);
         try {
             holder.lblMovimentacaoData.setText(sdf2.format(sdf.parse(movimentacao.movimentacao_data)));
@@ -50,7 +50,7 @@ public class MovimentacaoAdapter extends RecyclerView.Adapter<MovimentacaoAdapte
 
     @Override
     public int getItemCount() {
-        return movimentacoes.length;
+        return movimentacoes.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
