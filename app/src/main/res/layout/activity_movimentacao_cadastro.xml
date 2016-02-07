@@ -75,16 +75,27 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5">
+                    android:layout_weight="0.25">
 
                     <EditText
                         android:id="@+id/txtMovimentacaoData"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:enabled="false"
                         android:hint="@string/txtMovimentacaoDataHint"
                         android:inputType="date" />
 
                 </android.support.design.widget.TextInputLayout>
+
+                <ImageButton
+                    android:id="@+id/btnData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:onClick="abrirDatePicker"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_button_calendario"/>
+
             </LinearLayout>
 
             <LinearLayout
@@ -106,9 +117,9 @@
                 <Switch
                     android:id="@+id/swtRealizada"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="0.5"
-                    android:textSize="@dimen/item_movimentacao_descricao_text_size"
+                    android:textSize="20sp"
                     android:hint="Realizada" />
             </LinearLayout>
 

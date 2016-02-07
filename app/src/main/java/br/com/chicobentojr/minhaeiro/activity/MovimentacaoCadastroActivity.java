@@ -18,7 +18,10 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
+import java.util.Calendar;
+
 import br.com.chicobentojr.minhaeiro.R;
+import br.com.chicobentojr.minhaeiro.dialogs.DatePicker;
 import br.com.chicobentojr.minhaeiro.models.Categoria;
 import br.com.chicobentojr.minhaeiro.models.Movimentacao;
 import br.com.chicobentojr.minhaeiro.models.Pessoa;
@@ -28,7 +31,7 @@ import br.com.chicobentojr.minhaeiro.utils.AppController;
 import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
 import br.com.chicobentojr.minhaeiro.utils.P;
 
-public class MovimentacaoCadastroActivity extends AppCompatActivity {
+public class MovimentacaoCadastroActivity extends AppCompatActivity implements DatePicker.DataFornecidaListener {
 
     private Usuario usuario;
     private Spinner spnCategoria;
@@ -49,9 +52,9 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity {
         usuario = P.getUsuario(P.obter(P.USUARIO_JSON));
 
         spnCategoria = (Spinner) findViewById(R.id.spnCategoria);
-        spnCategoria.setAdapter(new ArrayAdapter(this,android.R.layout.simple_spinner_item,usuario.Categoria));
+        spnCategoria.setAdapter(new ArrayAdapter(this, android.R.layout.simple_spinner_item, usuario.Categoria));
         spnPessoa = (Spinner) findViewById(R.id.spnPessoa);
-        spnPessoa.setAdapter(new ArrayAdapter(this,android.R.layout.simple_spinner_item,usuario.Pessoa));
+        spnPessoa.setAdapter(new ArrayAdapter(this, android.R.layout.simple_spinner_item, usuario.Pessoa));
 
         txtMovimentacaoData = (EditText) findViewById(R.id.txtMovimentacaoData);
         txtMovimentacaoValor = (EditText) findViewById(R.id.txtMovimentacaoValor);
@@ -61,13 +64,15 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCanceledOnTouchOutside(false);
+
+        this.PreencherData(Calendar.getInstance());
     }
 
     public void cadastrar(View v) {
         limparErros();
 
-        int categoria_id = ((Categoria)spnCategoria.getSelectedItem()).categoria_id;
-        int pessoa_id = ((Pessoa)spnPessoa.getSelectedItem()).pessoa_id;
+        int categoria_id = ((Categoria) spnCategoria.getSelectedItem()).categoria_id;
+        int pessoa_id = ((Pessoa) spnPessoa.getSelectedItem()).pessoa_id;
         String movimentacao_data = txtMovimentacaoData.getText().toString();
         double valor = Double.parseDouble(txtMovimentacaoValor.getText().toString());
         String descricao = txtDescricao.getText().toString();
@@ -116,13 +121,13 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity {
         }
     }
 
-    public void cadastrarMovimentacao(Movimentacao movimentacao){
+    public void cadastrarMovimentacao(Movimentacao movimentacao) {
         progressDialog.setMessage("Carregando...");
         progressDialog.show();
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
-                ApiRoutes.montar(P.autenticacao(),"movimentacao",P.usuario_id()),
+                ApiRoutes.montar(P.autenticacao(), "movimentacao", P.usuario_id()),
                 new JSONObject(movimentacao.toParams()),
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -132,7 +137,7 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity {
 
                         progressDialog.hide();
                         Intent intentResposta = new Intent(getApplicationContext(), MainActivity.class);
-                        intentResposta.putExtra("movimentacao",movimentacaoResposta);
+                        intentResposta.putExtra("movimentacao", movimentacaoResposta);
                         setResult(RESULT_OK, intentResposta);
                         finish();
                     }
@@ -152,5 +157,21 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity {
         txtDescricao.setError(null);
     }
 
+    public void abrirDatePicker(View view) {
+        DatePicker datePicker = new DatePicker(this);
+        datePicker.show(getFragmentManager(), "DatePicker");
+    }
+
+    @Override
+    public void PreencherData(Calendar calendario) {
+        String data = "";
+        int dia = calendario.get(Calendar.DAY_OF_MONTH);
+        int mes = calendario.get(Calendar.MONTH) + 1;
+        int ano = calendario.get(Calendar.YEAR);
+
+        data = String.format("%02d", dia) + "/" + String.format("%02d", mes) + "/" + ano;
+
+        txtMovimentacaoData.setText(data);
+    }
 }
 
