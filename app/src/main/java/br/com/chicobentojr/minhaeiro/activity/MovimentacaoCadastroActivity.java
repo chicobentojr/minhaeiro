@@ -28,6 +28,7 @@ import br.com.chicobentojr.minhaeiro.models.Pessoa;
 import br.com.chicobentojr.minhaeiro.models.Usuario;
 import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
 import br.com.chicobentojr.minhaeiro.utils.AppController;
+import br.com.chicobentojr.minhaeiro.utils.Extensoes;
 import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
 import br.com.chicobentojr.minhaeiro.utils.P;
 
@@ -119,7 +120,7 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
 
             movimentacao.categoria_id = categoria_id;
             movimentacao.pessoa_id = pessoa_id;
-            movimentacao.movimentacao_data = movimentacao_data;
+            movimentacao.movimentacao_data = Extensoes.STRING.toBrazilianDate(movimentacao_data);
             movimentacao.valor = Double.parseDouble(valor);
             movimentacao.descricao = descricao;
             movimentacao.tipo = tipo;
