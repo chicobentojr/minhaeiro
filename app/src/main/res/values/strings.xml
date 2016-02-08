@@ -37,6 +37,10 @@
     <string name="nova_senha_vazio_erro">A Nova Senha é obrigatória</string>
     <string name="confirma_senha_vazio_erro">A Confirmação de Senha é obrigatória</string>
     <string name="confirma_senha_invalida_erro">A Confirmação de Senha está diferente da Nova Senha</string>
+    <string name="descricao_vazio_erro">A Descrição é obrigatória</string>
+    <string name="valor_vazio_erro">O Valor é obrigatório</string>
+    <string name="data_vazio_erro">A Data é obrigatória</string>
+    <string name="valor_maior_zero_erro">O Valor tem que ser maior que zero</string>
     <string name="btnPerfil">Atualizar Perfil</string>
     <string name="title_activity_movimentacao_cadastro">Cadastrar Movimentação</string>
     <string name="txtDescricaoHint">Descrição</string>

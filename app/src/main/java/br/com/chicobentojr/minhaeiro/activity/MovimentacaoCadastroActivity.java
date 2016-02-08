@@ -46,6 +46,12 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.iniciarLayout();
+        this.PreencherData(Calendar.getInstance());
+    }
+
+    public void iniciarLayout() {
         setContentView(R.layout.activity_movimentacao_cadastro);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -64,8 +70,6 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCanceledOnTouchOutside(false);
-
-        this.PreencherData(Calendar.getInstance());
     }
 
     public void cadastrar(View v) {
@@ -74,7 +78,7 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
         int categoria_id = ((Categoria) spnCategoria.getSelectedItem()).categoria_id;
         int pessoa_id = ((Pessoa) spnPessoa.getSelectedItem()).pessoa_id;
         String movimentacao_data = txtMovimentacaoData.getText().toString();
-        double valor = Double.parseDouble(txtMovimentacaoValor.getText().toString());
+        String valor = txtMovimentacaoValor.getText().toString();
         String descricao = txtDescricao.getText().toString();
         char tipo = getResources().getStringArray(R.array.tipo_movimentacao_valor)[spnMovimentacaoTipo.getSelectedItemPosition()].charAt(0);
         boolean realizada = swtRealizada.isChecked();
@@ -82,17 +86,21 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
         boolean valido = true;
         View focusView = null;
 
-        if (movimentacao_data.isEmpty()) {
-            txtMovimentacaoData.setError("A Data é obrigatória");
-            focusView = txtMovimentacaoData;
+        if (descricao.isEmpty()) {
+            txtDescricao.setError(getString(R.string.descricao_vazio_erro));
+            focusView = txtDescricao;
             valido = false;
-        } else if (String.valueOf(valor).isEmpty() || valor <= 0) {
-            txtMovimentacaoValor.setError("O Valor é obrigatório");
+        } else if (valor.isEmpty()) {
+            txtMovimentacaoValor.setError(getString(R.string.valor_vazio_erro));
             focusView = txtMovimentacaoValor;
             valido = false;
-        } else if (descricao.isEmpty()) {
-            txtDescricao.setError("A Descrição é obrigatória");
-            focusView = txtDescricao;
+        } else if (movimentacao_data.isEmpty()) {
+            txtMovimentacaoData.setError(getString(R.string.data_vazio_erro));
+            focusView = txtMovimentacaoData;
+            valido = false;
+        } else if (Double.parseDouble(valor) <= 0) {
+            txtMovimentacaoValor.setError(getString(R.string.valor_maior_zero_erro));
+            focusView = txtMovimentacaoValor;
             valido = false;
         } else if (String.valueOf(tipo).isEmpty()) {
             //txtMovimentacaoTipo.setError("O Tipo é obrigatório");
@@ -112,7 +120,7 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
             movimentacao.categoria_id = categoria_id;
             movimentacao.pessoa_id = pessoa_id;
             movimentacao.movimentacao_data = movimentacao_data;
-            movimentacao.valor = valor;
+            movimentacao.valor = Double.parseDouble(valor);
             movimentacao.descricao = descricao;
             movimentacao.tipo = tipo;
             movimentacao.realizada = realizada;
