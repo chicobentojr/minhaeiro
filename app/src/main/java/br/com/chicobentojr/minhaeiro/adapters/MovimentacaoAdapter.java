@@ -1,5 +1,7 @@
 package br.com.chicobentojr.minhaeiro.adapters;
 
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -36,10 +38,18 @@ public class MovimentacaoAdapter extends RecyclerView.Adapter<MovimentacaoAdapte
     public void onBindViewHolder(MovimentacaoAdapter.ViewHolder holder, int position) {
 
         Movimentacao movimentacao = movimentacoes.get(position);
+
         holder.lblMovimentacaoDescricao.setText(movimentacao.descricao);
         holder.lblMovimentacaoData.setText(Extensoes.LAYOUT.data(movimentacao.movimentacao_data));
         holder.lblMovimentacaoPessoa.setText(String.valueOf(movimentacao.Pessoa.nome));
         holder.lblMovimentacaoValor.setText(Extensoes.LAYOUT.valor(movimentacao.valor));
+
+        if (movimentacao.realizada) {
+            holder.lblMovimentacaoDescricao.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+        }
+        if (movimentacao.tipo == 'D') {
+            holder.lblMovimentacaoValor.setTextColor(Color.RED);
+        }
     }
 
     @Override
@@ -66,7 +76,7 @@ public class MovimentacaoAdapter extends RecyclerView.Adapter<MovimentacaoAdapte
         @Override
         public void onClick(View v) {
             TextView lblMovimentacaoDescricao = (TextView) v.findViewById(R.id.lblMovimentacaoDescricao);
-            Snackbar.make(v,lblMovimentacaoDescricao.getText(),Snackbar.LENGTH_LONG).show();
+            Snackbar.make(v, lblMovimentacaoDescricao.getText(), Snackbar.LENGTH_LONG).show();
         }
     }
 
