@@ -20,6 +20,11 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/lblCategoria"
+                android:textColor="@color/accent" />
 
             <Spinner
                 android:id="@+id/spnCategoria"
@@ -27,7 +32,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spinner_margin_vertical"
                 android:layout_marginTop="@dimen/spinner_margin_vertical"
-                android:prompt="@string/spnCategoriaPrompt" />
+                android:prompt="@string/spnCategoriaPrompt"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/lblPessoa"
+                android:textColor="@color/accent" />
 
             <Spinner
                 android:id="@+id/spnPessoa"
@@ -92,11 +103,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"
-                    android:onClick="abrirDatePicker"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/ic_button_calendario"/>
+                    android:onClick="abrirDatePicker"
+                    android:src="@drawable/ic_button_calendario" />
 
             </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:text="@string/lblTipo"
+                android:textColor="@color/accent" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -107,8 +125,6 @@
                     android:id="@+id/spnMovimentacaoTipo"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/spinner_margin_vertical"
-                    android:layout_marginTop="@dimen/spinner_margin_vertical"
                     android:layout_weight="0.5"
                     android:entries="@array/tipo_movimentacao_texto"
 
@@ -119,8 +135,8 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"
-                    android:textSize="20sp"
-                    android:hint="Realizada" />
+                    android:hint="Realizada"
+                    android:textSize="20sp" />
             </LinearLayout>
 
 

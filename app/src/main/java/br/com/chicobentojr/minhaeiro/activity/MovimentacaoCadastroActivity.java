@@ -42,6 +42,9 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
     private EditText txtDescricao;
     private Spinner spnMovimentacaoTipo;
     private Switch swtRealizada;
+
+    private ArrayAdapter<Categoria> adpCategoria;
+    private ArrayAdapter<Pessoa> adpPessoa;
     private ProgressDialog progressDialog;
 
     @Override
@@ -58,10 +61,15 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
 
         usuario = P.getUsuario(P.obter(P.USUARIO_JSON));
 
+        adpCategoria = new ArrayAdapter(this, android.R.layout.simple_spinner_item, usuario.Categoria);
+        adpCategoria.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnCategoria = (Spinner) findViewById(R.id.spnCategoria);
-        spnCategoria.setAdapter(new ArrayAdapter(this, android.R.layout.simple_spinner_item, usuario.Categoria));
+        spnCategoria.setAdapter(adpCategoria);
+
+        adpPessoa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, usuario.Pessoa);
+        adpPessoa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnPessoa = (Spinner) findViewById(R.id.spnPessoa);
-        spnPessoa.setAdapter(new ArrayAdapter(this, android.R.layout.simple_spinner_item, usuario.Pessoa));
+        spnPessoa.setAdapter(adpPessoa);
 
         txtMovimentacaoData = (EditText) findViewById(R.id.txtMovimentacaoData);
         txtMovimentacaoValor = (EditText) findViewById(R.id.txtMovimentacaoValor);

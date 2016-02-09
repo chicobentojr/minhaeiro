@@ -46,9 +46,14 @@
     <string name="txtDescricaoHint">Descrição</string>
     <string name="txtMovimentacaoDataHint">Data</string>
     <string name="txtValorHint">Valor</string>
+    <string name="lblCategoria">Categoria</string>
+    <string name="lblPessoa">Pessoa</string>
+    <string name="lblCredito">Crédito</string>
+    <string name="lblDebito">Débito</string>
 
     <string name="spnCategoriaPrompt">Categoria</string>
     <string name="spnPessoaPrompt">Pessoa</string>
+    <string name="lblTipo">Tipo</string>
 
     <string-array name="tipo_movimentacao_texto">
         <item>Crédito</item>
