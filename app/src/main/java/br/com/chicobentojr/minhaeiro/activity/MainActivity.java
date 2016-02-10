@@ -1,6 +1,7 @@
 package br.com.chicobentojr.minhaeiro.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,9 +14,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -55,16 +59,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (P.usuarioConectado()) {
             setContentView(R.layout.activity_main);
             this.iniciarLayout();
-
-            recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-            recyclerView.setHasFixedSize(true);
-            recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
-            recyclerView.setItemAnimator(new SlideInUpAnimator());
-            layoutManager = new LinearLayoutManager(this);
-            recyclerView.setLayoutManager(layoutManager);
-
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setCanceledOnTouchOutside(false);
             this.carregarMovimentacoes();
         } else {
             this.finish();
@@ -150,6 +144,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         lblUsuarioLogin = (TextView) navHeader.findViewById(R.id.lblUsuarioLogin);
         lblUsuarioNome.setText(P.nome());
         lblUsuarioLogin.setText(P.login());
+
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        recyclerView.setItemAnimator(new SlideInUpAnimator());
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void OnItemClick(View view, int position) {
+                        Movimentacao movimentacao = movimentacoes.get(position);
+
+                        Intent intent = new Intent(MainActivity.this, MovimentacaoDetalheActivity.class);
+
+                        intent.putExtra("movimentacao", movimentacao);
+
+                        startActivity(intent);
+                    }
+                })
+        );
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCanceledOnTouchOutside(false);
     }
 
     public void carregarMovimentacoes() {
@@ -183,6 +202,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivity(new Intent(this, LoginActivity.class));
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == P.REQUEST.MOVIMENTACAO_CADASTRO) {
+            if (resultCode == RESULT_OK && data != null) {
+                Movimentacao movimentacao = (Movimentacao) data.getSerializableExtra("movimentacao");
+                movimentacoes.add(0, movimentacao);
+                adapter.notifyDataSetChanged();
+                Snackbar.make(recyclerView, "Movimentação cadastrada com sucesso!", Snackbar.LENGTH_LONG).show();
+            }
+        }
+    }
+
     private class BtnFloatingOnClick implements View.OnClickListener {
 
         @Override
@@ -193,15 +224,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == P.REQUEST.MOVIMENTACAO_CADASTRO) {
-            if (resultCode == RESULT_OK && data != null) {
-                Movimentacao movimentacao = (Movimentacao) data.getSerializableExtra("movimentacao");
-                movimentacoes.add(0, movimentacao);
-                adapter.notifyDataSetChanged();
-                Snackbar.make(recyclerView, "Movimentação cadastrada com sucesso!", Snackbar.LENGTH_LONG).show();
+    public static class RecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
+
+        private OnItemClickListener listener;
+
+        public interface OnItemClickListener {
+            public void OnItemClick(View view, int position);
+        }
+
+        private GestureDetector gestureDetector;
+
+        public RecyclerItemClickListener(Context context, OnItemClickListener listener) {
+            this.listener = listener;
+            this.gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onSingleTapUp(MotionEvent e) {
+                    return true;
+                }
+            });
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+            View childView = rv.findChildViewUnder(e.getX(), e.getY());
+            if (childView != null && listener != null && gestureDetector.onTouchEvent(e)) {
+                listener.OnItemClick(childView, rv.getChildAdapterPosition(childView));
             }
+            return false;
+        }
+
+        @Override
+        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+        }
+
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
         }
     }
 }

@@ -46,10 +46,19 @@
         </activity>
         <activity
             android:name=".activity.MovimentacaoCadastroActivity"
-            android:windowSoftInputMode="stateHidden"
             android:label="@string/title_activity_movimentacao_cadastro"
             android:launchMode="singleInstance"
-            android:parentActivityName=".activity.MainActivity">
+            android:parentActivityName=".activity.MainActivity"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.chicobentojr.minhaeiro.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.MovimentacaoDetalheActivity"
+            android:label="@string/title_activity_movimentacao_detalhe"
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.chicobentojr.minhaeiro.activity.MainActivity" />
