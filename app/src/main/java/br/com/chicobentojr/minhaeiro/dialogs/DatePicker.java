@@ -13,7 +13,7 @@ import java.util.Calendar;
 public class DatePicker extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
     public interface DataFornecidaListener{
-        public void PreencherData(Calendar calendario);
+        public void preencherData(Calendar calendario);
     }
 
     private DataFornecidaListener listener;
@@ -41,7 +41,7 @@ public class DatePicker extends DialogFragment implements DatePickerDialog.OnDat
         calendario.set(Calendar.MONTH, monthOfYear);
         calendario.set(Calendar.YEAR, year);
 
-        listener.PreencherData(calendario);
+        listener.preencherData(calendario);
     }
 
 

@@ -52,7 +52,7 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
         super.onCreate(savedInstanceState);
 
         this.iniciarLayout();
-        this.PreencherData(Calendar.getInstance());
+        this.preencherData(Calendar.getInstance());
     }
 
     public void iniciarLayout() {
@@ -180,7 +180,7 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
     }
 
     @Override
-    public void PreencherData(Calendar calendario) {
+    public void preencherData(Calendar calendario) {
         String data = "";
         int dia = calendario.get(Calendar.DAY_OF_MONTH);
         int mes = calendario.get(Calendar.MONTH) + 1;

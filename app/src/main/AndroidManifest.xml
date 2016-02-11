@@ -57,8 +57,9 @@
         <activity
             android:name=".activity.MovimentacaoDetalheActivity"
             android:label="@string/title_activity_movimentacao_detalhe"
+            android:launchMode="singleInstance"
             android:parentActivityName=".activity.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.chicobentojr.minhaeiro.activity.MainActivity" />
