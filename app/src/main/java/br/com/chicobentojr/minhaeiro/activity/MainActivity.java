@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (P.usuarioConectado()) {
-            setContentView(R.layout.activity_main);
             this.iniciarLayout();
             this.carregarMovimentacoes();
         } else {
@@ -125,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void iniciarLayout() {
+        setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -161,8 +161,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Intent intent = new Intent(MainActivity.this, MovimentacaoDetalheActivity.class);
 
                         intent.putExtra("movimentacao", movimentacao);
+                        intent.putExtra("item_posicao",position);
 
-                        startActivity(intent);
+                        startActivityForResult(intent, P.REQUEST.MOVIMENTACAO_ATUALIZACAO);
                     }
                 })
         );
@@ -210,6 +211,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 movimentacoes.add(0, movimentacao);
                 adapter.notifyDataSetChanged();
                 Snackbar.make(recyclerView, "Movimentação cadastrada com sucesso!", Snackbar.LENGTH_LONG).show();
+            }
+        } else if(requestCode == P.REQUEST.MOVIMENTACAO_ATUALIZACAO) {
+            if (resultCode == RESULT_OK && data != null) {
+                Movimentacao movimentacao = (Movimentacao) data.getSerializableExtra("movimentacao");
+                int item_posicao = data.getIntExtra("item_posicao",-1);
+                movimentacoes.set(item_posicao, movimentacao);
+                adapter.notifyItemChanged(item_posicao);
+                Snackbar.make(recyclerView, "Movimentação atualizada com sucesso!", Snackbar.LENGTH_LONG).show();
             }
         }
     }

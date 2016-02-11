@@ -16,6 +16,13 @@ public class ApiRoutes {
     public static String montar(String autenticacao, String controller, Integer usuario_id) {
         return ApiRoutes.URL_BASE  + autenticacao + "/" + controller + "/" + usuario_id;
     }
+    public static String montar(String autenticacao, String controller, Integer usuario_id, Integer... params) {
+        String url = ApiRoutes.URL_BASE + autenticacao + "/" + controller + "/" + usuario_id;
+        for (Integer parametro : params) {
+            url += "/" + parametro;
+        }
+        return url;
+    }
     public static String montar(String autenticacao, String controller, String usuario_id, String... params) {
         String url = ApiRoutes.URL_BASE + autenticacao + "/" + controller + "/" + usuario_id;
         for (String parametro : params) {

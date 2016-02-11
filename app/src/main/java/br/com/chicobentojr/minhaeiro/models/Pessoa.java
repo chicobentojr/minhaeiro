@@ -11,5 +11,11 @@ public class Pessoa implements Serializable {
     public String toString() {
         return this.nome;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        Pessoa p = (Pessoa) o;
+        return this.usuario_id == p.usuario_id && this.pessoa_id == p.pessoa_id;
+    }
 }
 

@@ -150,14 +150,14 @@
         android:layout_weight="1">
 
         <Button
-            android:id="@+id/btnCadastrar"
+            android:id="@+id/btnAtualizar"
             style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="@color/accent"
-            android:onClick="cadastrar"
-            android:text="@string/btnCadastrar"
+            android:onClick="atualizar"
+            android:text="@string/btnAtualizar"
             android:textColor="@android:color/white"
             android:textStyle="bold" />
     </RelativeLayout>

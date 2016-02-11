@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -18,6 +19,7 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.Calendar;
 
 import br.com.chicobentojr.minhaeiro.R;
@@ -36,6 +38,8 @@ public class MovimentacaoDetalheActivity extends AppCompatActivity implements Da
 
     private Usuario usuario;
     private Movimentacao movimentacao;
+    private int item_posicao;
+
     private Spinner spnCategoria;
     private Spinner spnPessoa;
     private EditText txtMovimentacaoData;
@@ -83,7 +87,7 @@ public class MovimentacaoDetalheActivity extends AppCompatActivity implements Da
         progressDialog.setCanceledOnTouchOutside(false);
     }
 
-    public void cadastrar(View v) {
+    public void atualizar(View v) {
         limparErros();
 
         int categoria_id = ((Categoria) spnCategoria.getSelectedItem()).categoria_id;
@@ -126,7 +130,6 @@ public class MovimentacaoDetalheActivity extends AppCompatActivity implements Da
         if (!valido) {
             focusView.requestFocus();
         } else {
-            Movimentacao movimentacao = new Movimentacao();
 
             movimentacao.categoria_id = categoria_id;
             movimentacao.pessoa_id = pessoa_id;
@@ -136,17 +139,17 @@ public class MovimentacaoDetalheActivity extends AppCompatActivity implements Da
             movimentacao.tipo = tipo;
             movimentacao.realizada = realizada;
 
-            cadastrarMovimentacao(movimentacao);
+            atualizarMovimentacao(movimentacao);
         }
     }
 
-    public void cadastrarMovimentacao(Movimentacao movimentacao) {
+    public void atualizarMovimentacao(Movimentacao movimentacao) {
         progressDialog.setMessage("Carregando...");
         progressDialog.show();
 
         JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.POST,
-                ApiRoutes.montar(P.autenticacao(), "movimentacao", P.usuario_id()),
+                Request.Method.PUT,
+                ApiRoutes.montar(P.autenticacao(), "movimentacao", P.usuario_id(),movimentacao.movimentacao_id),
                 new JSONObject(movimentacao.toParams()),
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -157,6 +160,7 @@ public class MovimentacaoDetalheActivity extends AppCompatActivity implements Da
                         progressDialog.hide();
                         Intent intentResposta = new Intent(getApplicationContext(), MainActivity.class);
                         intentResposta.putExtra("movimentacao", movimentacaoResposta);
+                        intentResposta.putExtra("item_posicao", item_posicao);
                         setResult(RESULT_OK, intentResposta);
                         finish();
                     }
@@ -183,10 +187,22 @@ public class MovimentacaoDetalheActivity extends AppCompatActivity implements Da
 
     public void preencherMovimentacao(){
         movimentacao = (Movimentacao) this.getIntent().getSerializableExtra("movimentacao");
+        item_posicao = this.getIntent().getIntExtra("item_posicao",-1);
 
         txtDescricao.setText(movimentacao.descricao);
         txtMovimentacaoValor.setText(String.valueOf(movimentacao.valor));
+        txtMovimentacaoData.setText(Extensoes.LAYOUT.data(movimentacao.movimentacao_data));
         swtRealizada.setChecked(movimentacao.realizada);
+
+        int categoriaIndice = HelperSpinner.getSelectedItemPosition(spnCategoria, movimentacao.Categoria);
+        int pessoaIndice = HelperSpinner.getSelectedItemPosition(spnPessoa,movimentacao.Pessoa);
+
+        String[] tipos = getResources().getStringArray(R.array.tipo_movimentacao_valor);
+        int tipoIndice = Arrays.asList(tipos).indexOf(String.valueOf(movimentacao.tipo));
+
+        spnCategoria.setSelection(categoriaIndice);
+        spnPessoa.setSelection(pessoaIndice);
+        spnMovimentacaoTipo.setSelection(tipoIndice);
     }
 
     @Override
@@ -199,5 +215,18 @@ public class MovimentacaoDetalheActivity extends AppCompatActivity implements Da
         data = String.format("%02d", dia) + "/" + String.format("%02d", mes) + "/" + ano;
 
         txtMovimentacaoData.setText(data);
+    }
+
+    public static class HelperSpinner{
+        public static <T> int getSelectedItemPosition(Spinner spinner, T object){
+            int retorno = -1;
+            for (int i = 0; i < spinner.getCount(); i++){
+                T temp = (T) spinner.getItemAtPosition(i);
+                if(temp.equals(object)){
+                    retorno = i;
+                }
+            }
+            return retorno;
+        }
     }
 }

@@ -15,4 +15,10 @@ public class Categoria implements Serializable {
     public String toString() {
         return this.nome;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        Categoria c = (Categoria) o;
+        return this.usuario_id == c.usuario_id && this.categoria_id == c.categoria_id;
+    }
 }

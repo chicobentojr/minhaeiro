@@ -16,6 +16,7 @@ public class P {
 
     public static final class REQUEST{
         public static final int MOVIMENTACAO_CADASTRO = 1;
+        public static final int MOVIMENTACAO_ATUALIZACAO = 2;
     }
 
     public static final String PREF_KEY = "br.com.chicobentojr.minhaeiro.shared_preferences";
