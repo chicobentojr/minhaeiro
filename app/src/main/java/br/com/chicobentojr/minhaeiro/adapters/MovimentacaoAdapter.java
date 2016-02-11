@@ -39,17 +39,35 @@ public class MovimentacaoAdapter extends RecyclerView.Adapter<MovimentacaoAdapte
 
         Movimentacao movimentacao = movimentacoes.get(position);
 
-        holder.lblMovimentacaoDescricao.setText(movimentacao.descricao);
-        holder.lblMovimentacaoData.setText(Extensoes.LAYOUT.data(movimentacao.movimentacao_data));
-        holder.lblMovimentacaoPessoa.setText(String.valueOf(movimentacao.Pessoa.nome));
-        holder.lblMovimentacaoValor.setText(Extensoes.LAYOUT.valor(movimentacao.valor));
+        if(movimentacao != null) {
 
-        if (movimentacao.realizada) {
-            holder.lblMovimentacaoDescricao.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.lblMovimentacaoDescricao.setText(movimentacao.descricao);
+            holder.lblMovimentacaoData.setText(Extensoes.LAYOUT.data(movimentacao.movimentacao_data));
+            holder.lblMovimentacaoPessoa.setText(String.valueOf(movimentacao.Pessoa.nome));
+            holder.lblMovimentacaoValor.setText(Extensoes.LAYOUT.valor(movimentacao.valor));
+
+            if (movimentacao.realizada) {
+                holder.lblMovimentacaoDescricao.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+            } else{
+                holder.lblMovimentacaoDescricao.setPaintFlags(0);
+            }
+            if (movimentacao.tipo == 'D') {
+                holder.lblMovimentacaoValor.setTextColor(Color.RED);
+            } else if(movimentacao.tipo == 'C'){
+                holder.lblMovimentacaoValor.setTextColor(Color.parseColor("#1B5E20"));
+            }
+            this.toggleView(holder,View.VISIBLE);
         }
-        if (movimentacao.tipo == 'D') {
-            holder.lblMovimentacaoValor.setTextColor(Color.RED);
+        else{
+            this.toggleView(holder,View.INVISIBLE);
         }
+    }
+
+    public void toggleView(MovimentacaoAdapter.ViewHolder holder, int visibility){
+        holder.lblMovimentacaoDescricao.setVisibility(visibility);
+        holder.lblMovimentacaoData.setVisibility(visibility);
+        holder.lblMovimentacaoPessoa.setVisibility(visibility);
+        holder.lblMovimentacaoValor.setVisibility(visibility);
     }
 
     @Override
