@@ -3,7 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="1dp"
-    android:padding="@dimen/activity_horizontal_margin">
+    android:background="?android:attr/selectableItemBackground"
+    android:padding="@dimen/activity_horizontal_margin"
+    android:clickable="true"
+    android:focusable="true">
 
     <ImageView
         android:id="@+id/imgMovimentacaoIcon"
