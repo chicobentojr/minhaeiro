@@ -39,35 +39,21 @@ public class MovimentacaoAdapter extends RecyclerView.Adapter<MovimentacaoAdapte
 
         Movimentacao movimentacao = movimentacoes.get(position);
 
-        if(movimentacao != null) {
+        holder.lblMovimentacaoDescricao.setText(movimentacao.descricao);
+        holder.lblMovimentacaoData.setText(Extensoes.LAYOUT.data(movimentacao.movimentacao_data));
+        holder.lblMovimentacaoPessoa.setText(String.valueOf(movimentacao.Pessoa.nome));
+        holder.lblMovimentacaoValor.setText(Extensoes.LAYOUT.valor(movimentacao.valor));
 
-            holder.lblMovimentacaoDescricao.setText(movimentacao.descricao);
-            holder.lblMovimentacaoData.setText(Extensoes.LAYOUT.data(movimentacao.movimentacao_data));
-            holder.lblMovimentacaoPessoa.setText(String.valueOf(movimentacao.Pessoa.nome));
-            holder.lblMovimentacaoValor.setText(Extensoes.LAYOUT.valor(movimentacao.valor));
-
-            if (movimentacao.realizada) {
-                holder.lblMovimentacaoDescricao.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-            } else{
-                holder.lblMovimentacaoDescricao.setPaintFlags(0);
-            }
-            if (movimentacao.tipo == 'D') {
-                holder.lblMovimentacaoValor.setTextColor(Color.RED);
-            } else if(movimentacao.tipo == 'C'){
-                holder.lblMovimentacaoValor.setTextColor(Color.parseColor("#1B5E20"));
-            }
-            this.toggleView(holder,View.VISIBLE);
+        if (movimentacao.realizada) {
+            holder.itemView.setAlpha(0.2f);
+        } else {
+            holder.itemView.setAlpha(1f);
         }
-        else{
-            this.toggleView(holder,View.INVISIBLE);
+        if (movimentacao.tipo == 'D') {
+            holder.lblMovimentacaoValor.setTextColor(Color.RED);
+        } else if (movimentacao.tipo == 'C') {
+            holder.lblMovimentacaoValor.setTextColor(Color.parseColor("#1B5E20"));
         }
-    }
-
-    public void toggleView(MovimentacaoAdapter.ViewHolder holder, int visibility){
-        holder.lblMovimentacaoDescricao.setVisibility(visibility);
-        holder.lblMovimentacaoData.setVisibility(visibility);
-        holder.lblMovimentacaoPessoa.setVisibility(visibility);
-        holder.lblMovimentacaoValor.setVisibility(visibility);
     }
 
     @Override
@@ -77,6 +63,7 @@ public class MovimentacaoAdapter extends RecyclerView.Adapter<MovimentacaoAdapte
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        public View itemView;
         public TextView lblMovimentacaoDescricao;
         public TextView lblMovimentacaoData;
         public TextView lblMovimentacaoPessoa;
@@ -84,6 +71,7 @@ public class MovimentacaoAdapter extends RecyclerView.Adapter<MovimentacaoAdapte
 
         public ViewHolder(View itemView) {
             super(itemView);
+            this.itemView = itemView;
             lblMovimentacaoDescricao = (TextView) itemView.findViewById(R.id.lblMovimentacaoDescricao);
             lblMovimentacaoData = (TextView) itemView.findViewById(R.id.lblMovimentacaoData);
             lblMovimentacaoPessoa = (TextView) itemView.findViewById(R.id.lblMovimentacaoPessoa);
