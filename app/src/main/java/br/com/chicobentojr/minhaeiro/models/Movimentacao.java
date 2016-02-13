@@ -15,7 +15,7 @@ public class Movimentacao implements Serializable {
     public char tipo;
     public boolean realizada;
 
-    public ArrayList<MovimentacaoItem> MovimentacaoItem;
+    public MovimentacaoItem[] MovimentacaoItem;
     public Pessoa Pessoa;
     public Categoria Categoria;
 

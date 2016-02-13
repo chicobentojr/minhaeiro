@@ -13,4 +13,6 @@ public class MovimentacaoItem implements Serializable {
     public String descricao;
     public char tipo;
     public boolean realizada;
+
+    public Pessoa Pessoa;
 }
