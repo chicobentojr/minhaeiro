@@ -33,6 +33,7 @@ import br.com.chicobentojr.minhaeiro.utils.AppController;
 import br.com.chicobentojr.minhaeiro.utils.Extensoes;
 import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
 import br.com.chicobentojr.minhaeiro.utils.P;
+import br.com.chicobentojr.minhaeiro.utils.SpinnerHelper;
 
 public class MovimentacaoDetalheActivity extends AppCompatActivity implements DatePicker.DataFornecidaListener {
 
@@ -189,13 +190,15 @@ public class MovimentacaoDetalheActivity extends AppCompatActivity implements Da
         movimentacao = (Movimentacao) this.getIntent().getSerializableExtra("movimentacao");
         item_posicao = this.getIntent().getIntExtra("item_posicao",-1);
 
+        this.setTitle(movimentacao.descricao);
+
         txtDescricao.setText(movimentacao.descricao);
         txtMovimentacaoValor.setText(String.valueOf(movimentacao.valor));
         txtMovimentacaoData.setText(Extensoes.LAYOUT.data(movimentacao.movimentacao_data));
         swtRealizada.setChecked(movimentacao.realizada);
 
-        int categoriaIndice = HelperSpinner.getSelectedItemPosition(spnCategoria, movimentacao.Categoria);
-        int pessoaIndice = HelperSpinner.getSelectedItemPosition(spnPessoa,movimentacao.Pessoa);
+        int categoriaIndice = SpinnerHelper.getSelectedItemPosition(spnCategoria, movimentacao.Categoria);
+        int pessoaIndice = SpinnerHelper.getSelectedItemPosition(spnPessoa,movimentacao.Pessoa);
 
         String[] tipos = getResources().getStringArray(R.array.tipo_movimentacao_valor);
         int tipoIndice = Arrays.asList(tipos).indexOf(String.valueOf(movimentacao.tipo));
@@ -215,18 +218,5 @@ public class MovimentacaoDetalheActivity extends AppCompatActivity implements Da
         data = String.format("%02d", dia) + "/" + String.format("%02d", mes) + "/" + ano;
 
         txtMovimentacaoData.setText(data);
-    }
-
-    public static class HelperSpinner{
-        public static <T> int getSelectedItemPosition(Spinner spinner, T object){
-            int retorno = -1;
-            for (int i = 0; i < spinner.getCount(); i++){
-                T temp = (T) spinner.getItemAtPosition(i);
-                if(temp.equals(object)){
-                    retorno = i;
-                }
-            }
-            return retorno;
-        }
     }
 }

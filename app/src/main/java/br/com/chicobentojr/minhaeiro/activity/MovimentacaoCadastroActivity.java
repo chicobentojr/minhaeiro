@@ -1,11 +1,14 @@
 package br.com.chicobentojr.minhaeiro.activity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -31,6 +34,7 @@ import br.com.chicobentojr.minhaeiro.utils.AppController;
 import br.com.chicobentojr.minhaeiro.utils.Extensoes;
 import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
 import br.com.chicobentojr.minhaeiro.utils.P;
+import br.com.chicobentojr.minhaeiro.utils.SpinnerHelper;
 
 public class MovimentacaoCadastroActivity extends AppCompatActivity implements DatePicker.DataFornecidaListener {
 
@@ -46,6 +50,19 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
     private ArrayAdapter<Categoria> adpCategoria;
     private ArrayAdapter<Pessoa> adpPessoa;
     private ProgressDialog progressDialog;
+
+
+    @Override
+    public void preencherData(Calendar calendario) {
+        String data = "";
+        int dia = calendario.get(Calendar.DAY_OF_MONTH);
+        int mes = calendario.get(Calendar.MONTH) + 1;
+        int ano = calendario.get(Calendar.YEAR);
+
+        data = String.format("%02d", dia) + "/" + String.format("%02d", mes) + "/" + ano;
+
+        txtMovimentacaoData.setText(data);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,16 +196,59 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
         datePicker.show(getFragmentManager(), "DatePicker");
     }
 
-    @Override
-    public void preencherData(Calendar calendario) {
-        String data = "";
-        int dia = calendario.get(Calendar.DAY_OF_MONTH);
-        int mes = calendario.get(Calendar.MONTH) + 1;
-        int ano = calendario.get(Calendar.YEAR);
+    public void abrirCategoriaDialog(View view) {
+        final AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setTitle("Nova Categoria")
+                .setView(R.layout.dialog_categoria_cadastro)
+                .setPositiveButton("Cadastrar", null)
+                .setNegativeButton("Cancelar", null)
+                .create();
 
-        data = String.format("%02d", dia) + "/" + String.format("%02d", mes) + "/" + ano;
-
-        txtMovimentacaoData.setText(data);
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                positiveButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        EditText txtNome = (EditText) (alertDialog).findViewById(R.id.txtNome);
+                        String nome = txtNome.getText().toString();
+                        Categoria categoria = new Categoria();
+                        categoria.nome = nome;
+                        if (nome.isEmpty()) {
+                            txtNome.setError(getString(R.string.nome_vazio_erro));
+                            txtNome.requestFocus();
+                        } else {
+                            progressDialog.setMessage("Carregando...");
+                            progressDialog.show();
+                            JsonObjectRequest request = new JsonObjectRequest(
+                                    Request.Method.POST,
+                                    ApiRoutes.CATEGORIA.Post(),
+                                    new JSONObject(categoria.toParams()),
+                                    new Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject response) {
+                                            Categoria categoriaResposta = new Gson().fromJson(response.toString(), Categoria.class);
+                                            adpCategoria.add(categoriaResposta);
+                                            spnCategoria.setSelection(SpinnerHelper.getSelectedItemPosition(spnCategoria, categoriaResposta));
+                                            alertDialog.dismiss();
+                                            progressDialog.dismiss();
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            MinhaeiroErrorHelper.alertar(error, MovimentacaoCadastroActivity.this);
+                                        }
+                                    }
+                            );
+                            AppController.getInstance().addToRequestQueue(request);
+                        }
+                    }
+                });
+            }
+        });
+        alertDialog.show();
     }
 }
 

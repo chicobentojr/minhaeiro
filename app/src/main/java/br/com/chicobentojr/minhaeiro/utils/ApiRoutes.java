@@ -6,6 +6,12 @@ package br.com.chicobentojr.minhaeiro.utils;
 public class ApiRoutes {
     public static final String URL_BASE = "http://minhaeiro.apphb.com/api/";
 
+    public static class CATEGORIA {
+        public static String Post() {
+            return URL_BASE + P.autenticacao() + "/" + "categoria/" + P.usuario_id();
+        }
+    }
+
     public static String montar(String... params) {
         String url = ApiRoutes.URL_BASE;
         for (String parametro : params) {
@@ -13,9 +19,11 @@ public class ApiRoutes {
         }
         return url;
     }
+
     public static String montar(String autenticacao, String controller, Integer usuario_id) {
-        return ApiRoutes.URL_BASE  + autenticacao + "/" + controller + "/" + usuario_id;
+        return ApiRoutes.URL_BASE + autenticacao + "/" + controller + "/" + usuario_id;
     }
+
     public static String montar(String autenticacao, String controller, Integer usuario_id, Integer... params) {
         String url = ApiRoutes.URL_BASE + autenticacao + "/" + controller + "/" + usuario_id;
         for (Integer parametro : params) {
@@ -23,6 +31,7 @@ public class ApiRoutes {
         }
         return url;
     }
+
     public static String montar(String autenticacao, String controller, String usuario_id, String... params) {
         String url = ApiRoutes.URL_BASE + autenticacao + "/" + controller + "/" + usuario_id;
         for (String parametro : params) {
