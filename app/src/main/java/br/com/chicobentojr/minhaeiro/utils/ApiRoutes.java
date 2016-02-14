@@ -12,6 +12,12 @@ public class ApiRoutes {
         }
     }
 
+    public static class PESSOA{
+        public static String Post(){
+            return URL_BASE + P.autenticacao() + "/" + "pessoa/" + P.usuario_id();
+        }
+    }
+
     public static String montar(String... params) {
         String url = ApiRoutes.URL_BASE;
         for (String parametro : params) {

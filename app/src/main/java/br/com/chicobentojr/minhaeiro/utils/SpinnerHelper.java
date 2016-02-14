@@ -12,6 +12,7 @@ public class SpinnerHelper {
             T temp = (T) spinner.getItemAtPosition(i);
             if (temp.equals(object)) {
                 retorno = i;
+                break;
             }
         }
         return retorno;

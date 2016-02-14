@@ -20,65 +20,67 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/lblCategoria"
-            android:textColor="@color/accent" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Spinner
-                android:id="@+id/spnCategoria"
-                android:layout_width="0dp"
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spinner_margin_vertical"
-                android:layout_marginTop="@dimen/spinner_margin_vertical"
-                android:layout_weight="1"
-                android:prompt="@string/spnCategoriaPrompt" />
+                android:text="@string/lblCategoria"
+                android:textColor="@color/accent" />
 
-            <ImageButton
-                android:id="@+id/btnCategoriaAdicionar"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:background="@android:color/transparent"
-                android:onClick="abrirCategoriaDialog"
-                android:src="@drawable/ic_button_categoria_adicionar" />
-        </LinearLayout>
-
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/lblPessoa"
-            android:textColor="@color/accent" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Spinner
-                android:id="@+id/spnPessoa"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spinner_margin_vertical"
-                android:layout_marginTop="@dimen/spinner_margin_vertical"
-                android:prompt="@string/spnPessoaPrompt" />
-            <ImageButton
-                android:id="@+id/btnPessoaAdicionar"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:background="@android:color/transparent"
-                android:onClick="abrirPessoaDialog"
-                android:src="@drawable/ic_button_pessoa_adicionar" />
+                android:orientation="horizontal">
 
-        </LinearLayout>
+                <Spinner
+                    android:id="@+id/spnCategoria"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spinner_margin_vertical"
+                    android:layout_marginTop="@dimen/spinner_margin_vertical"
+                    android:layout_weight="1"
+                    android:prompt="@string/spnCategoriaPrompt" />
+
+                <ImageButton
+                    android:id="@+id/btnCategoriaAdicionar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:color/transparent"
+                    android:onClick="abrirCategoriaDialog"
+                    android:src="@drawable/ic_button_categoria_adicionar" />
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/lblPessoa"
+                android:textColor="@color/accent" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Spinner
+                    android:id="@+id/spnPessoa"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spinner_margin_vertical"
+                    android:layout_marginTop="@dimen/spinner_margin_vertical"
+                    android:layout_weight="1"
+                    android:prompt="@string/spnPessoaPrompt" />
+
+                <ImageButton
+                    android:id="@+id/btnPessoaAdicionar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:color/transparent"
+                    android:onClick="abrirPessoaDialog"
+                    android:src="@drawable/ic_button_pessoa_adicionar" />
+
+            </LinearLayout>
+
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">

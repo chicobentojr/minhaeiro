@@ -250,5 +250,60 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
         });
         alertDialog.show();
     }
+
+    public void abrirPessoaDialog(View view) {
+        final AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setTitle("Nova Pessoa")
+                .setView(R.layout.dialog_pessoa_cadastro)
+                .setPositiveButton("Cadastrar", null)
+                .setNegativeButton("Cancelar", null)
+                .create();
+
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                positiveButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        EditText txtNome = (EditText) (alertDialog).findViewById(R.id.txtNome);
+                        String nome = txtNome.getText().toString();
+                        final Pessoa pessoa = new Pessoa();
+                        pessoa.nome = nome;
+                        if (nome.isEmpty()) {
+                            txtNome.setError(getString(R.string.nome_vazio_erro));
+                            txtNome.requestFocus();
+                        } else {
+                            progressDialog.setMessage("Carregando...");
+                            progressDialog.show();
+                            JsonObjectRequest request = new JsonObjectRequest(
+                                    Request.Method.POST,
+                                    ApiRoutes.PESSOA.Post(),
+                                    new JSONObject(pessoa.toParams()),
+                                    new Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject response) {
+                                            Pessoa pessoaResposta = new Gson().fromJson(response.toString(), Pessoa.class);
+                                            adpPessoa.add(pessoaResposta);
+                                            spnPessoa.setSelection(SpinnerHelper.getSelectedItemPosition(spnPessoa, pessoaResposta));
+                                            alertDialog.dismiss();
+                                            progressDialog.dismiss();
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            MinhaeiroErrorHelper.alertar(error, MovimentacaoCadastroActivity.this);
+                                        }
+                                    }
+                            );
+                            AppController.getInstance().addToRequestQueue(request);
+                        }
+                    }
+                });
+            }
+        });
+        alertDialog.show();
+    }
 }
 
