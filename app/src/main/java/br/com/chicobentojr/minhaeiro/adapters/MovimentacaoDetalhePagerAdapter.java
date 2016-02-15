@@ -13,7 +13,9 @@ import br.com.chicobentojr.minhaeiro.fragments.MovimentacaoItensFragment;
  * Created by Francisco on 14/02/2016.
  */
 public class MovimentacaoDetalhePagerAdapter extends FragmentPagerAdapter {
+
     private Activity listener;
+
     public MovimentacaoDetalhePagerAdapter(FragmentManager fm,Activity listener) {
         super(fm);
         this.listener = listener;
