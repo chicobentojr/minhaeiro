@@ -238,6 +238,7 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
                                     new Response.ErrorListener() {
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
+                                            progressDialog.dismiss();
                                             MinhaeiroErrorHelper.alertar(error, MovimentacaoCadastroActivity.this);
                                         }
                                     }
@@ -293,6 +294,7 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
                                     new Response.ErrorListener() {
                                         @Override
                                         public void onErrorResponse(VolleyError error) {
+                                            progressDialog.dismiss();
                                             MinhaeiroErrorHelper.alertar(error, MovimentacaoCadastroActivity.this);
                                         }
                                     }

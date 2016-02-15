@@ -1,5 +1,7 @@
 package br.com.chicobentojr.minhaeiro.utils;
 
+import br.com.chicobentojr.minhaeiro.models.Movimentacao;
+
 /**
  * Created by Francisco on 30/01/2016.
  */
@@ -8,13 +10,23 @@ public class ApiRoutes {
 
     public static class CATEGORIA {
         public static String Post() {
-            return URL_BASE + P.autenticacao() + "/" + "categoria/" + P.usuario_id();
+            return URL_BASE + P.autenticacao() + "/categoria/" + P.usuario_id();
         }
     }
 
-    public static class PESSOA{
-        public static String Post(){
-            return URL_BASE + P.autenticacao() + "/" + "pessoa/" + P.usuario_id();
+    public static class PESSOA {
+        public static String Post() {
+            return URL_BASE + P.autenticacao() + "/pessoa/" + P.usuario_id();
+        }
+    }
+
+    public static class MOVIMENTACAO {
+        public static String Post() {
+            return "";
+        }
+
+        public static String Put(int movimentacao_id) {
+            return URL_BASE + P.autenticacao() + "/movimentacao/" + P.usuario_id() +"/" + movimentacao_id;
         }
     }
 
