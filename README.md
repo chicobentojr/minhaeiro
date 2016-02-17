@@ -1,4 +1,4 @@
-# Minhaeiro
+# :moneybag: Minhaeiro :moneybag:
 Projeto pessoal para controle de finanças na plataforma Android
 
 ## Funcionalidades
