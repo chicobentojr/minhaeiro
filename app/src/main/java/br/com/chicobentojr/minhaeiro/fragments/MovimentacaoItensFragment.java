@@ -25,11 +25,11 @@ import br.com.chicobentojr.minhaeiro.utils.DividerItemDecoration;
 public class MovimentacaoItensFragment extends Fragment {
 
     private Activity listener;
-    private ArrayList<MovimentacaoItem> itens;
+    public static ArrayList<MovimentacaoItem> itens;
 
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
+    public static RecyclerView recyclerView;
+    public static RecyclerView.Adapter adapter;
+    public static RecyclerView.LayoutManager layoutManager;
 
     public MovimentacaoItensFragment(){
 
@@ -55,5 +55,10 @@ public class MovimentacaoItensFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         return view;
+    }
+
+    public void adicionarItem(MovimentacaoItem item){
+        itens.add(0,item);
+        adapter.notifyDataSetChanged();
     }
 }

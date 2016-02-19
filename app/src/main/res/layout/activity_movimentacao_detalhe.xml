@@ -36,11 +36,12 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/fabCadastrarItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
+        android:onClick="abrirCadastroItemDialog"
         android:src="@drawable/ic_dinheiro" />
 
 </android.support.design.widget.CoordinatorLayout>

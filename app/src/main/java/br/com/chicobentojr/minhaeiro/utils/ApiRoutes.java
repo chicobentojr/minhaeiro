@@ -30,6 +30,12 @@ public class ApiRoutes {
         }
     }
 
+    public static class MOVIMENTACAO_ITEM {
+        public static String Post(int movimentacao_id){
+            return URL_BASE + P.autenticacao() + "/movimentacaoitem/" + P.usuario_id() +"/" + movimentacao_id;
+        }
+    }
+
     public static String montar(String... params) {
         String url = ApiRoutes.URL_BASE;
         for (String parametro : params) {
