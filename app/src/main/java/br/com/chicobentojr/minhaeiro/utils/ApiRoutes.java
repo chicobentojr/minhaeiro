@@ -8,6 +8,20 @@ import br.com.chicobentojr.minhaeiro.models.Movimentacao;
 public class ApiRoutes {
     public static final String URL_BASE = "http://minhaeiro.apphb.com/api/";
 
+
+
+    public static class USUARIO {
+        public static String Entrar() {
+          return URL_BASE + "login";
+        }
+        public static String Post(){
+            return ApiRoutes.URL_BASE + "usuario";
+        }
+        public static String Get(){
+            return URL_BASE + P.autenticacao() + "/usuario/" + P.usuario_id();
+        }
+    }
+
     public static class CATEGORIA {
         public static String Post() {
             return URL_BASE + P.autenticacao() + "/categoria/" + P.usuario_id();
@@ -62,10 +76,5 @@ public class ApiRoutes {
             url += "/" + parametro;
         }
         return url;
-    }
-
-    public interface Usuario {
-        String ENTRAR = ApiRoutes.URL_BASE + "login";
-        String CADASTRAR = ApiRoutes.URL_BASE + "usuario";
     }
 }

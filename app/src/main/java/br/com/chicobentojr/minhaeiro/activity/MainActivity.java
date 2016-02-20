@@ -32,6 +32,7 @@ import java.util.Arrays;
 import br.com.chicobentojr.minhaeiro.R;
 import br.com.chicobentojr.minhaeiro.adapters.MovimentacaoAdapter;
 import br.com.chicobentojr.minhaeiro.models.Movimentacao;
+import br.com.chicobentojr.minhaeiro.models.Usuario;
 import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
 import br.com.chicobentojr.minhaeiro.utils.AppController;
 import br.com.chicobentojr.minhaeiro.utils.DividerItemDecoration;
@@ -173,15 +174,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         progressDialog.setMessage("Carregando Movimentações...");
         progressDialog.show();
         StringRequest request = new StringRequest(
-                ApiRoutes.montar(P.autenticacao(), "movimentacao", P.usuario_id()),
+                ApiRoutes.USUARIO.Get(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        progressDialog.hide();
                         Gson gson = new Gson();
-                        movimentacoes = new ArrayList<Movimentacao>(Arrays.asList(gson.fromJson(response, Movimentacao[].class)));
+                        Usuario usuarioResposta = new Gson().fromJson(response,Usuario.class);
+                        movimentacoes = usuarioResposta.Movimentacao;
                         adapter = new MovimentacaoAdapter(movimentacoes);
                         recyclerView.setAdapter(adapter);
+
+                        P.inserir(P.USUARIO_JSON,response);
+
+                        progressDialog.hide();
 
                     }
                 }, new Response.ErrorListener() {

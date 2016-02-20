@@ -101,7 +101,7 @@ public class CadastroActivity extends AppCompatActivity implements TextView.OnEd
         progressDialog.show();
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
-                ApiRoutes.Usuario.CADASTRAR,
+                ApiRoutes.USUARIO.Post(),
                 new JSONObject(usuario.toParams()),
                 new Response.Listener<JSONObject>() {
                     @Override
