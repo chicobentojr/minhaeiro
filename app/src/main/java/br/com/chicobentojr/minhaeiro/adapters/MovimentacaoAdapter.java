@@ -1,5 +1,7 @@
 package br.com.chicobentojr.minhaeiro.adapters;
 
+import android.content.res.ColorStateList;
+import android.graphics.AvoidXfermode;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.design.widget.Snackbar;
@@ -7,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -45,9 +48,11 @@ public class MovimentacaoAdapter extends RecyclerView.Adapter<MovimentacaoAdapte
         holder.lblMovimentacaoValor.setText(Extensoes.LAYOUT.valor(movimentacao.valor));
 
         if (movimentacao.realizada) {
-            holder.itemView.setAlpha(0.2f);
+            holder.itemView.setAlpha(0.5f);
+            holder.imgMovimentacaoIcone.setColorFilter(Color.parseColor("#B6B6B6")) ;
         } else {
             holder.itemView.setAlpha(1f);
+            holder.imgMovimentacaoIcone.setColorFilter(Color.parseColor("8BC34A"));
         }
         if (movimentacao.tipo == 'D') {
             holder.lblMovimentacaoValor.setTextColor(Color.RED);
@@ -68,6 +73,7 @@ public class MovimentacaoAdapter extends RecyclerView.Adapter<MovimentacaoAdapte
         public TextView lblMovimentacaoData;
         public TextView lblMovimentacaoPessoa;
         public TextView lblMovimentacaoValor;
+        public ImageView imgMovimentacaoIcone;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -76,6 +82,7 @@ public class MovimentacaoAdapter extends RecyclerView.Adapter<MovimentacaoAdapte
             lblMovimentacaoData = (TextView) itemView.findViewById(R.id.lblMovimentacaoData);
             lblMovimentacaoPessoa = (TextView) itemView.findViewById(R.id.lblMovimentacaoPessoa);
             lblMovimentacaoValor = (TextView) itemView.findViewById(R.id.lblMovimentacaoValor);
+            imgMovimentacaoIcone = (ImageView) itemView.findViewById(R.id.imgMovimentacaoIcon);
             itemView.setOnClickListener(this);
         }
 

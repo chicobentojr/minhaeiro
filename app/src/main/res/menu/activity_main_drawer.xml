@@ -15,17 +15,17 @@
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Slideshow" />
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/nav_share"
+            android:icon="@drawable/ic_menu_share"
+            android:title="Share" />
     </group>
 
     <item android:title="Communicate">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:id="@+id/nav_pessoas"
+                android:icon="@drawable/ic_menu_pessoas"
+                android:title="Pessoas" />
             <item
                 android:id="@+id/nav_perfil"
                 android:icon="@drawable/ic_menu_perfil"
