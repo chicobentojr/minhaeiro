@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -23,8 +24,12 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import br.com.chicobentojr.minhaeiro.R;
 import br.com.chicobentojr.minhaeiro.activity.MainActivity;
@@ -81,7 +86,14 @@ public class MovimentacaoDetalheFragment extends Fragment implements DatePicker.
         View fragmentView = inflater.inflate(R.layout.fragment_movimentacao_detalhe, container, false);
         fragmentView = this.iniciarLayout(fragmentView);
         this.preencherMovimentacao();
-        this.preencherData(Calendar.getInstance());
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            calendar.setTime(sdf.parse(movimentacao.movimentacao_data));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        this.preencherData(calendar);
         return fragmentView;
     }
 

@@ -44,7 +44,7 @@ public class MovimentacaoItemAdapter extends RecyclerView.Adapter<MovimentacaoIt
         holder.lblMovimentacaoValor.setText(Extensoes.LAYOUT.valor(item.valor));
 
         if (item.realizada) {
-            holder.itemView.setAlpha(0.2f);
+            holder.itemView.setAlpha(0.5f);
         } else {
             holder.itemView.setAlpha(1f);
         }
