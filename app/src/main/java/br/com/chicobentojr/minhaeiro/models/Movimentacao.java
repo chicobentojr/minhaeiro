@@ -34,4 +34,31 @@ public class Movimentacao implements Serializable {
         return params;
     }
 
+    public static ArrayList<Movimentacao> filtrarPorPessoa(ArrayList<Movimentacao> movimentacoes,Pessoa pessoa){
+        ArrayList<Movimentacao> retorno = new ArrayList<>();
+        if(movimentacoes != null) {
+            for (Movimentacao movimentacao : movimentacoes) {
+                if (movimentacao.Pessoa.pessoa_id == pessoa.pessoa_id) {
+                    retorno.add(movimentacao);
+                }
+            }
+        }
+        return retorno;
+    }
+
+    public static double obterSaldo(ArrayList<Movimentacao> movimentacoes){
+        double saldo = 0;
+        if(movimentacoes != null) {
+            for (Movimentacao movimentacao : movimentacoes) {
+                if (movimentacao.tipo == 'C') {
+                    saldo+=movimentacao.valor;
+                }else if(movimentacao.tipo == 'D'){
+                    saldo-=movimentacao.valor;
+                }
+            }
+        }
+        return saldo;
+    }
+
+
 }
