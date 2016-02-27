@@ -25,7 +25,6 @@ import br.com.chicobentojr.minhaeiro.utils.P;
 
 public class PessoasActivity extends AppCompatActivity {
 
-
     private ArrayList<Pessoa> pessoas;
 
     private RecyclerView recyclerView;
