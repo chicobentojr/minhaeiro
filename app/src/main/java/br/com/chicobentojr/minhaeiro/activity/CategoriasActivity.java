@@ -26,7 +26,7 @@ public class CategoriasActivity extends AppCompatActivity implements AdapterView
         this.setContentView(R.layout.activity_pessoas);
         this.getSupportActionBar().setHomeButtonEnabled(true);
 
-        listView = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.recyclerView);
         categorias = P.getUsuario(P.obter(P.USUARIO_JSON)).Categoria;
 
         adapter = new ArrayAdapter<Categoria>(this, android.R.layout.simple_list_item_1, categorias);

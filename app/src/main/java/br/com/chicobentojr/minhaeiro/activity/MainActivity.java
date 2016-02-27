@@ -100,14 +100,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.nav_camera:
-                break;
-            case R.id.nav_gallery:
-                break;
-            case R.id.nav_slideshow:
-                break;
-            case R.id.nav_share:
-                break;
             case R.id.nav_categorias:
                 startActivity(new Intent(this, CategoriasActivity.class));
                 break;

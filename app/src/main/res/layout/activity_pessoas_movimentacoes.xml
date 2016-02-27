@@ -32,15 +32,16 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="20dp">
+                android:padding="40dp">
 
                 <TextView
                     android:id="@+id/lblSaldo"
+                    android:textColor="@android:color/white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Saldo:"
                     android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:fontFamily="sans-serif-thin"  />
             </RelativeLayout>
 
         </android.support.design.widget.CollapsingToolbarLayout>

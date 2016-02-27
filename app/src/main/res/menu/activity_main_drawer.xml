@@ -1,35 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <!--<group android:checkableBehavior="single">-->
+    <group>
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:id="@+id/nav_categorias"
+            android:icon="@drawable/ic_button_categoria_adicionar"
+            android:title="Categorias" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_share"
-            android:icon="@drawable/ic_menu_share"
-            android:title="Share" />
+            android:id="@+id/nav_pessoas"
+            android:icon="@drawable/ic_menu_pessoas"
+            android:title="Pessoas" />
     </group>
 
     <item android:title="Communicate">
         <menu>
-            <item
-                android:id="@+id/nav_categorias"
-                android:icon="@drawable/ic_button_categoria_adicionar"
-                android:title="Categorias" />
-            <item
-                android:id="@+id/nav_pessoas"
-                android:icon="@drawable/ic_menu_pessoas"
-                android:title="Pessoas" />
             <item
                 android:id="@+id/nav_perfil"
                 android:icon="@drawable/ic_menu_perfil"

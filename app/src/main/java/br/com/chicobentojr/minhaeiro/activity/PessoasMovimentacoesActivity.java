@@ -70,7 +70,7 @@ public class PessoasMovimentacoesActivity extends AppCompatActivity {
             adapter = new MovimentacaoAdapter(movimentacoes);
             recyclerView.setAdapter(adapter);
 
-            lblSaldo.setText("Saldo: "+ Extensoes.LAYOUT.valor(Movimentacao.obterSaldo(movimentacoes)));
+            lblSaldo.setText("Saldo: " + Extensoes.LAYOUT.valor(Movimentacao.obterSaldo(movimentacoes)));
         }
     }
 }

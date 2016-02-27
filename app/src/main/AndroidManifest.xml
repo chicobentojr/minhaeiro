@@ -86,7 +86,6 @@
         <activity
             android:name=".activity.CategoriasActivity"
             android:label="@string/title_activity_categorias"
-
             android:launchMode="singleInstance"
             android:parentActivityName=".activity.MainActivity">
             <meta-data
