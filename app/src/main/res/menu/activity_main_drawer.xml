@@ -23,6 +23,10 @@
     <item android:title="Communicate">
         <menu>
             <item
+                android:id="@+id/nav_categorias"
+                android:icon="@drawable/ic_button_categoria_adicionar"
+                android:title="Categorias" />
+            <item
                 android:id="@+id/nav_pessoas"
                 android:icon="@drawable/ic_menu_pessoas"
                 android:title="Pessoas" />

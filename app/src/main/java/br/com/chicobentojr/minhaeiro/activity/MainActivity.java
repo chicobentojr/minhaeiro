@@ -108,6 +108,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_share:
                 break;
+            case R.id.nav_categorias:
+                startActivity(new Intent(this, CategoriasActivity.class));
+                break;
             case R.id.nav_pessoas:
                 startActivity(new Intent(this, PessoasActivity.class));
                 break;

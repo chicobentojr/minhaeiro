@@ -73,7 +73,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.chicobentojr.minhaeiro.activity.MainActivity" />
-            >
         </activity>
         <activity
             android:name=".activity.PessoasMovimentacoesActivity"
@@ -83,6 +82,16 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.chicobentojr.minhaeiro.activity.PessoasActivity" />
+        </activity>
+        <activity
+            android:name=".activity.CategoriasActivity"
+            android:label="@string/title_activity_categorias"
+
+            android:launchMode="singleInstance"
+            android:parentActivityName=".activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.chicobentojr.minhaeiro.activity.MainActivity" />
         </activity>
     </application>
 
