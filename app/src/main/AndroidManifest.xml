@@ -76,7 +76,6 @@
         </activity>
         <activity
             android:name=".activity.PessoasMovimentacoesActivity"
-            android:label="@string/title_activity_pessoas_movimentacoes"
             android:parentActivityName=".activity.PessoasActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -92,6 +91,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.chicobentojr.minhaeiro.activity.MainActivity" />
         </activity>
+        <activity
+            android:name=".activity.CategoriasMovimentacoesActivity"
+            android:parentActivityName=".activity.CategoriasActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.chicobentojr.minhaeiro.activity.CategoriasActivity" />
+        </activity>
     </application>
-
 </manifest>

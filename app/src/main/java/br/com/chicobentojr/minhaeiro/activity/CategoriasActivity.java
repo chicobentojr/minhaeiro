@@ -49,9 +49,9 @@ public class CategoriasActivity extends AppCompatActivity {
                     @Override
                     public void OnItemClick(View view, int position) {
                         Categoria categoria = categorias.get(position);
-                        Intent intent = new Intent(CategoriasActivity.this, PessoasMovimentacoesActivity.class);
+                        Intent intent = new Intent(CategoriasActivity.this, CategoriasMovimentacoesActivity.class);
                         intent.putExtra("categoria", categoria);
-                        //startActivity(intent);
+                        startActivity(intent);
                     }
                 })
         );
