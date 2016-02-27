@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import br.com.chicobentojr.minhaeiro.R;
 import br.com.chicobentojr.minhaeiro.adapters.PessoasAdapter;
+import br.com.chicobentojr.minhaeiro.listeners.RecyclerItemClickListener;
 import br.com.chicobentojr.minhaeiro.models.Movimentacao;
 import br.com.chicobentojr.minhaeiro.models.Pessoa;
 import br.com.chicobentojr.minhaeiro.utils.DividerItemDecoration;
@@ -44,7 +45,7 @@ public class PessoasActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         recyclerView.addOnItemTouchListener(
-                new PessoasActivity.RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
+                new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void OnItemClick(View view, int position) {
                         Pessoa pessoa = pessoas.get(position);
@@ -60,43 +61,5 @@ public class PessoasActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    public static class RecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
 
-        private OnItemClickListener listener;
-
-        public interface OnItemClickListener {
-            public void OnItemClick(View view, int position);
-        }
-
-        private GestureDetector gestureDetector;
-
-        public RecyclerItemClickListener(Context context, OnItemClickListener listener) {
-            this.listener = listener;
-            this.gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onSingleTapUp(MotionEvent e) {
-                    return true;
-                }
-            });
-        }
-
-        @Override
-        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-            View childView = rv.findChildViewUnder(e.getX(), e.getY());
-            if (childView != null && listener != null && gestureDetector.onTouchEvent(e)) {
-                listener.OnItemClick(childView, rv.getChildAdapterPosition(childView));
-            }
-            return false;
-        }
-
-        @Override
-        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
-        }
-
-        @Override
-        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-        }
-    }
 }
