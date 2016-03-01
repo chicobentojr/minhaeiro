@@ -103,7 +103,7 @@ public class MovimentacaoDetalheActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        usuario = P.getUsuario(P.obter(P.USUARIO_JSON));
+        usuario = P.getUsuarioInstance();
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCanceledOnTouchOutside(false);
@@ -210,7 +210,7 @@ public class MovimentacaoDetalheActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         MovimentacaoItem itemResposta = new Gson().fromJson(response.toString(), MovimentacaoItem.class);
                         MovimentacaoItensFragment fragment = (MovimentacaoItensFragment) pagerAdapter.getItem(FRG_ITENS_INDEX);
-                        fragment.adicionarItem(itemResposta);
+                        fragment.adicionarItemAdapter(itemResposta);
                         progressDialog.dismiss();
                         itemDialog.dismiss();
                     }

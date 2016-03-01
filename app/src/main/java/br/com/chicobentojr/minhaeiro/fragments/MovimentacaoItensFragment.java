@@ -1,6 +1,9 @@
 package br.com.chicobentojr.minhaeiro.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,15 +12,38 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Switch;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import br.com.chicobentojr.minhaeiro.R;
 import br.com.chicobentojr.minhaeiro.adapters.MovimentacaoItemAdapter;
+import br.com.chicobentojr.minhaeiro.listeners.RecyclerItemClickListener;
+import br.com.chicobentojr.minhaeiro.models.Categoria;
 import br.com.chicobentojr.minhaeiro.models.Movimentacao;
 import br.com.chicobentojr.minhaeiro.models.MovimentacaoItem;
+import br.com.chicobentojr.minhaeiro.models.Pessoa;
+import br.com.chicobentojr.minhaeiro.models.Usuario;
+import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
+import br.com.chicobentojr.minhaeiro.utils.AppController;
 import br.com.chicobentojr.minhaeiro.utils.DividerItemDecoration;
+import br.com.chicobentojr.minhaeiro.utils.Extensoes;
+import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
+import br.com.chicobentojr.minhaeiro.utils.P;
+import br.com.chicobentojr.minhaeiro.utils.SpinnerHelper;
 
 /**
  * Created by Francisco on 14/02/2016.
@@ -25,11 +51,26 @@ import br.com.chicobentojr.minhaeiro.utils.DividerItemDecoration;
 public class MovimentacaoItensFragment extends Fragment {
 
     private Activity listener;
-    public static ArrayList<MovimentacaoItem> itens;
+    private Usuario usuario;
+    private ArrayList<MovimentacaoItem> itens;
+    private MovimentacaoItem item;
+    private int itemPosicao;
 
-    public static RecyclerView recyclerView;
-    public static RecyclerView.Adapter adapter;
-    public static RecyclerView.LayoutManager layoutManager;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
+
+    private Spinner spnPessoa;
+    private EditText txtMovimentacaoValor;
+    private EditText txtDescricao;
+    private Spinner spnMovimentacaoTipo;
+    private Switch swtRealizada;
+
+    private ArrayAdapter<Pessoa> adpPessoa;
+
+    private ProgressDialog progressDialog;
+
+    private AlertDialog itemDialog;
 
     public MovimentacaoItensFragment(){
 
@@ -50,15 +91,157 @@ public class MovimentacaoItensFragment extends Fragment {
         layoutManager = new LinearLayoutManager(listener);
         recyclerView.setLayoutManager(layoutManager);
 
+        usuario = P.getUsuarioInstance();
+        progressDialog = new ProgressDialog(listener);
+        progressDialog.setCanceledOnTouchOutside(false);
+
         itens = new ArrayList<MovimentacaoItem>(Arrays.asList(((Movimentacao) listener.getIntent().getSerializableExtra("movimentacao")).MovimentacaoItem));
         adapter = new MovimentacaoItemAdapter(itens);
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(listener, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void OnItemClick(View view, int position) {
+                        item = itens.get(position);
+                        itemPosicao = position;
+                        abrirAtualizarItemDialog();
+                    }
+                })
+        );
 
         return view;
     }
 
-    public void adicionarItem(MovimentacaoItem item){
-        itens.add(0,item);
+    public void adicionarItemAdapter(MovimentacaoItem item){
+        itens.add(0, item);
         adapter.notifyDataSetChanged();
     }
+
+    public void atualizarItemAdapter(MovimentacaoItem item){
+        itens.set(itemPosicao, item);
+        adapter.notifyItemChanged(itemPosicao);
+    }
+
+    public void abrirAtualizarItemDialog() {
+        itemDialog = new AlertDialog.Builder(listener)
+                .setTitle("Atualizar Item")
+                .setView(R.layout.dialog_movimentacao_item_cadastro)
+                .setPositiveButton("Atualizar", null)
+                .setNegativeButton("Cancelar", null)
+                .create();
+
+        itemDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button positiveButton = itemDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                positiveButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        atualizar(v);
+                    }
+                });
+            }
+        });
+        itemDialog.show();
+        this.iniciarItemDialogLayout(itemDialog);
+        this.preencherMovimentacaoItem();
+    }
+
+    public void iniciarItemDialogLayout(AlertDialog dialog) {
+        adpPessoa = new ArrayAdapter(listener, android.R.layout.simple_spinner_item, usuario.Pessoa);
+        adpPessoa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnPessoa = (Spinner) dialog.findViewById(R.id.spnPessoa);
+        spnPessoa.setAdapter(adpPessoa);
+
+        txtMovimentacaoValor = (EditText) dialog.findViewById(R.id.txtMovimentacaoValor);
+        txtDescricao = (EditText) dialog.findViewById(R.id.txtDescricao);
+        spnMovimentacaoTipo = (Spinner) dialog.findViewById(R.id.spnMovimentacaoTipo);
+        swtRealizada = (Switch) dialog.findViewById(R.id.swtRealizada);
+
+    }
+
+    public void preencherMovimentacaoItem(){
+        txtDescricao.setText(item.descricao);
+        txtMovimentacaoValor.setText(String.valueOf(item.valor));
+        swtRealizada.setChecked(item.realizada);
+
+        int pessoaIndice = SpinnerHelper.getSelectedItemPosition(spnPessoa, item.Pessoa);
+
+        String[] tipos = getResources().getStringArray(R.array.tipo_movimentacao_valor);
+        int tipoIndice = Arrays.asList(tipos).indexOf(String.valueOf(item.tipo));
+
+        spnPessoa.setSelection(pessoaIndice);
+        spnMovimentacaoTipo.setSelection(tipoIndice);
+    }
+
+    public void atualizar(View v) {
+        limparErros();
+
+        int pessoa_id = ((Pessoa) spnPessoa.getSelectedItem()).pessoa_id;
+        String valor = txtMovimentacaoValor.getText().toString();
+        String descricao = txtDescricao.getText().toString();
+        char tipo = getResources().getStringArray(R.array.tipo_movimentacao_valor)[spnMovimentacaoTipo.getSelectedItemPosition()].charAt(0);
+        boolean realizada = swtRealizada.isChecked();
+
+        boolean valido = true;
+        View focusView = null;
+
+        if (descricao.isEmpty()) {
+            txtDescricao.setError(getString(R.string.descricao_vazio_erro));
+            focusView = txtDescricao;
+            valido = false;
+        } else if (valor.isEmpty()) {
+            txtMovimentacaoValor.setError(getString(R.string.valor_vazio_erro));
+            focusView = txtMovimentacaoValor;
+            valido = false;
+        } else if (Double.parseDouble(valor) <= 0) {
+            txtMovimentacaoValor.setError(getString(R.string.valor_maior_zero_erro));
+            focusView = txtMovimentacaoValor;
+            valido = false;
+        }
+
+        if (!valido) {
+            focusView.requestFocus();
+        } else {
+            item.pessoa_id = pessoa_id;
+            item.valor = Double.parseDouble(valor);
+            item.descricao = descricao;
+            item.tipo = tipo;
+            item.realizada = realizada;
+
+            atualizarMovimentacaoItem(item);
+        }
+    }
+
+    public void limparErros() {
+        txtDescricao.setError(null);
+        txtMovimentacaoValor.setError(null);
+    }
+
+    public void atualizarMovimentacaoItem(MovimentacaoItem item) {
+        progressDialog.setMessage("Carregando...");
+        progressDialog.show();
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.PUT,
+                ApiRoutes.MOVIMENTACAO_ITEM.Put(item.movimentacao_id,item.item_id),
+                new JSONObject(item.toParams()),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        MovimentacaoItem itemResposta = new Gson().fromJson(response.toString(), MovimentacaoItem.class);
+                        atualizarItemAdapter(itemResposta);
+                        progressDialog.dismiss();
+                        itemDialog.dismiss();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressDialog.hide();
+                MinhaeiroErrorHelper.alertar(error, listener);
+            }
+        });
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
 }
