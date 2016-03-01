@@ -15,7 +15,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import br.com.chicobentojr.minhaeiro.R;
@@ -23,7 +22,6 @@ import br.com.chicobentojr.minhaeiro.models.Usuario;
 import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
 import br.com.chicobentojr.minhaeiro.utils.AppController;
 import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
-import br.com.chicobentojr.minhaeiro.utils.MinhaeiroRetryPolicy;
 import br.com.chicobentojr.minhaeiro.utils.P;
 
 public class CadastroActivity extends AppCompatActivity implements TextView.OnEditorActionListener {

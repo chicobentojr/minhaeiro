@@ -19,6 +19,8 @@ public class P {
         public static final int MOVIMENTACAO_ATUALIZACAO = 2;
     }
 
+    public static Usuario usuario = null;
+
     public static final String PREF_KEY = "br.com.chicobentojr.minhaeiro.shared_preferences";
 
     public static final String USUARIO_JSON = "shared_preference_usuario_JSON";
@@ -30,6 +32,13 @@ public class P {
     public static final String USUARIO_CONECTADO = "shared_preference_conectado";
 
     public static SharedPreferences prefs = AppController.getContext().getSharedPreferences(PREF_KEY, Context.MODE_PRIVATE);
+
+    public static Usuario getUsuarioInstance(){
+        if(usuario == null){
+            usuario = P.getUsuario(P.obter(P.USUARIO_JSON));
+        }
+        return usuario;
+    }
 
     public static Usuario getUsuario() {
         Usuario usuario = new Usuario();

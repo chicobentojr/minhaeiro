@@ -68,7 +68,7 @@
         <activity
             android:name=".activity.PessoasActivity"
             android:label="@string/title_activity_pessoas"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTop"
             android:parentActivityName=".activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -85,7 +85,7 @@
         <activity
             android:name=".activity.CategoriasActivity"
             android:label="@string/title_activity_categorias"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTop"
             android:parentActivityName=".activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

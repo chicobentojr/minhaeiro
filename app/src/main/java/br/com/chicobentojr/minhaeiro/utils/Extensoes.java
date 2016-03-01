@@ -17,6 +17,9 @@ public class Extensoes {
 
     public static class LAYOUT {
         public static String valor(double valor) {
+            boolean negativo = valor < 0;
+            valor = !negativo ? valor : valor * -1;
+
             String strValor = String.valueOf(valor);
             String[] array = strValor.split("\\.");
 
@@ -34,7 +37,8 @@ public class Extensoes {
                 }
                 indice++;
             }
-            return "R$ " + inteiros + "," + decimal;
+
+            return (negativo ? "- " : "") + "R$ " + inteiros + "," + decimal;
         }
 
         public static String data(String data) {

@@ -1,5 +1,6 @@
 package br.com.chicobentojr.minhaeiro.adapters;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,10 @@ import java.util.ArrayList;
 
 import br.com.chicobentojr.minhaeiro.R;
 import br.com.chicobentojr.minhaeiro.models.Categoria;
+import br.com.chicobentojr.minhaeiro.models.Movimentacao;
 import br.com.chicobentojr.minhaeiro.models.Pessoa;
+import br.com.chicobentojr.minhaeiro.utils.Extensoes;
+import br.com.chicobentojr.minhaeiro.utils.P;
 
 /**
  * Created by Francisco on 27/02/2016.
@@ -36,9 +40,18 @@ public class CategoriasAdapter extends RecyclerView.Adapter<CategoriasAdapter.Vi
     public void onBindViewHolder(CategoriasAdapter.ViewHolder holder, int position) {
 
         Categoria categoria = categorias.get(position);
+        ArrayList<Movimentacao> movimentacoes = Movimentacao.filtrarPorCategoria(P.getUsuarioInstance().Movimentacao, categoria);
+
+        double saldo = Movimentacao.obterSaldo(movimentacoes);
+
+        if (saldo < 0) {
+            holder.lblSaldo.setTextColor(Color.RED);
+        } else if (saldo >= 0) {
+            holder.lblSaldo.setTextColor(Color.parseColor("#1B5E20"));
+        }
 
         holder.lblDescricao.setText(categoria.nome);
-        //holder.lblSaldo.setText(Extensoes.LAYOUT.valor(pessoa.obterSaldo(movimentacoes)));
+        holder.lblSaldo.setText(Extensoes.LAYOUT.valor(saldo));
     }
 
     @Override
