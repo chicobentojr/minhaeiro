@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -41,7 +42,7 @@ public class MovimentacaoDetalheActivity extends AppCompatActivity {
     public static int FRG_DETALHES_INDEX = 0;
     public static int FRG_ITENS_INDEX = 1;
 
-    MovimentacaoItensFragment itensFragment;
+    private MovimentacaoItensFragment itensFragment;
 
     private Usuario usuario;
     private Movimentacao movimentacao;
@@ -60,9 +61,9 @@ public class MovimentacaoDetalheActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
     private AlertDialog itemDialog;
+    private FloatingActionButton fabCadastrarItem;
 
     private MovimentacaoDetalhePagerAdapter pagerAdapter;
-
     private ViewPager viewPager;
 
     @Override
@@ -72,14 +73,32 @@ public class MovimentacaoDetalheActivity extends AppCompatActivity {
         this.iniciarLayout();
     }
 
-    public void iniciarLayout(){
+    public void iniciarLayout() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        pagerAdapter = new MovimentacaoDetalhePagerAdapter(getSupportFragmentManager(), this);
 
         viewPager = (ViewPager) findViewById(R.id.container);
+        fabCadastrarItem = (FloatingActionButton) findViewById(R.id.fabCadastrarItem);
+        pagerAdapter = new MovimentacaoDetalhePagerAdapter(getSupportFragmentManager(), this);
+
         viewPager.setAdapter(pagerAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                alternarBotao(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
@@ -90,7 +109,7 @@ public class MovimentacaoDetalheActivity extends AppCompatActivity {
         progressDialog.setCanceledOnTouchOutside(false);
     }
 
-    public void iniciarDialogLayout(AlertDialog dialog){
+    public void iniciarDialogLayout(AlertDialog dialog) {
         movimentacao = (Movimentacao) getIntent().getSerializableExtra("movimentacao");
         item_posicao = getIntent().getIntExtra("item_posicao", -1);
 
@@ -122,40 +141,6 @@ public class MovimentacaoDetalheActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         cadastrar(v);
-                        /*EditText txtNome = (EditText) (alertDialog).findViewById(R.id.txtNome);
-                        String nome = txtNome.getText().toString();
-                        Categoria categoria = new Categoria();
-                        categoria.nome = nome;
-                        if (nome.isEmpty()) {
-                            txtNome.setError(getString(R.string.nome_vazio_erro));
-                            txtNome.requestFocus();
-                        } else {
-                            progressDialog.setMessage("Carregando...");
-                            progressDialog.show();
-                            JsonObjectRequest request = new JsonObjectRequest(
-                                    Request.Method.POST,
-                                    ApiRoutes.CATEGORIA.Post(),
-                                    new JSONObject(categoria.toParams()),
-                                    new Response.Listener<JSONObject>() {
-                                        @Override
-                                        public void onResponse(JSONObject response) {
-                                            Categoria categoriaResposta = new Gson().fromJson(response.toString(), Categoria.class);
-                                            adpCategoria.add(categoriaResposta);
-                                            spnCategoria.setSelection(SpinnerHelper.getSelectedItemPosition(spnCategoria, categoriaResposta));
-                                            alertDialog.dismiss();
-                                            progressDialog.dismiss();
-                                        }
-                                    },
-                                    new Response.ErrorListener() {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-                                            progressDialog.dismiss();
-                                            MinhaeiroErrorHelper.alertar(error, MovimentacaoCadastroActivity.this);
-                                        }
-                                    }
-                            );
-                            AppController.getInstance().addToRequestQueue(request);
-                        }*/
                     }
                 });
             }
@@ -237,5 +222,13 @@ public class MovimentacaoDetalheActivity extends AppCompatActivity {
             }
         });
         AppController.getInstance().addToRequestQueue(request);
+    }
+
+    public void alternarBotao(int fragmentPosicao) {
+        if (fragmentPosicao == 0) {
+            fabCadastrarItem.hide();
+        } else if (fragmentPosicao == 1) {
+            fabCadastrarItem.show();
+        }
     }
 }
