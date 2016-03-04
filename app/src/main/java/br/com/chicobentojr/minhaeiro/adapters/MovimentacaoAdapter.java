@@ -52,7 +52,7 @@ public class MovimentacaoAdapter extends RecyclerView.Adapter<MovimentacaoAdapte
             holder.imgMovimentacaoIcone.setColorFilter(Color.parseColor("#B6B6B6")) ;
         } else {
             holder.itemView.setAlpha(1f);
-            holder.imgMovimentacaoIcone.setColorFilter(Color.parseColor("8BC34A"));
+            holder.imgMovimentacaoIcone.setColorFilter(Color.parseColor("#8BC34A"));
         }
         if (movimentacao.tipo == 'D') {
             holder.lblMovimentacaoValor.setTextColor(Color.RED);
