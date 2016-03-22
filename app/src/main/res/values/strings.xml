@@ -57,12 +57,12 @@
     <string name="lblTipo">Tipo</string>
 
     <string-array name="tipo_movimentacao_texto">
-        <item>Débito</item>
-        <item>Crédito</item>
+        <item>Despesa</item>
+        <item>Receita</item>
     </string-array>
     <string-array name="tipo_movimentacao_valor">
         <item>D</item>
-        <item>C</item>
+        <item>R</item>
     </string-array>
     <string name="title_activity_movimentacao_detalhe">MovimentacaoDetalheActivity</string>
     <string name="title_activity_pessoas">Pessoas</string>

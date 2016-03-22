@@ -128,14 +128,6 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
             txtMovimentacaoValor.setError(getString(R.string.valor_maior_zero_erro));
             focusView = txtMovimentacaoValor;
             valido = false;
-        } else if (String.valueOf(tipo).isEmpty()) {
-            //txtMovimentacaoTipo.setError("O Tipo é obrigatório");
-            //focusView = txtMovimentacaoTipo;
-            valido = false;
-        } else if (String.valueOf(realizada).isEmpty()) {
-            //txtRealizada.setError("Esse campo é obrigatório");
-            //focusView = txtRealizada;
-            valido = false;
         }
 
         if (!valido) {

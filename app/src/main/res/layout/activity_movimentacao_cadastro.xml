@@ -164,6 +164,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
                 android:hint="Realizada"
+                android:checked="true"
                 android:textSize="20sp" />
         </LinearLayout>
 

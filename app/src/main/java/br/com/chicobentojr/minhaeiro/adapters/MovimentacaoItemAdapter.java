@@ -50,7 +50,7 @@ public class MovimentacaoItemAdapter extends RecyclerView.Adapter<MovimentacaoIt
         }
         if (item.tipo == 'D') {
             holder.lblMovimentacaoValor.setTextColor(Color.RED);
-        } else if (item.tipo == 'C') {
+        } else if (item.tipo == 'R') {
             holder.lblMovimentacaoValor.setTextColor(Color.parseColor("#1B5E20"));
         }
     }

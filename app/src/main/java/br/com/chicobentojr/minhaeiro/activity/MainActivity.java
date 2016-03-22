@@ -1,7 +1,6 @@
 package br.com.chicobentojr.minhaeiro.activity;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,10 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -27,16 +24,15 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import br.com.chicobentojr.minhaeiro.R;
 import br.com.chicobentojr.minhaeiro.adapters.MovimentacaoAdapter;
-import br.com.chicobentojr.minhaeiro.listeners.RecyclerItemClickListener;
 import br.com.chicobentojr.minhaeiro.models.Movimentacao;
 import br.com.chicobentojr.minhaeiro.models.Usuario;
 import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
 import br.com.chicobentojr.minhaeiro.utils.AppController;
 import br.com.chicobentojr.minhaeiro.utils.DividerItemDecoration;
+import br.com.chicobentojr.minhaeiro.utils.ItemClickSupport;
 import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
 import br.com.chicobentojr.minhaeiro.utils.P;
 
@@ -147,24 +143,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void OnItemClick(View view, int position) {
-                        Movimentacao movimentacao = movimentacoes.get(position);
-
-                        Intent intent = new Intent(MainActivity.this, MovimentacaoDetalheActivity.class);
-
-                        intent.putExtra("movimentacao", movimentacao);
-                        intent.putExtra("item_posicao",position);
-
-                        startActivityForResult(intent, P.REQUEST.MOVIMENTACAO_ATUALIZACAO);
-                    }
-                })
-        );
-
         progressDialog = new ProgressDialog(this);
         progressDialog.setCanceledOnTouchOutside(false);
+
+        definirRecyclerViewItemClicks();
     }
 
     public void carregarMovimentacoes() {
@@ -176,12 +158,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onResponse(String response) {
                         Gson gson = new Gson();
-                        Usuario usuarioResposta = new Gson().fromJson(response,Usuario.class);
+                        Usuario usuarioResposta = new Gson().fromJson(response, Usuario.class);
                         movimentacoes = usuarioResposta.Movimentacao;
                         adapter = new MovimentacaoAdapter(movimentacoes);
                         recyclerView.setAdapter(adapter);
 
-                        P.inserir(P.USUARIO_JSON,response);
+                        P.inserir(P.USUARIO_JSON, response);
 
                         progressDialog.hide();
 
@@ -202,6 +184,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivity(new Intent(this, LoginActivity.class));
     }
 
+    public void definirRecyclerViewItemClicks() {
+        ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                Movimentacao movimentacao = movimentacoes.get(position);
+
+                Intent intent = new Intent(MainActivity.this, MovimentacaoDetalheActivity.class);
+
+                intent.putExtra("movimentacao", movimentacao);
+                intent.putExtra("item_posicao", position);
+
+                startActivityForResult(intent, P.REQUEST.MOVIMENTACAO_ATUALIZACAO);
+            }
+        });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == P.REQUEST.MOVIMENTACAO_CADASTRO) {
@@ -211,10 +209,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 adapter.notifyDataSetChanged();
                 Snackbar.make(recyclerView, "Movimentação cadastrada com sucesso!", Snackbar.LENGTH_LONG).show();
             }
-        } else if(requestCode == P.REQUEST.MOVIMENTACAO_ATUALIZACAO) {
+        } else if (requestCode == P.REQUEST.MOVIMENTACAO_ATUALIZACAO) {
             if (resultCode == RESULT_OK && data != null) {
                 Movimentacao movimentacao = (Movimentacao) data.getSerializableExtra("movimentacao");
-                int item_posicao = data.getIntExtra("item_posicao",-1);
+                int item_posicao = data.getIntExtra("item_posicao", -1);
                 movimentacoes.set(item_posicao, movimentacao);
                 adapter.notifyItemChanged(item_posicao);
                 Snackbar.make(recyclerView, "Movimentação atualizada com sucesso!", Snackbar.LENGTH_LONG).show();

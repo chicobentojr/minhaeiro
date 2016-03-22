@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,8 +30,6 @@ import java.util.Arrays;
 
 import br.com.chicobentojr.minhaeiro.R;
 import br.com.chicobentojr.minhaeiro.adapters.MovimentacaoItemAdapter;
-import br.com.chicobentojr.minhaeiro.listeners.RecyclerItemClickListener;
-import br.com.chicobentojr.minhaeiro.models.Categoria;
 import br.com.chicobentojr.minhaeiro.models.Movimentacao;
 import br.com.chicobentojr.minhaeiro.models.MovimentacaoItem;
 import br.com.chicobentojr.minhaeiro.models.Pessoa;
@@ -40,7 +37,7 @@ import br.com.chicobentojr.minhaeiro.models.Usuario;
 import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
 import br.com.chicobentojr.minhaeiro.utils.AppController;
 import br.com.chicobentojr.minhaeiro.utils.DividerItemDecoration;
-import br.com.chicobentojr.minhaeiro.utils.Extensoes;
+import br.com.chicobentojr.minhaeiro.utils.ItemClickSupport;
 import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
 import br.com.chicobentojr.minhaeiro.utils.P;
 import br.com.chicobentojr.minhaeiro.utils.SpinnerHelper;
@@ -98,18 +95,21 @@ public class MovimentacaoItensFragment extends Fragment {
         itens = new ArrayList<MovimentacaoItem>(Arrays.asList(((Movimentacao) listener.getIntent().getSerializableExtra("movimentacao")).MovimentacaoItem));
         adapter = new MovimentacaoItemAdapter(itens);
         recyclerView.setAdapter(adapter);
-        recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(listener, new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void OnItemClick(View view, int position) {
-                        item = itens.get(position);
-                        itemPosicao = position;
-                        abrirAtualizarItemDialog();
-                    }
-                })
-        );
+
+        definirRecyclerViewItemClicks();
 
         return view;
+    }
+
+    public void definirRecyclerViewItemClicks(){
+        ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                item = itens.get(position);
+                itemPosicao = position;
+                abrirAtualizarItemDialog();
+            }
+        });
     }
 
     public void adicionarItemAdapter(MovimentacaoItem item){
