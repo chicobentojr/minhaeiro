@@ -19,24 +19,24 @@ public class Movimentacao implements Serializable {
     public Pessoa Pessoa;
     public Categoria Categoria;
 
-    public HashMap<String,String> toParams(){
-        HashMap<String,String> params = new HashMap<>();
+    public HashMap<String, String> toParams() {
+        HashMap<String, String> params = new HashMap<>();
 
-        params.put("usuario_id",String.valueOf(this.usuario_id));
-        params.put("categoria_id",String.valueOf(this.categoria_id));
-        params.put("pessoa_id",String.valueOf(this.pessoa_id));
-        params.put("movimentacao_data",this.movimentacao_data);
-        params.put("valor",String.valueOf(this.valor));
-        params.put("descricao",this.descricao);
-        params.put("tipo",String.valueOf(this.tipo));
-        params.put("realizada",String.valueOf(this.realizada));
+        params.put("usuario_id", String.valueOf(this.usuario_id));
+        params.put("categoria_id", String.valueOf(this.categoria_id));
+        params.put("pessoa_id", String.valueOf(this.pessoa_id));
+        params.put("movimentacao_data", this.movimentacao_data);
+        params.put("valor", String.valueOf(this.valor));
+        params.put("descricao", this.descricao);
+        params.put("tipo", String.valueOf(this.tipo));
+        params.put("realizada", String.valueOf(this.realizada));
 
         return params;
     }
 
-    public static ArrayList<Movimentacao> filtrarPorPessoa(ArrayList<Movimentacao> movimentacoes,Pessoa pessoa){
+    public static ArrayList<Movimentacao> filtrarPorPessoa(ArrayList<Movimentacao> movimentacoes, Pessoa pessoa) {
         ArrayList<Movimentacao> retorno = new ArrayList<>();
-        if(movimentacoes != null) {
+        if (movimentacoes != null) {
             for (Movimentacao movimentacao : movimentacoes) {
                 if (movimentacao.Pessoa.pessoa_id == pessoa.pessoa_id) {
                     retorno.add(movimentacao);
@@ -46,9 +46,9 @@ public class Movimentacao implements Serializable {
         return retorno;
     }
 
-    public static ArrayList<Movimentacao> filtrarPorCategoria(ArrayList<Movimentacao> movimentacoes,Categoria categoria){
+    public static ArrayList<Movimentacao> filtrarPorCategoria(ArrayList<Movimentacao> movimentacoes, Categoria categoria) {
         ArrayList<Movimentacao> retorno = new ArrayList<>();
-        if(movimentacoes != null) {
+        if (movimentacoes != null) {
             for (Movimentacao movimentacao : movimentacoes) {
                 if (movimentacao.categoria_id == categoria.categoria_id) {
                     retorno.add(movimentacao);
@@ -58,14 +58,31 @@ public class Movimentacao implements Serializable {
         return retorno;
     }
 
-    public static double obterSaldo(ArrayList<Movimentacao> movimentacoes){
-        double saldo = 0;
-        if(movimentacoes != null) {
+    public static ArrayList<Movimentacao> filtrarPendentes(ArrayList<Movimentacao> movimentacoes) {
+        ArrayList<Movimentacao> retorno = new ArrayList<>();
+        if (movimentacoes != null) {
             for (Movimentacao movimentacao : movimentacoes) {
-                if (movimentacao.tipo == 'C') {
-                    saldo+=movimentacao.valor;
-                }else if(movimentacao.tipo == 'D'){
-                    saldo-=movimentacao.valor;
+                if (!movimentacao.realizada) {
+                    retorno.add(movimentacao);
+                }
+            }
+        }
+        return retorno;
+    }
+
+    public static ArrayList<Movimentacao> filtrarPendentes(ArrayList<Movimentacao> movimentacoes, Pessoa pessoa) {
+        movimentacoes = Movimentacao.filtrarPorPessoa(movimentacoes, pessoa);
+        return Movimentacao.filtrarPendentes(movimentacoes);
+    }
+
+    public static double obterSaldo(ArrayList<Movimentacao> movimentacoes) {
+        double saldo = 0;
+        if (movimentacoes != null) {
+            for (Movimentacao movimentacao : movimentacoes) {
+                if (movimentacao.tipo == 'R') {
+                    saldo += movimentacao.valor;
+                } else if (movimentacao.tipo == 'D') {
+                    saldo -= movimentacao.valor;
                 }
             }
         }

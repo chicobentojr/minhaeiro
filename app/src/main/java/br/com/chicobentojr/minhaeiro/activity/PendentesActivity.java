@@ -10,13 +10,15 @@ import android.view.View;
 import java.util.ArrayList;
 
 import br.com.chicobentojr.minhaeiro.R;
-import br.com.chicobentojr.minhaeiro.adapters.PessoasAdapter;
+import br.com.chicobentojr.minhaeiro.adapters.CategoriasAdapter;
+import br.com.chicobentojr.minhaeiro.adapters.PendentesAdapter;
+import br.com.chicobentojr.minhaeiro.models.Categoria;
 import br.com.chicobentojr.minhaeiro.models.Pessoa;
 import br.com.chicobentojr.minhaeiro.utils.DividerItemDecoration;
 import br.com.chicobentojr.minhaeiro.utils.ItemClickSupport;
 import br.com.chicobentojr.minhaeiro.utils.P;
 
-public class PessoasActivity extends AppCompatActivity {
+public class PendentesActivity extends AppCompatActivity {
 
     private ArrayList<Pessoa> pessoas;
 
@@ -27,7 +29,7 @@ public class PessoasActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.activity_pessoas);
+        this.setContentView(R.layout.activity_pendentes);
         this.getSupportActionBar().setHomeButtonEnabled(true);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
@@ -36,9 +38,9 @@ public class PessoasActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        pessoas = P.getUsuarioInstance().Pessoa;
+        pessoas = Pessoa.filtrarPendentes(P.getUsuarioInstance().Movimentacao);
 
-        adapter = new PessoasAdapter(pessoas);
+        adapter = new PendentesAdapter(pessoas);
         recyclerView.setAdapter(adapter);
 
         definirRecyclerViewItemClicks();
@@ -49,12 +51,10 @@ public class PessoasActivity extends AppCompatActivity {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                 Pessoa pessoa = pessoas.get(position);
-                Intent intent = new Intent(PessoasActivity.this, PessoasMovimentacoesActivity.class);
+                Intent intent = new Intent(PendentesActivity.this, PendentesMovimentacoesActivity.class);
                 intent.putExtra("pessoa", pessoa);
                 startActivity(intent);
             }
         });
     }
-
-
 }

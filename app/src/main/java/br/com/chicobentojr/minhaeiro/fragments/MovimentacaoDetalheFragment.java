@@ -99,7 +99,7 @@ public class MovimentacaoDetalheFragment extends Fragment implements DatePicker.
 
     public View iniciarLayout(View view) {
 
-        usuario = P.getUsuario(P.obter(P.USUARIO_JSON));
+        usuario = P.getUsuarioInstance();
 
         adpCategoria = new ArrayAdapter(listener, android.R.layout.simple_spinner_item, usuario.Categoria);
         adpCategoria.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

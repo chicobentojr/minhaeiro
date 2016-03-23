@@ -17,7 +17,7 @@ import br.com.chicobentojr.minhaeiro.utils.DividerItemDecoration;
 import br.com.chicobentojr.minhaeiro.utils.Extensoes;
 import br.com.chicobentojr.minhaeiro.utils.P;
 
-public class PessoasMovimentacoesActivity extends AppCompatActivity {
+public class PendentesMovimentacoesActivity extends AppCompatActivity {
 
     private Pessoa pessoa;
     private ArrayList<Movimentacao> movimentacoes;
@@ -42,7 +42,7 @@ public class PessoasMovimentacoesActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         pessoa = (Pessoa) getIntent().getSerializableExtra("pessoa");
-        movimentacoes = P.getUsuarioInstance().Movimentacao;
+        movimentacoes = Movimentacao.filtrarPendentes(P.getUsuarioInstance().Movimentacao,pessoa);
         lblSaldo = (TextView) findViewById(R.id.lblSaldo);
 
         if (pessoa != null) {

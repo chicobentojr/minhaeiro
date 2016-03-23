@@ -76,7 +76,7 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
         setContentView(R.layout.activity_movimentacao_cadastro);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        usuario = P.getUsuario(P.obter(P.USUARIO_JSON));
+        usuario = P.getUsuarioInstance();
 
         adpCategoria = new ArrayAdapter(this, android.R.layout.simple_spinner_item, usuario.Categoria);
         adpCategoria.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

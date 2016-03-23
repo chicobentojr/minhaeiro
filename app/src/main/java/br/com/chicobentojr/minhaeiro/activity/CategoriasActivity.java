@@ -36,7 +36,7 @@ public class CategoriasActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        categorias = P.getUsuario(P.obter(P.USUARIO_JSON)).Categoria;
+        categorias = P.getUsuarioInstance().Categoria;
 
         adapter = new CategoriasAdapter(categorias);
         recyclerView.setAdapter(adapter);

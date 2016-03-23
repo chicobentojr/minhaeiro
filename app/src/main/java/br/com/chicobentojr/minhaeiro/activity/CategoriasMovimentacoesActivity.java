@@ -43,7 +43,7 @@ public class CategoriasMovimentacoesActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         categoria = (Categoria) getIntent().getSerializableExtra("categoria");
-        movimentacoes = P.getUsuario(P.obter(P.USUARIO_JSON)).Movimentacao;
+        movimentacoes = P.getUsuarioInstance().Movimentacao;
 
         lblSaldo = (TextView) findViewById(R.id.lblSaldo);
 

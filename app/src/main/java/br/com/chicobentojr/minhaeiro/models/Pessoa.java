@@ -1,6 +1,7 @@
 package br.com.chicobentojr.minhaeiro.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Pessoa implements Serializable {
@@ -26,6 +27,20 @@ public class Pessoa implements Serializable {
         params.put("pessoa_id", String.valueOf(this.pessoa_id));
         params.put("nome", String.valueOf(this.nome));
         return params;
+    }
+
+    public static ArrayList<Pessoa> filtrarPendentes(ArrayList<Movimentacao> movimentacoes) {
+        ArrayList<Pessoa> retorno = new ArrayList<>();
+        if (movimentacoes != null) {
+            for (Movimentacao movimentacao : movimentacoes) {
+                if (!movimentacao.realizada) {
+                    if (!retorno.contains(movimentacao.Pessoa)) {
+                        retorno.add(movimentacao.Pessoa);
+                    }
+                }
+            }
+        }
+        return retorno;
     }
 }
 
