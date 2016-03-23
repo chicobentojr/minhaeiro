@@ -42,6 +42,9 @@ public class ApiRoutes {
         public static String Put(int movimentacao_id) {
             return URL_BASE + P.autenticacao() + "/movimentacao/" + P.usuario_id() +"/" + movimentacao_id;
         }
+        public static String Delete(int movimentacao_id){
+            return URL_BASE + P.autenticacao() + "/movimentacao/" + P.usuario_id() +"/" + movimentacao_id;
+        }
     }
 
     public static class MOVIMENTACAO_ITEM {
@@ -49,6 +52,9 @@ public class ApiRoutes {
             return URL_BASE + P.autenticacao() + "/movimentacaoitem/" + P.usuario_id() +"/" + movimentacao_id;
         }
         public static String Put(int movimentacao_id,int item_id){
+            return URL_BASE + P.autenticacao() + "/movimentacaoitem/" + P.usuario_id() +"/" + movimentacao_id + "/" + item_id;
+        }
+        public static String Delete(int movimentacao_id,int item_id){
             return URL_BASE + P.autenticacao() + "/movimentacaoitem/" + P.usuario_id() +"/" + movimentacao_id + "/" + item_id;
         }
     }

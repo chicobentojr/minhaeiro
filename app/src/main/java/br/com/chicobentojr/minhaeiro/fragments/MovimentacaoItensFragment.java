@@ -8,12 +8,15 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.Switch;
 
@@ -21,6 +24,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -45,12 +49,12 @@ import br.com.chicobentojr.minhaeiro.utils.SpinnerHelper;
 /**
  * Created by Francisco on 14/02/2016.
  */
-public class MovimentacaoItensFragment extends Fragment {
+public class MovimentacaoItensFragment extends Fragment implements PopupMenu.OnMenuItemClickListener {
 
     private Activity listener;
     private Usuario usuario;
     private ArrayList<MovimentacaoItem> itens;
-    private MovimentacaoItem item;
+    private MovimentacaoItem itemSelecionado;
     private int itemPosicao;
 
     private RecyclerView recyclerView;
@@ -69,10 +73,11 @@ public class MovimentacaoItensFragment extends Fragment {
 
     private AlertDialog itemDialog;
 
-    public MovimentacaoItensFragment(){
+    public MovimentacaoItensFragment() {
 
     }
-    public static MovimentacaoItensFragment newInstance(Activity listener){
+
+    public static MovimentacaoItensFragment newInstance(Activity listener) {
         MovimentacaoItensFragment fragment = new MovimentacaoItensFragment();
         fragment.listener = listener;
         return fragment;
@@ -101,23 +106,35 @@ public class MovimentacaoItensFragment extends Fragment {
         return view;
     }
 
-    public void definirRecyclerViewItemClicks(){
+    public void definirRecyclerViewItemClicks() {
         ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                item = itens.get(position);
+                itemSelecionado = itens.get(position);
                 itemPosicao = position;
                 abrirAtualizarItemDialog();
             }
         });
+        ItemClickSupport.addTo(recyclerView).setOnItemLongClickListener(new ItemClickSupport.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClicked(RecyclerView recyclerView, int position, View v) {
+                itemSelecionado = itens.get(position);
+
+                PopupMenu popupMenu = new PopupMenu(listener, v, Gravity.LEFT);
+                popupMenu.setOnMenuItemClickListener(MovimentacaoItensFragment.this);
+                popupMenu.inflate(R.menu.popup_movimentacao);
+                popupMenu.show();
+                return true;
+            }
+        });
     }
 
-    public void adicionarItemAdapter(MovimentacaoItem item){
+    public void adicionarItemAdapter(MovimentacaoItem item) {
         itens.add(0, item);
         adapter.notifyDataSetChanged();
     }
 
-    public void atualizarItemAdapter(MovimentacaoItem item){
+    public void atualizarItemAdapter(MovimentacaoItem item) {
         itens.set(itemPosicao, item);
         adapter.notifyItemChanged(itemPosicao);
     }
@@ -160,15 +177,15 @@ public class MovimentacaoItensFragment extends Fragment {
 
     }
 
-    public void preencherMovimentacaoItem(){
-        txtDescricao.setText(item.descricao);
-        txtMovimentacaoValor.setText(String.valueOf(item.valor));
-        swtRealizada.setChecked(item.realizada);
+    public void preencherMovimentacaoItem() {
+        txtDescricao.setText(itemSelecionado.descricao);
+        txtMovimentacaoValor.setText(String.valueOf(itemSelecionado.valor));
+        swtRealizada.setChecked(itemSelecionado.realizada);
 
-        int pessoaIndice = SpinnerHelper.getSelectedItemPosition(spnPessoa, item.Pessoa);
+        int pessoaIndice = SpinnerHelper.getSelectedItemPosition(spnPessoa, itemSelecionado.Pessoa);
 
         String[] tipos = getResources().getStringArray(R.array.tipo_movimentacao_valor);
-        int tipoIndice = Arrays.asList(tipos).indexOf(String.valueOf(item.tipo));
+        int tipoIndice = Arrays.asList(tipos).indexOf(String.valueOf(itemSelecionado.tipo));
 
         spnPessoa.setSelection(pessoaIndice);
         spnMovimentacaoTipo.setSelection(tipoIndice);
@@ -203,13 +220,13 @@ public class MovimentacaoItensFragment extends Fragment {
         if (!valido) {
             focusView.requestFocus();
         } else {
-            item.pessoa_id = pessoa_id;
-            item.valor = Double.parseDouble(valor);
-            item.descricao = descricao;
-            item.tipo = tipo;
-            item.realizada = realizada;
+            itemSelecionado.pessoa_id = pessoa_id;
+            itemSelecionado.valor = Double.parseDouble(valor);
+            itemSelecionado.descricao = descricao;
+            itemSelecionado.tipo = tipo;
+            itemSelecionado.realizada = realizada;
 
-            atualizarMovimentacaoItem(item);
+            atualizarMovimentacaoItem(itemSelecionado);
         }
     }
 
@@ -224,7 +241,7 @@ public class MovimentacaoItensFragment extends Fragment {
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.PUT,
-                ApiRoutes.MOVIMENTACAO_ITEM.Put(item.movimentacao_id,item.item_id),
+                ApiRoutes.MOVIMENTACAO_ITEM.Put(item.movimentacao_id, item.item_id),
                 new JSONObject(item.toParams()),
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -244,4 +261,37 @@ public class MovimentacaoItensFragment extends Fragment {
         AppController.getInstance().addToRequestQueue(request);
     }
 
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.act_excluir:
+                this.excluirMovimentacaoItem(itemSelecionado);
+                return true;
+        }
+        return false;
+    }
+
+    public void excluirMovimentacaoItem(final MovimentacaoItem item) {
+        progressDialog.setMessage("Excluindo Movimentação...");
+        progressDialog.show();
+        StringRequest request = new StringRequest(
+                Request.Method.DELETE,
+                ApiRoutes.MOVIMENTACAO_ITEM.Delete(item.movimentacao_id, item.item_id),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        itens.remove(itemSelecionado);
+                        adapter.notifyDataSetChanged();
+                        progressDialog.hide();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressDialog.hide();
+                MinhaeiroErrorHelper.alertar(error, listener);
+            }
+        }
+        );
+        AppController.getInstance().addToRequestQueue(request);
+    }
 }

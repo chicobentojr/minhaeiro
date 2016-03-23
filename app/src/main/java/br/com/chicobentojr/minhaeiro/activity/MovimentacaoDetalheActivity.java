@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -209,7 +210,7 @@ public class MovimentacaoDetalheActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         MovimentacaoItem itemResposta = new Gson().fromJson(response.toString(), MovimentacaoItem.class);
-                        MovimentacaoItensFragment fragment = (MovimentacaoItensFragment) pagerAdapter.getItem(FRG_ITENS_INDEX);
+                        MovimentacaoItensFragment fragment = (MovimentacaoItensFragment) findFragmentByPosition(FRG_ITENS_INDEX);
                         fragment.adicionarItemAdapter(itemResposta);
                         progressDialog.dismiss();
                         itemDialog.dismiss();
@@ -230,5 +231,8 @@ public class MovimentacaoDetalheActivity extends AppCompatActivity {
         } else if (fragmentPosicao == 1) {
             fabCadastrarItem.show();
         }
+    }
+    public Fragment findFragmentByPosition(int position) {
+        return getSupportFragmentManager().findFragmentByTag("android:switcher:" + viewPager.getId() + ":"+ pagerAdapter.getItemId(position));
     }
 }

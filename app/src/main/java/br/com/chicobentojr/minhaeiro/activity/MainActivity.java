@@ -13,11 +13,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -36,7 +39,7 @@ import br.com.chicobentojr.minhaeiro.utils.ItemClickSupport;
 import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
 import br.com.chicobentojr.minhaeiro.utils.P;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, PopupMenu.OnMenuItemClickListener {
 
     private TextView lblUsuarioNome;
     private TextView lblUsuarioLogin;
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private ProgressDialog progressDialog;
     private ArrayList<Movimentacao> movimentacoes;
+    private Movimentacao movimentacaoSelecionada;
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -157,7 +161,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Gson gson = new Gson();
                         Usuario usuarioResposta = new Gson().fromJson(response, Usuario.class);
                         movimentacoes = usuarioResposta.Movimentacao;
                         adapter = new MovimentacaoAdapter(movimentacoes);
@@ -167,6 +170,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         progressDialog.hide();
 
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressDialog.hide();
+                MinhaeiroErrorHelper.alertar(error, MainActivity.this);
+            }
+        }
+        );
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    public void excluirMovimentacao(final Movimentacao movimentacao){
+        progressDialog.setMessage("Excluindo Movimentação...");
+        progressDialog.show();
+        StringRequest request = new StringRequest(
+                Request.Method.DELETE,
+                ApiRoutes.MOVIMENTACAO.Delete(movimentacao.movimentacao_id),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        movimentacoes.remove(movimentacao);
+                        adapter.notifyDataSetChanged();
+                        progressDialog.hide();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -198,6 +225,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivityForResult(intent, P.REQUEST.MOVIMENTACAO_ATUALIZACAO);
             }
         });
+
+        ItemClickSupport.addTo(recyclerView).setOnItemLongClickListener(new ItemClickSupport.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClicked(RecyclerView recyclerView, int position, View v) {
+                movimentacaoSelecionada = movimentacoes.get(position);
+
+                PopupMenu popupMenu = new PopupMenu(MainActivity.this,v, Gravity.LEFT);
+                popupMenu.setOnMenuItemClickListener(MainActivity.this);
+                popupMenu.inflate(R.menu.popup_movimentacao);
+                popupMenu.show();
+                return true;
+            }
+        });
     }
 
     @Override
@@ -218,6 +258,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Snackbar.make(recyclerView, "Movimentação atualizada com sucesso!", Snackbar.LENGTH_LONG).show();
             }
         }
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.act_excluir:
+                this.excluirMovimentacao(movimentacaoSelecionada);
+                return true;
+        }
+        return false;
     }
 
     private class BtnFloatingOnClick implements View.OnClickListener {
