@@ -8,7 +8,6 @@
 
     <string name="title_activity_login">Entrar</string>
 
-    <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
     <string name="action_sign_in">Sign in or register</string>
@@ -72,4 +71,5 @@
     <string name="title_activity_categorias">Categorias</string>
     <string name="title_activity_pendentes">Pendentes</string>
     <string name="act_excluir">Excluir</string>
+    <string name="title_activity_periodo">Período</string>
 </resources>

@@ -1,7 +1,13 @@
 package br.com.chicobentojr.minhaeiro.models;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class Movimentacao implements Serializable {
@@ -73,6 +79,76 @@ public class Movimentacao implements Serializable {
     public static ArrayList<Movimentacao> filtrarPendentes(ArrayList<Movimentacao> movimentacoes, Pessoa pessoa) {
         movimentacoes = Movimentacao.filtrarPorPessoa(movimentacoes, pessoa);
         return Movimentacao.filtrarPendentes(movimentacoes);
+    }
+
+    public static ArrayList<Movimentacao> filtrarPorPeriodo(ArrayList<Movimentacao> movimentacoes, Calendar periodo) {
+        ArrayList<Movimentacao> retorno = new ArrayList<>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        if (movimentacoes != null) {
+            for (Movimentacao movimentacao : movimentacoes) {
+                try {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(dateFormat.parse(movimentacao.movimentacao_data));
+                    if (calendar.get(Calendar.YEAR) == periodo.get(Calendar.YEAR) && calendar.get(Calendar.MONTH) == periodo.get(Calendar.MONTH)) {
+                        retorno.add(movimentacao);
+                    }
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    continue;
+                }
+            }
+        }
+        return retorno;
+    }
+
+    public static ArrayList<Calendar> obterPeriodos(ArrayList<Movimentacao> movimentacoes) {
+        ArrayList<Calendar> retorno = new ArrayList<>();
+        ArrayList<Integer[]> periodos = new ArrayList<Integer[]>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        int ano = 0;
+        int mes = 0;
+        boolean valido = true;
+        for (Movimentacao movimentacao : movimentacoes) {
+            try {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(dateFormat.parse(movimentacao.movimentacao_data));
+                ano = calendar.get(Calendar.YEAR);
+                mes = calendar.get(Calendar.MONTH);
+                for (Integer[] periodo : periodos) {
+                    if (periodo[0] == ano && periodo[1] == mes) {
+                        valido = false;
+                        break;
+                    }
+                }
+                if (valido) {
+                    periodos.add(new Integer[]{ano, mes});
+                    retorno.add(calendar);
+                }
+                valido = true;
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+                continue;
+            }
+        }
+
+        Collections.sort(retorno, new Comparator<Calendar>() {
+            @Override
+            public int compare(Calendar lhs, Calendar rhs) {
+                int flag = 0;
+                if (lhs.getTimeInMillis() < rhs.getTimeInMillis()) {
+                    flag = -1;
+                } else {
+                    if (lhs.getTimeInMillis() > rhs.getTimeInMillis()) {
+                        flag = 1;
+                    }
+                }
+                return flag;
+            }
+        });
+
+        return retorno;
     }
 
     public static double obterSaldo(ArrayList<Movimentacao> movimentacoes) {

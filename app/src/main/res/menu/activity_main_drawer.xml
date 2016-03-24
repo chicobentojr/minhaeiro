@@ -16,6 +16,10 @@
                 android:id="@+id/nav_pendentes"
                 android:icon="@drawable/ic_menu_pendentes"
                 android:title="Pendentes" />
+            <item
+                android:id="@+id/nav_periodo"
+                android:icon="@drawable/ic_button_calendario"
+                android:title="Período" />
         </menu>
     </item>
 
