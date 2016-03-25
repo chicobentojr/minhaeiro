@@ -131,5 +131,17 @@ public class P {
         }
         P.setUsuario(usuario);
     }
+    public static void removerPessoa(Pessoa pessoa){
+        usuario = P.getUsuarioInstance();
+        Pessoa p;
+        for(int i = 0, qtd = usuario.Pessoa.size(); i < qtd; i++){
+            p = usuario.Pessoa.get(i);
+            if(p.pessoa_id == pessoa.pessoa_id){
+                usuario.Pessoa.remove(p);
+                break;
+            }
+        }
+        P.setUsuario(usuario);
+    }
 
 }
