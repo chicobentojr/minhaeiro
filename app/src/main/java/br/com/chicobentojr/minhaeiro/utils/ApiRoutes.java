@@ -25,15 +25,21 @@ public class ApiRoutes {
         public static String Post() {
             return URL_BASE + P.autenticacao() + "/categoria/" + P.usuario_id();
         }
+
+        public static String Delete(int categoria_id) {
+            return URL_BASE + P.autenticacao() + "/categoria/" + P.usuario_id() + "/" + categoria_id;
+        }
     }
 
     public static class PESSOA {
         public static String Post() {
             return URL_BASE + P.autenticacao() + "/pessoa/" + P.usuario_id();
         }
+
         public static String Put(int pessoa_id) {
             return URL_BASE + P.autenticacao() + "/pessoa/" + P.usuario_id() + "/" + pessoa_id;
         }
+
         public static String Delete(int pessoa_id) {
             return URL_BASE + P.autenticacao() + "/pessoa/" + P.usuario_id() + "/" + pessoa_id;
         }
