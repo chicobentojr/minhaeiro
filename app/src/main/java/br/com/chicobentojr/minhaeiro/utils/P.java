@@ -6,7 +6,10 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+
 import br.com.chicobentojr.minhaeiro.activity.LoginActivity;
+import br.com.chicobentojr.minhaeiro.models.Pessoa;
 import br.com.chicobentojr.minhaeiro.models.Usuario;
 
 /**
@@ -48,10 +51,10 @@ public class P {
         usuario.autenticacao = prefs.getString(USUARIO_AUTENTICACAO,"");
         return usuario;
     }
-    public static Usuario getUsuario(String json) {
+    private static Usuario getUsuario(String json) {
         Usuario usuario = new Usuario();
         Gson gson = new Gson();
-        usuario = gson.fromJson(json,Usuario.class);
+        usuario = gson.fromJson(json, Usuario.class);
         return usuario;
     }
     public static void setUsuario(Usuario usuario){
@@ -60,6 +63,7 @@ public class P {
                 .putString(USUARIO_NOME, usuario.nome)
                 .putString(USUARIO_LOGIN,usuario.login)
                 .putString(USUARIO_AUTENTICACAO,usuario.autenticacao)
+                .putString(USUARIO_JSON,new Gson().toJson(usuario))
                 .apply();
     }
 
@@ -115,5 +119,17 @@ public class P {
         return prefs.getString(chave, "");
     }
 
+    public static void editarPessoa(Pessoa pessoa){
+        usuario = P.getUsuarioInstance();
+        Pessoa p;
+        for(int i = 0, qtd = usuario.Pessoa.size(); i < qtd; i++){
+            p = usuario.Pessoa.get(i);
+            if(p.pessoa_id == pessoa.pessoa_id){
+                usuario.Pessoa.get(i).nome = pessoa.nome;
+                break;
+            }
+        }
+        P.setUsuario(usuario);
+    }
 
 }

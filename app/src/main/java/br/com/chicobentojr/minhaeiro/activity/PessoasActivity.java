@@ -25,8 +25,18 @@ public class PessoasActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        this.iniciarLayout();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.iniciarLayout();
+    }
+
+    public void iniciarLayout(){
         this.setContentView(R.layout.activity_pessoas);
         this.getSupportActionBar().setHomeButtonEnabled(true);
 

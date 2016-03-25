@@ -1,7 +1,5 @@
 package br.com.chicobentojr.minhaeiro.utils;
 
-import br.com.chicobentojr.minhaeiro.models.Movimentacao;
-
 /**
  * Created by Francisco on 30/01/2016.
  */
@@ -9,15 +7,16 @@ public class ApiRoutes {
     public static final String URL_BASE = "http://minhaeiro.apphb.com/api/";
 
 
-
     public static class USUARIO {
         public static String Entrar() {
-          return URL_BASE + "login";
+            return URL_BASE + "login";
         }
-        public static String Post(){
+
+        public static String Post() {
             return ApiRoutes.URL_BASE + "usuario";
         }
-        public static String Get(){
+
+        public static String Get() {
             return URL_BASE + P.autenticacao() + "/usuario/" + P.usuario_id();
         }
     }
@@ -32,6 +31,10 @@ public class ApiRoutes {
         public static String Post() {
             return URL_BASE + P.autenticacao() + "/pessoa/" + P.usuario_id();
         }
+
+        public static String Put(int pessoa_id) {
+            return URL_BASE + P.autenticacao() + "/pessoa/" + P.usuario_id() + "/" + pessoa_id;
+        }
     }
 
     public static class MOVIMENTACAO {
@@ -40,22 +43,25 @@ public class ApiRoutes {
         }
 
         public static String Put(int movimentacao_id) {
-            return URL_BASE + P.autenticacao() + "/movimentacao/" + P.usuario_id() +"/" + movimentacao_id;
+            return URL_BASE + P.autenticacao() + "/movimentacao/" + P.usuario_id() + "/" + movimentacao_id;
         }
-        public static String Delete(int movimentacao_id){
-            return URL_BASE + P.autenticacao() + "/movimentacao/" + P.usuario_id() +"/" + movimentacao_id;
+
+        public static String Delete(int movimentacao_id) {
+            return URL_BASE + P.autenticacao() + "/movimentacao/" + P.usuario_id() + "/" + movimentacao_id;
         }
     }
 
     public static class MOVIMENTACAO_ITEM {
-        public static String Post(int movimentacao_id){
-            return URL_BASE + P.autenticacao() + "/movimentacaoitem/" + P.usuario_id() +"/" + movimentacao_id;
+        public static String Post(int movimentacao_id) {
+            return URL_BASE + P.autenticacao() + "/movimentacaoitem/" + P.usuario_id() + "/" + movimentacao_id;
         }
-        public static String Put(int movimentacao_id,int item_id){
-            return URL_BASE + P.autenticacao() + "/movimentacaoitem/" + P.usuario_id() +"/" + movimentacao_id + "/" + item_id;
+
+        public static String Put(int movimentacao_id, int item_id) {
+            return URL_BASE + P.autenticacao() + "/movimentacaoitem/" + P.usuario_id() + "/" + movimentacao_id + "/" + item_id;
         }
-        public static String Delete(int movimentacao_id,int item_id){
-            return URL_BASE + P.autenticacao() + "/movimentacaoitem/" + P.usuario_id() +"/" + movimentacao_id + "/" + item_id;
+
+        public static String Delete(int movimentacao_id, int item_id) {
+            return URL_BASE + P.autenticacao() + "/movimentacaoitem/" + P.usuario_id() + "/" + movimentacao_id + "/" + item_id;
         }
     }
 
