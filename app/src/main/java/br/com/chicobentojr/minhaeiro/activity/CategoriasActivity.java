@@ -48,6 +48,12 @@ public class CategoriasActivity extends AppCompatActivity implements PopupMenu.O
         this.iniciarLayout();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.iniciarLayout();
+    }
+
     public void iniciarLayout() {
         this.setContentView(R.layout.activity_categorias);
         this.getSupportActionBar().setHomeButtonEnabled(true);
@@ -85,7 +91,7 @@ public class CategoriasActivity extends AppCompatActivity implements PopupMenu.O
                 categoriaSelecionada = categorias.get(position);
                 PopupMenu popupMenu = new PopupMenu(CategoriasActivity.this, v, Gravity.LEFT);
                 popupMenu.setOnMenuItemClickListener(CategoriasActivity.this);
-                popupMenu.inflate(R.menu.popup_excluir);
+                popupMenu.inflate(R.menu.popup_gerenciar);
                 popupMenu.show();
                 return true;
             }
@@ -135,6 +141,11 @@ public class CategoriasActivity extends AppCompatActivity implements PopupMenu.O
         switch (item.getItemId()) {
             case R.id.act_excluir:
                 abrirPessoaDialog();
+                return true;
+            case R.id.act_editar:
+                Intent intent = new Intent(this,CategoriaEditarActivity.class);
+                intent.putExtra("categoria", categoriaSelecionada);
+                startActivity(intent);
                 return true;
         }
         return false;

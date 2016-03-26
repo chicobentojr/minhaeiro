@@ -1,10 +1,13 @@
 package br.com.chicobentojr.minhaeiro.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -40,9 +43,10 @@ public class PendentesMovimentacoesActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        this.esconderFloatingButton();
 
         pessoa = (Pessoa) getIntent().getSerializableExtra("pessoa");
-        movimentacoes = Movimentacao.filtrarPendentes(P.getUsuarioInstance().Movimentacao,pessoa);
+        movimentacoes = Movimentacao.filtrarPendentes(P.getUsuarioInstance().Movimentacao, pessoa);
         lblSaldo = (TextView) findViewById(R.id.lblSaldo);
 
         if (pessoa != null) {
@@ -54,11 +58,18 @@ public class PendentesMovimentacoesActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(layoutManager);
 
             movimentacoes = Movimentacao.filtrarPorPessoa(movimentacoes, pessoa);
-
             adapter = new MovimentacaoAdapter(movimentacoes);
             recyclerView.setAdapter(adapter);
 
             lblSaldo.setText("Saldo: " + Extensoes.LAYOUT.valor(Movimentacao.obterSaldo(movimentacoes)));
         }
+    }
+
+    public void esconderFloatingButton() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.btnEditar);
+        CoordinatorLayout.LayoutParams p = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+        p.setAnchorId(View.NO_ID);
+        fab.setLayoutParams(p);
+        fab.setVisibility(View.GONE);
     }
 }

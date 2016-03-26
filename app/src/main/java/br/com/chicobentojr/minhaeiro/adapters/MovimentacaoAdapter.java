@@ -47,6 +47,12 @@ public class MovimentacaoAdapter extends RecyclerView.Adapter<MovimentacaoAdapte
         holder.lblMovimentacaoPessoa.setText(String.valueOf(movimentacao.Pessoa.nome));
         holder.lblMovimentacaoValor.setText(Extensoes.LAYOUT.valor(movimentacao.valor));
 
+        if(movimentacao.Categoria.icone_id != 0){
+            holder.imgMovimentacaoIcone.setImageResource(movimentacao.Categoria.icone_id);
+        } else{
+            holder.imgMovimentacaoIcone.setImageResource(R.drawable.categorias_ic_padrao);
+        }
+
         if (movimentacao.realizada) {
             holder.itemView.setAlpha(0.5f);
             holder.imgMovimentacaoIcone.setColorFilter(Color.parseColor("#B6B6B6")) ;

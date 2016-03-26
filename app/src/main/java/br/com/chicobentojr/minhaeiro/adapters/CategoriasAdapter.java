@@ -52,6 +52,12 @@ public class CategoriasAdapter extends RecyclerView.Adapter<CategoriasAdapter.Vi
 
         holder.lblDescricao.setText(categoria.nome);
         holder.lblSaldo.setText(Extensoes.LAYOUT.valor(saldo));
+
+        if (categoria.icone_id != 0) {
+            holder.imgIcone.setImageResource(categoria.icone_id);
+        } else {
+            holder.imgIcone.setImageResource(R.drawable.categorias_ic_padrao);
+        }
     }
 
     @Override
@@ -62,14 +68,14 @@ public class CategoriasAdapter extends RecyclerView.Adapter<CategoriasAdapter.Vi
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public View itemView;
-        public ImageView lblIcone;
+        public ImageView imgIcone;
         public TextView lblDescricao;
         public TextView lblSaldo;
 
         public ViewHolder(View itemView) {
             super(itemView);
             this.itemView = itemView;
-            lblIcone = (ImageView) itemView.findViewById(R.id.lblIcone);
+            imgIcone = (ImageView) itemView.findViewById(R.id.imgIcone);
             lblDescricao = (TextView) itemView.findViewById(R.id.lblDescricao);
             lblSaldo = (TextView) itemView.findViewById(R.id.lblSaldo);
         }

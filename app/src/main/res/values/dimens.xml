@@ -12,6 +12,7 @@
     <dimen name="item_movimentacao_secundario_text_size">13sp</dimen>
 
     <dimen name="item_movimentacao_icon">40dp</dimen>
+    <dimen name="categoria_icon">80dp</dimen>
 
     <dimen name="spinner_margin_vertical">10dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>

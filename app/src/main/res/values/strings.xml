@@ -28,6 +28,7 @@
     <string name="title_activity_perfil">Perfil</string>
     <string name="txtNomeHint">Nome</string>
     <string name="btnCadastrar">Cadastrar</string>
+    <string name="btnEditar">Editar</string>
     <string name="btnAtualizar">Atualizar</string>
     <string name="txtConfirmaSenhaHint">Confirmação de Senha</string>
 
@@ -72,4 +73,5 @@
     <string name="title_activity_pendentes">Pendentes</string>
     <string name="act_excluir">Excluir</string>
     <string name="title_activity_periodo">Período</string>
+    <string name="act_editar">Editar</string>
 </resources>

@@ -1,0 +1,114 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="br.com.chicobentojr.minhaeiro.activity.CategoriaEditarActivity">
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/txtNome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:hint="@string/txtNomeHint"
+            android:inputType="textCapWords"
+            android:maxLines="1"
+            android:singleLine="true" />
+
+    </android.support.design.widget.TextInputLayout>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@color/accent"
+        android:padding="5dp"
+        android:text="Selecione o Ícone para esta Categoria"
+        android:textColor="@android:color/white" />
+
+    <TableLayout
+        android:id="@+id/tblIcones"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:stretchColumns="*">
+
+        <TableRow>
+
+            <ImageView
+                android:layout_width="@dimen/categoria_icon"
+                android:layout_height="@dimen/categoria_icon"
+                android:onClick="alterarIcone"
+                android:src="@drawable/categorias_ic_compras"
+                android:tag="categorias_ic_compras"
+                android:tint="@android:color/darker_gray" />
+
+            <ImageView
+                android:layout_width="@dimen/categoria_icon"
+                android:layout_height="@dimen/categoria_icon"
+                android:onClick="alterarIcone"
+                android:src="@drawable/categorias_ic_emprestimo"
+                android:tag="categorias_ic_emprestimo"
+                android:tint="@android:color/darker_gray" />
+
+            <ImageView
+                android:layout_width="@dimen/categoria_icon"
+                android:layout_height="@dimen/categoria_icon"
+                android:onClick="alterarIcone"
+                android:src="@drawable/categorias_ic_passeios"
+                android:tag="categorias_ic_passeios"
+                android:tint="@android:color/darker_gray" />
+        </TableRow>
+
+        <TableRow>
+
+            <ImageView
+                android:layout_width="@dimen/categoria_icon"
+                android:layout_height="@dimen/categoria_icon"
+                android:onClick="alterarIcone"
+                android:src="@drawable/categorias_ic_trabalho"
+                android:tag="categorias_ic_trabalho"
+                android:tint="@android:color/darker_gray" />
+
+            <ImageView
+                android:layout_width="@dimen/categoria_icon"
+                android:layout_height="@dimen/categoria_icon"
+                android:onClick="alterarIcone"
+                android:src="@drawable/categorias_ic_padrao"
+                android:tag="categorias_ic_padrao"
+                android:tint="@android:color/darker_gray" />
+        </TableRow>
+    </TableLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/btnCadastrar"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="16dp"
+            android:background="@color/accent"
+            android:onClick="editarCategoria"
+            android:text="@string/btnEditar"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+</LinearLayout>

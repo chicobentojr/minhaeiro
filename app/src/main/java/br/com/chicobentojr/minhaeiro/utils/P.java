@@ -125,7 +125,7 @@ public class P {
         for (int i = 0, qtd = usuario.Pessoa.size(); i < qtd; i++) {
             p = usuario.Pessoa.get(i);
             if (p.pessoa_id == pessoa.pessoa_id) {
-                usuario.Pessoa.get(i).nome = pessoa.nome;
+                usuario.Pessoa.set(i,pessoa);
                 break;
             }
         }
