@@ -3,8 +3,14 @@ package br.com.chicobentojr.minhaeiro.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Environment;
 
 import com.google.gson.Gson;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import br.com.chicobentojr.minhaeiro.models.Categoria;
 import br.com.chicobentojr.minhaeiro.models.Pessoa;
@@ -125,7 +131,7 @@ public class P {
         for (int i = 0, qtd = usuario.Pessoa.size(); i < qtd; i++) {
             p = usuario.Pessoa.get(i);
             if (p.pessoa_id == pessoa.pessoa_id) {
-                usuario.Pessoa.set(i,pessoa);
+                usuario.Pessoa.set(i, pessoa);
                 break;
             }
         }
@@ -156,6 +162,38 @@ public class P {
             }
         }
         P.setUsuario(usuario);
+    }
+
+    public static boolean exportarDados() {
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            String filename = dateFormat.format(new Date()) + ".txt";
+            String outputString = "";
+            File myDir = new File(Environment.getExternalStorageDirectory().toString() + "/PosteroCompany/Minhaeiro");
+
+            myDir.mkdirs();
+
+            outputString = new Gson().toJson(P.getUsuarioInstance());
+
+            try {
+                File file = new File(myDir, filename);
+                if (file.exists()) {
+                    file.delete();
+                }
+
+                FileOutputStream fos = new FileOutputStream(file);
+
+                fos.write(outputString.getBytes());
+                fos.flush();
+                fos.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

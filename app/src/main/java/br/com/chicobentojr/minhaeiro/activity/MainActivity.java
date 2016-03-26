@@ -113,6 +113,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_periodo:
                 startActivity(new Intent(this, PeriodoActivity.class));
                 break;
+            case R.id.nav_exportar:
+                if(P.exportarDados()){
+                    Snackbar.make(recyclerView,"Dados exportados com Sucesso!",Snackbar.LENGTH_SHORT).show();
+                } else{
+                    Snackbar.make(recyclerView,"Erro na exportação dos dados!",Snackbar.LENGTH_SHORT).show();
+                }
+                break;
             case R.id.nav_perfil:
                 startActivity(new Intent(this, PerfilActivity.class));
                 break;

@@ -26,6 +26,10 @@
     <item android:title="Configuração">
         <menu>
             <item
+                android:id="@+id/nav_exportar"
+                android:icon="@drawable/nav_ic_exportar"
+                android:title="Exportar" />
+            <item
                 android:id="@+id/nav_perfil"
                 android:icon="@drawable/ic_menu_perfil"
                 android:title="Perfil" />
