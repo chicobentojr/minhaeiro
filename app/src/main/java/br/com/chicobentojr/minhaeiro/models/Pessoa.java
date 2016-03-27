@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import br.com.chicobentojr.minhaeiro.utils.P;
+
 public class Pessoa implements Serializable {
     public int usuario_id;
     public int pessoa_id;
@@ -41,6 +43,32 @@ public class Pessoa implements Serializable {
             }
         }
         return retorno;
+    }
+
+    public static void editar(Pessoa pessoa) {
+        Usuario usuario = P.getUsuarioInstance();
+        Pessoa p;
+        for (int i = 0, qtd = usuario.Pessoa.size(); i < qtd; i++) {
+            p = usuario.Pessoa.get(i);
+            if (p.pessoa_id == pessoa.pessoa_id) {
+                usuario.Pessoa.set(i, pessoa);
+                break;
+            }
+        }
+        P.setUsuario(usuario);
+    }
+
+    public static void remover(Pessoa pessoa) {
+        Usuario usuario = P.getUsuarioInstance();
+        Pessoa p;
+        for (int i = 0, qtd = usuario.Pessoa.size(); i < qtd; i++) {
+            p = usuario.Pessoa.get(i);
+            if (p.pessoa_id == pessoa.pessoa_id) {
+                usuario.Pessoa.remove(p);
+                break;
+            }
+        }
+        P.setUsuario(usuario);
     }
 }
 

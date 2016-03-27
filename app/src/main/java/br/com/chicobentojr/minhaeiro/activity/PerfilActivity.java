@@ -54,7 +54,7 @@ public class PerfilActivity extends AppCompatActivity implements TextView.OnEdit
         progressDialog = new ProgressDialog(this);
         progressDialog.setCanceledOnTouchOutside(false);
 
-        usuario = P.getUsuario();
+        usuario = P.getUsuarioInstance();
 
         txtNome.setText(usuario.nome);
         txtLogin.setText(usuario.login);

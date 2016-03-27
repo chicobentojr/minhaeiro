@@ -9,15 +9,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.PopupMenu;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -30,6 +36,7 @@ import br.com.chicobentojr.minhaeiro.utils.DividerItemDecoration;
 import br.com.chicobentojr.minhaeiro.utils.ItemClickSupport;
 import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
 import br.com.chicobentojr.minhaeiro.utils.P;
+import br.com.chicobentojr.minhaeiro.utils.SpinnerHelper;
 
 public class PessoasActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
@@ -75,6 +82,23 @@ public class PessoasActivity extends AppCompatActivity implements PopupMenu.OnMe
         definirRecyclerViewItemClicks();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_adicionar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.act_adicionar:
+                this.abrirPessoaAdicionarDialog();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     public void definirRecyclerViewItemClicks() {
         ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
@@ -114,7 +138,7 @@ public class PessoasActivity extends AppCompatActivity implements PopupMenu.OnMe
                                     @Override
                                     public void onResponse(String response) {
                                         Pessoa pessoaResposta = new Gson().fromJson(response, Pessoa.class);
-                                        P.removerPessoa(pessoaResposta);
+                                        Pessoa.remover(pessoaResposta);
                                         pessoas.remove(pessoaResposta);
                                         adapter.notifyDataSetChanged();
                                         progressDialog.dismiss();
@@ -144,5 +168,61 @@ public class PessoasActivity extends AppCompatActivity implements PopupMenu.OnMe
                 return true;
         }
         return false;
+    }
+
+    public void abrirPessoaAdicionarDialog() {
+        final AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setTitle("Nova Pessoa")
+                .setView(R.layout.dialog_pessoa_cadastro)
+                .setPositiveButton("Cadastrar", null)
+                .setNegativeButton("Cancelar", null)
+                .create();
+
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button positiveButton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                positiveButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        EditText txtNome = (EditText) (alertDialog).findViewById(R.id.txtNome);
+                        String nome = txtNome.getText().toString();
+                        final Pessoa pessoa = new Pessoa();
+                        pessoa.nome = nome;
+                        if (nome.isEmpty()) {
+                            txtNome.setError(getString(R.string.nome_vazio_erro));
+                            txtNome.requestFocus();
+                        } else {
+                            progressDialog.setMessage("Carregando...");
+                            progressDialog.show();
+                            JsonObjectRequest request = new JsonObjectRequest(
+                                    Request.Method.POST,
+                                    ApiRoutes.PESSOA.Post(),
+                                    new JSONObject(pessoa.toParams()),
+                                    new Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject response) {
+                                            Pessoa pessoaResposta = new Gson().fromJson(response.toString(), Pessoa.class);
+                                            pessoas.add(pessoaResposta);
+                                            adapter.notifyDataSetChanged();
+                                            alertDialog.dismiss();
+                                            progressDialog.dismiss();
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            progressDialog.dismiss();
+                                            MinhaeiroErrorHelper.alertar(error, PessoasActivity.this);
+                                        }
+                                    }
+                            );
+                            AppController.getInstance().addToRequestQueue(request);
+                        }
+                    }
+                });
+            }
+        });
+        alertDialog.show();
     }
 }

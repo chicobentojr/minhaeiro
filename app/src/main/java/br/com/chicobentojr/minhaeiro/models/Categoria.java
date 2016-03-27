@@ -48,4 +48,17 @@ public class Categoria implements Serializable {
         P.setUsuario(usuario);
     }
 
+    public static void remover(Categoria categoria) {
+        Usuario usuario = P.getUsuarioInstance();
+        Categoria c;
+        for (int i = 0, qtd = usuario.Categoria.size(); i < qtd; i++) {
+            c = usuario.Categoria.get(i);
+            if (c.categoria_id == categoria.categoria_id) {
+                usuario.Categoria.remove(c);
+                break;
+            }
+        }
+        P.setUsuario(usuario);
+    }
+
 }

@@ -114,7 +114,7 @@ public class CategoriasActivity extends AppCompatActivity implements PopupMenu.O
                                     @Override
                                     public void onResponse(String response) {
                                         Categoria categoriaResposta = new Gson().fromJson(response, Categoria.class);
-                                        P.removerCategoria(categoriaResposta);
+                                        Categoria.remover(categoriaResposta);
                                         categorias.remove(categoriaResposta);
                                         adapter.notifyDataSetChanged();
                                         progressDialog.dismiss();

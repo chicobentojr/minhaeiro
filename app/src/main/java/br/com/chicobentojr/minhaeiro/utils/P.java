@@ -42,24 +42,8 @@ public class P {
 
     public static Usuario getUsuarioInstance() {
         if (usuario == null) {
-            usuario = P.getUsuario(P.obter(P.USUARIO_JSON));
+            usuario = new Gson().fromJson(P.obter(USUARIO_JSON),Usuario.class);
         }
-        return usuario;
-    }
-
-    public static Usuario getUsuario() {
-        Usuario usuario = new Usuario();
-        usuario.usuario_id = prefs.getInt(USUARIO_ID, 0);
-        usuario.nome = prefs.getString(USUARIO_NOME, "");
-        usuario.login = prefs.getString(USUARIO_LOGIN, "");
-        usuario.autenticacao = prefs.getString(USUARIO_AUTENTICACAO, "");
-        return usuario;
-    }
-
-    private static Usuario getUsuario(String json) {
-        Usuario usuario = new Usuario();
-        Gson gson = new Gson();
-        usuario = gson.fromJson(json, Usuario.class);
         return usuario;
     }
 
@@ -73,107 +57,45 @@ public class P {
                 .apply();
     }
 
+    public static void inserir(String chave, String valor) {
+        prefs.edit().putString(chave, valor).apply();
+    }
+    public static String obter(String chave) {
+        return prefs.getString(chave, "");
+    }
     public static void limpar() {
         prefs.edit().clear().apply();
     }
-
     public static void conectarUsuario(boolean conectar) {
         prefs.edit().putBoolean(USUARIO_CONECTADO, conectar).apply();
     }
-
     public static boolean usuarioConectado() {
         return prefs.getBoolean(USUARIO_CONECTADO, false);
     }
-
     public static int usuario_id() {
         return prefs.getInt(USUARIO_ID, 0);
     }
-
-    public static void usuario_id(int usuario_id) {
-        prefs.edit().putInt(USUARIO_ID, usuario_id).apply();
-    }
-
     public static String nome() {
         return prefs.getString(USUARIO_NOME, "");
     }
-
-    public static void nome(String nome) {
-        prefs.edit().putString(USUARIO_NOME, nome).apply();
-    }
-
     public static String login() {
         return prefs.getString(USUARIO_LOGIN, "");
     }
-
-    public static void login(String login) {
-        prefs.edit().putString(USUARIO_LOGIN, login).apply();
-    }
-
     public static String autenticacao() {
         return prefs.getString(USUARIO_AUTENTICACAO, "");
     }
 
-    public static void autenticacao(String autenticacao) {
-        prefs.edit().putString(USUARIO_AUTENTICACAO, autenticacao).apply();
-    }
-
-    public static void inserir(String chave, String valor) {
-        prefs.edit().putString(chave, valor).apply();
-    }
-
-    public static String obter(String chave) {
-        return prefs.getString(chave, "");
-    }
-
-    public static void editarPessoa(Pessoa pessoa) {
-        usuario = P.getUsuarioInstance();
-        Pessoa p;
-        for (int i = 0, qtd = usuario.Pessoa.size(); i < qtd; i++) {
-            p = usuario.Pessoa.get(i);
-            if (p.pessoa_id == pessoa.pessoa_id) {
-                usuario.Pessoa.set(i, pessoa);
-                break;
-            }
-        }
-        P.setUsuario(usuario);
-    }
-
-    public static void removerPessoa(Pessoa pessoa) {
-        usuario = P.getUsuarioInstance();
-        Pessoa p;
-        for (int i = 0, qtd = usuario.Pessoa.size(); i < qtd; i++) {
-            p = usuario.Pessoa.get(i);
-            if (p.pessoa_id == pessoa.pessoa_id) {
-                usuario.Pessoa.remove(p);
-                break;
-            }
-        }
-        P.setUsuario(usuario);
-    }
-
-    public static void removerCategoria(Categoria categoria) {
-        usuario = P.getUsuarioInstance();
-        Categoria c;
-        for (int i = 0, qtd = usuario.Categoria.size(); i < qtd; i++) {
-            c = usuario.Categoria.get(i);
-            if (c.categoria_id == categoria.categoria_id) {
-                usuario.Categoria.remove(c);
-                break;
-            }
-        }
-        P.setUsuario(usuario);
-    }
-
     public static boolean exportarDados() {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            Usuario usuario = P.getUsuarioInstance();
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-            String filename = dateFormat.format(new Date()) + ".txt";
+            String filename = usuario.login + " " + dateFormat.format(new Date()) + ".txt";
             String outputString = "";
             File myDir = new File(Environment.getExternalStorageDirectory().toString() + "/PosteroCompany/Minhaeiro");
 
             myDir.mkdirs();
 
-            outputString = new Gson().toJson(P.getUsuarioInstance());
+            outputString = new Gson().toJson(usuario);
 
             try {
                 File file = new File(myDir, filename);
