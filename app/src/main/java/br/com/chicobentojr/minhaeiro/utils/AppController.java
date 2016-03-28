@@ -8,6 +8,10 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
+import java.util.ArrayList;
+
+import br.com.chicobentojr.minhaeiro.models.Requisicao;
+
 /**
  * Created by Francisco on 30/01/2016.
  */
@@ -24,31 +28,44 @@ public class AppController extends Application {
         super.onCreate();
         instance = this;
     }
-    public static synchronized AppController getInstance(){
+
+    public static synchronized AppController getInstance() {
         return instance;
     }
-    public RequestQueue getRequestQueue(){
-        if(requestQueue == null){
+
+    public RequestQueue getRequestQueue() {
+        if (requestQueue == null) {
             requestQueue = Volley.newRequestQueue(getApplicationContext());
         }
         return requestQueue;
     }
-    public <T> void addToRequestQueue(Request<T> request, String tag){
+
+    public <T> void addToRequestQueue(Request<T> request, String tag) {
         request.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
         getRequestQueue().add(request);
     }
-    public <T> void addToRequestQueue(Request<T> request){
+
+    public <T> void addToRequestQueue(Request<T> request) {
         request.setRetryPolicy(MinhaeiroRetryPolicy.getInstance());
         request.setTag(TAG);
+
+        //Código para enviar as requisições, caso o app tenha sido usado sem conexão com a internet
+        ArrayList<Request> requests = Requisicao.enviar();
+        for (Request r : requests) {
+            getRequestQueue().add(r);
+        }
+        //Fim do Código
+
         getRequestQueue().add(request);
     }
-    public void cancelPendingRequests(Object tag){
-        if (requestQueue != null){
+
+    public void cancelPendingRequests(Object tag) {
+        if (requestQueue != null) {
             requestQueue.cancelAll(tag);
         }
     }
 
-    public static Context getContext(){
+    public static Context getContext() {
         return AppController.getInstance().getApplicationContext();
     }
 }

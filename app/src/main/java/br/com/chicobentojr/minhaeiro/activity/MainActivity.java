@@ -187,6 +187,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Usuario usuarioResposta = P.getUsuarioInstance();
+                movimentacoes = usuarioResposta.Movimentacao;
+                adapter = new MovimentacaoAdapter(movimentacoes);
+                recyclerView.setAdapter(adapter);
                 progressDialog.hide();
                 MinhaeiroErrorHelper.alertar(error, MainActivity.this);
             }

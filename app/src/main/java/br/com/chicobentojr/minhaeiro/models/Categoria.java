@@ -35,13 +35,24 @@ public class Categoria implements Serializable {
         return params;
     }
 
+    public static Categoria obter(int categoria_id) {
+        Categoria c = new Categoria();
+        for (Categoria categoria : P.getUsuarioInstance().Categoria) {
+            if (categoria.categoria_id == categoria_id) {
+                c = categoria;
+                break;
+            }
+        }
+        return c;
+    }
+
     public static void editar(Categoria categoria) {
         Usuario usuario = P.getUsuarioInstance();
         Categoria c;
         for (int i = 0, qtd = usuario.Categoria.size(); i < qtd; i++) {
             c = usuario.Categoria.get(i);
             if (c.categoria_id == categoria.categoria_id) {
-                usuario.Categoria.set(i,categoria);
+                usuario.Categoria.set(i, categoria);
                 break;
             }
         }

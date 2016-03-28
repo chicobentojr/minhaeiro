@@ -50,7 +50,7 @@ public class ApiRoutes {
 
     public static class MOVIMENTACAO {
         public static String Post() {
-            return "";
+            return URL_BASE + P.autenticacao() + "/movimentacao/" + P.usuario_id();
         }
 
         public static String Put(int movimentacao_id) {

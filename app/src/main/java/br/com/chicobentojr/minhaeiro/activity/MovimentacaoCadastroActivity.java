@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
 
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -21,6 +22,7 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Method;
 import java.util.Calendar;
 
 import br.com.chicobentojr.minhaeiro.R;
@@ -28,6 +30,7 @@ import br.com.chicobentojr.minhaeiro.dialogs.DatePicker;
 import br.com.chicobentojr.minhaeiro.models.Categoria;
 import br.com.chicobentojr.minhaeiro.models.Movimentacao;
 import br.com.chicobentojr.minhaeiro.models.Pessoa;
+import br.com.chicobentojr.minhaeiro.models.Requisicao;
 import br.com.chicobentojr.minhaeiro.models.Usuario;
 import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
 import br.com.chicobentojr.minhaeiro.utils.AppController;
@@ -101,8 +104,6 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
     public void cadastrar(View v) {
         limparErros();
 
-        int categoria_id = ((Categoria) spnCategoria.getSelectedItem()).categoria_id;
-        int pessoa_id = ((Pessoa) spnPessoa.getSelectedItem()).pessoa_id;
         String movimentacao_data = txtMovimentacaoData.getText().toString();
         String valor = txtMovimentacaoValor.getText().toString();
         String descricao = txtDescricao.getText().toString();
@@ -135,8 +136,10 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
         } else {
             Movimentacao movimentacao = new Movimentacao();
 
-            movimentacao.categoria_id = categoria_id;
-            movimentacao.pessoa_id = pessoa_id;
+            movimentacao.Categoria = ((Categoria) spnCategoria.getSelectedItem());
+            movimentacao.Pessoa = ((Pessoa) spnPessoa.getSelectedItem());
+            movimentacao.categoria_id = movimentacao.Categoria.categoria_id;
+            movimentacao.pessoa_id = movimentacao.Pessoa.pessoa_id;
             movimentacao.movimentacao_data = Extensoes.STRING.toBrazilianDate(movimentacao_data);
             movimentacao.valor = Double.parseDouble(valor);
             movimentacao.descricao = descricao;
@@ -147,13 +150,14 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
         }
     }
 
-    public void cadastrarMovimentacao(Movimentacao movimentacao) {
+    public void cadastrarMovimentacao(final Movimentacao movimentacao) {
         progressDialog.setMessage("Carregando...");
         progressDialog.show();
 
+        final String url =ApiRoutes.MOVIMENTACAO.Post();
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
-                ApiRoutes.montar(P.autenticacao(), "movimentacao", P.usuario_id()),
+                url,
                 new JSONObject(movimentacao.toParams()),
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -170,8 +174,18 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                if(error instanceof NoConnectionError){
+                    Movimentacao m = Movimentacao.adicionar(movimentacao);
+                    Requisicao.adicionar(new Requisicao(Request.Method.POST,url,Requisicao.MOVIMENTACAO,m));
+                    Intent intentResposta = new Intent(getApplicationContext(), MainActivity.class);
+                    intentResposta.putExtra("movimentacao", m);
+                    setResult(RESULT_OK, intentResposta);
+                    finish();
+                }
+                else {
+                    MinhaeiroErrorHelper.alertar(error, MovimentacaoCadastroActivity.this);
+                }
                 progressDialog.hide();
-                MinhaeiroErrorHelper.alertar(error, MovimentacaoCadastroActivity.this);
             }
         });
         AppController.getInstance().addToRequestQueue(request);

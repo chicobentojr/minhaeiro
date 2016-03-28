@@ -45,6 +45,17 @@ public class Pessoa implements Serializable {
         return retorno;
     }
 
+    public static Pessoa obter(int pessoa_id){
+        Pessoa p = new Pessoa();
+        for(Pessoa pessoa : P.getUsuarioInstance().Pessoa){
+            if(pessoa.pessoa_id == pessoa_id){
+                p = pessoa;
+                break;
+            }
+        }
+        return p;
+    }
+
     public static void editar(Pessoa pessoa) {
         Usuario usuario = P.getUsuarioInstance();
         Pessoa p;

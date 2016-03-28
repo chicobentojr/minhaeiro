@@ -114,7 +114,7 @@ public class PessoasMovimentacoesActivity extends AppCompatActivity {
                                         @Override
                                         public void onResponse(JSONObject response) {
                                             Pessoa pessoaResposta = new Gson().fromJson(response.toString(), Pessoa.class);
-                                            P.editarPessoa(pessoaResposta);
+                                            Pessoa.editar(pessoaResposta);
                                             alertDialog.dismiss();
                                             progressDialog.dismiss();
                                             finish();

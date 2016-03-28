@@ -4,11 +4,12 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+
+import br.com.chicobentojr.minhaeiro.utils.P;
 
 public class Movimentacao implements Serializable {
     public int usuario_id;
@@ -38,6 +39,17 @@ public class Movimentacao implements Serializable {
         params.put("realizada", String.valueOf(this.realizada));
 
         return params;
+    }
+
+    public static Movimentacao adicionar(Movimentacao movimentacao) {
+        Usuario usuario = P.getUsuarioInstance();
+        ArrayList<Movimentacao> movimentacoes = usuario.Movimentacao;
+
+        movimentacao.movimentacao_id = movimentacoes.size() > 0 ? movimentacoes.get(movimentacoes.size() - 1).movimentacao_id + 1 : 1;
+        usuario.Movimentacao.add(movimentacao);
+        P.setUsuario(usuario);
+
+        return movimentacao;
     }
 
     public static ArrayList<Movimentacao> filtrarPorPessoa(ArrayList<Movimentacao> movimentacoes, Pessoa pessoa) {
