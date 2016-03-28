@@ -42,12 +42,17 @@ public class Extensoes {
         }
 
         public static String data(String data) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-            SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
-            try {
-                return sdf2.format(sdf.parse(data));
-            } catch (ParseException e) {
-                e.printStackTrace();
+            if (data.length() == "dd/MM/yyyy".length()) {
+                return data;
+            } else {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
+                try {
+
+                    return sdf2.format(sdf.parse(data));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
             return "";
         }

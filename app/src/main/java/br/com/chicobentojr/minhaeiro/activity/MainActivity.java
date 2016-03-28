@@ -169,34 +169,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void carregarMovimentacoes() {
         progressDialog.setMessage("Carregando Movimentações...");
         progressDialog.show();
-        StringRequest request = new StringRequest(
-                ApiRoutes.USUARIO.Get(),
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Usuario usuarioResposta = new Gson().fromJson(response, Usuario.class);
-                        movimentacoes = usuarioResposta.Movimentacao;
-                        adapter = new MovimentacaoAdapter(movimentacoes);
-                        recyclerView.setAdapter(adapter);
 
-                        P.inserir(P.USUARIO_JSON, response);
-
-                        progressDialog.hide();
-
-                    }
-                }, new Response.ErrorListener() {
+        Usuario.listar(new Usuario.ObterListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                Usuario usuarioResposta = P.getUsuarioInstance();
-                movimentacoes = usuarioResposta.Movimentacao;
+            public void sucesso(Usuario usuario) {
+                movimentacoes = usuario.Movimentacao;
                 adapter = new MovimentacaoAdapter(movimentacoes);
                 recyclerView.setAdapter(adapter);
                 progressDialog.hide();
-                MinhaeiroErrorHelper.alertar(error, MainActivity.this);
             }
-        }
-        );
-        AppController.getInstance().addToRequestQueue(request);
+
+            @Override
+            public void erro(VolleyError erro) {
+                MinhaeiroErrorHelper.alertar(erro, MainActivity.this);
+            }
+        });
     }
 
     public void excluirMovimentacao(final Movimentacao movimentacao){

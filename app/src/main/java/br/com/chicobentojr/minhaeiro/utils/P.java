@@ -49,7 +49,7 @@ public class P {
 
     public static void setUsuario(Usuario usuario) {
         prefs.edit()
-                .putInt(USUARIO_ID, usuario.usuario_id)
+                .putString(USUARIO_ID, String.valueOf( usuario.usuario_id))
                 .putString(USUARIO_NOME, usuario.nome)
                 .putString(USUARIO_LOGIN, usuario.login)
                 .putString(USUARIO_AUTENTICACAO, usuario.autenticacao)
@@ -73,7 +73,7 @@ public class P {
         return prefs.getBoolean(USUARIO_CONECTADO, false);
     }
     public static int usuario_id() {
-        return prefs.getInt(USUARIO_ID, 0);
+        return Integer.valueOf(prefs.getString(USUARIO_ID, "0"));
     }
     public static String nome() {
         return prefs.getString(USUARIO_NOME, "");
