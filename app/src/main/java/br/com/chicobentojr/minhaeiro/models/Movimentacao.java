@@ -1,5 +1,11 @@
 package br.com.chicobentojr.minhaeiro.models;
 
+import com.android.volley.NoConnectionError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,6 +15,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
+import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
+import br.com.chicobentojr.minhaeiro.utils.AppController;
 import br.com.chicobentojr.minhaeiro.utils.P;
 
 public class Movimentacao implements Serializable {
@@ -45,8 +53,8 @@ public class Movimentacao implements Serializable {
         Usuario usuario = P.getUsuarioInstance();
         ArrayList<Movimentacao> movimentacoes = usuario.Movimentacao;
 
-        movimentacao.movimentacao_id = movimentacoes.size() > 0 ? movimentacoes.get(movimentacoes.size() - 1).movimentacao_id + 1 : 1;
-        usuario.Movimentacao.add(movimentacao);
+        movimentacao.movimentacao_id = movimentacoes.size() > 0 ? movimentacoes.get(0).movimentacao_id + 1 : 1;
+        usuario.Movimentacao.add(0, movimentacao);
         P.setUsuario(usuario);
 
         return movimentacao;
@@ -177,5 +185,50 @@ public class Movimentacao implements Serializable {
         return saldo;
     }
 
+    public static void excluir(Movimentacao movimentacao) {
+        Usuario usuario = P.getUsuarioInstance();
+        Movimentacao m;
+        for (int i = 0, qtd = usuario.Movimentacao.size(); i < qtd; i++) {
+            m = usuario.Movimentacao.get(i);
+            if (m.movimentacao_id == movimentacao.movimentacao_id) {
+                usuario.Movimentacao.remove(m);
+                break;
+            }
+        }
+        P.setUsuario(usuario);
+    }
+
+    public interface ObterListener {
+        void sucesso(Movimentacao movimentacao);
+
+        void erro(VolleyError erro);
+    }
+
+    public static void excluir(final Movimentacao movimentacao, final ObterListener listener) {
+        final String url = ApiRoutes.MOVIMENTACAO.Delete(movimentacao.movimentacao_id);
+        StringRequest request = new StringRequest(
+                Request.Method.DELETE,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Movimentacao.excluir(movimentacao);
+                        listener.sucesso(movimentacao);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error instanceof NoConnectionError) {
+                    Movimentacao.excluir(movimentacao);
+                    Requisicao.adicionar(new Requisicao(Request.Method.DELETE, url, Requisicao.MOVIMENTACAO, movimentacao));
+                    listener.sucesso(movimentacao);
+                } else {
+                    listener.erro(error);
+                }
+            }
+        }
+        );
+        AppController.getInstance().addToRequestQueue(request);
+    }
 
 }

@@ -13,10 +13,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import br.com.chicobentojr.minhaeiro.adapters.MovimentacaoAdapter;
 import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
 import br.com.chicobentojr.minhaeiro.utils.AppController;
-import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
 import br.com.chicobentojr.minhaeiro.utils.P;
 
 public class Usuario implements Serializable {
@@ -54,7 +52,7 @@ public class Usuario implements Serializable {
         return retorno;
     }
 
-    public static interface ObterListener {
+    public interface ObterListener {
         void sucesso(Usuario usuario);
 
         void erro(VolleyError erro);
@@ -67,7 +65,7 @@ public class Usuario implements Serializable {
                     @Override
                     public void onResponse(String response) {
                         Usuario usuario = new Gson().fromJson(response, Usuario.class);
-                        P.inserir(P.USUARIO_JSON,response);
+                        P.inserir(P.USUARIO_JSON, response);
                         P.inserir(P.USUARIO_ID, String.valueOf(usuario.usuario_id));
                         P.inserir(P.USUARIO_NOME, usuario.nome);
                         P.inserir(P.USUARIO_LOGIN, usuario.login);

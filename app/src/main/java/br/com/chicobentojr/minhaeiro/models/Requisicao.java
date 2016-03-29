@@ -100,7 +100,8 @@ public class Requisicao {
 
                 switch (requisicao.modelo){
                     case Requisicao.MOVIMENTACAO:
-                        objetoJson = new JSONObject(((Movimentacao)requisicao.objeto).toParams());
+                        Movimentacao m = (Movimentacao) requisicao.objeto;
+                        objetoJson = new JSONObject(m.toParams());
                         break;
                 }
 

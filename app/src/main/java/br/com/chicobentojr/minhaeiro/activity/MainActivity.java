@@ -20,11 +20,7 @@ import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -32,8 +28,6 @@ import br.com.chicobentojr.minhaeiro.R;
 import br.com.chicobentojr.minhaeiro.adapters.MovimentacaoAdapter;
 import br.com.chicobentojr.minhaeiro.models.Movimentacao;
 import br.com.chicobentojr.minhaeiro.models.Usuario;
-import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
-import br.com.chicobentojr.minhaeiro.utils.AppController;
 import br.com.chicobentojr.minhaeiro.utils.DividerItemDecoration;
 import br.com.chicobentojr.minhaeiro.utils.ItemClickSupport;
 import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
@@ -114,10 +108,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(this, PeriodoActivity.class));
                 break;
             case R.id.nav_exportar:
-                if(P.exportarDados()){
-                    Snackbar.make(recyclerView,"Dados exportados com Sucesso!",Snackbar.LENGTH_SHORT).show();
-                } else{
-                    Snackbar.make(recyclerView,"Erro na exportação dos dados!",Snackbar.LENGTH_SHORT).show();
+                if (P.exportarDados()) {
+                    Snackbar.make(recyclerView, "Dados exportados com Sucesso!", Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Snackbar.make(recyclerView, "Erro na exportação dos dados!", Snackbar.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.nav_perfil:
@@ -186,28 +180,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    public void excluirMovimentacao(final Movimentacao movimentacao){
+    public void excluirMovimentacao(final Movimentacao movimentacao) {
         progressDialog.setMessage("Excluindo Movimentação...");
         progressDialog.show();
-        StringRequest request = new StringRequest(
-                Request.Method.DELETE,
-                ApiRoutes.MOVIMENTACAO.Delete(movimentacao.movimentacao_id),
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        movimentacoes.remove(movimentacao);
-                        adapter.notifyDataSetChanged();
-                        progressDialog.hide();
-                    }
-                }, new Response.ErrorListener() {
+
+        Movimentacao.excluir(movimentacao, new Movimentacao.ObterListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void sucesso(Movimentacao movimentacao) {
+                movimentacoes.remove(movimentacao);
+                adapter.notifyDataSetChanged();
                 progressDialog.hide();
-                MinhaeiroErrorHelper.alertar(error, MainActivity.this);
             }
-        }
-        );
-        AppController.getInstance().addToRequestQueue(request);
+
+            @Override
+            public void erro(VolleyError erro) {
+                progressDialog.hide();
+                MinhaeiroErrorHelper.alertar(erro, MainActivity.this);
+            }
+        });
     }
 
     public void sair() {
@@ -235,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public boolean onItemLongClicked(RecyclerView recyclerView, int position, View v) {
                 movimentacaoSelecionada = movimentacoes.get(position);
 
-                PopupMenu popupMenu = new PopupMenu(MainActivity.this,v, Gravity.LEFT);
+                PopupMenu popupMenu = new PopupMenu(MainActivity.this, v, Gravity.LEFT);
                 popupMenu.setOnMenuItemClickListener(MainActivity.this);
                 popupMenu.inflate(R.menu.popup_movimentacao);
                 popupMenu.show();
@@ -266,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.act_excluir:
                 this.excluirMovimentacao(movimentacaoSelecionada);
                 return true;
