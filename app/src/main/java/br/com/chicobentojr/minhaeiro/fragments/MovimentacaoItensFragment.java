@@ -20,14 +20,7 @@ import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.Switch;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.google.gson.Gson;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,8 +31,6 @@ import br.com.chicobentojr.minhaeiro.models.Movimentacao;
 import br.com.chicobentojr.minhaeiro.models.MovimentacaoItem;
 import br.com.chicobentojr.minhaeiro.models.Pessoa;
 import br.com.chicobentojr.minhaeiro.models.Usuario;
-import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
-import br.com.chicobentojr.minhaeiro.utils.AppController;
 import br.com.chicobentojr.minhaeiro.utils.DividerItemDecoration;
 import br.com.chicobentojr.minhaeiro.utils.ItemClickSupport;
 import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
@@ -239,26 +230,20 @@ public class MovimentacaoItensFragment extends Fragment implements PopupMenu.OnM
         progressDialog.setMessage("Carregando...");
         progressDialog.show();
 
-        JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.PUT,
-                ApiRoutes.MOVIMENTACAO_ITEM.Put(item.movimentacao_id, item.item_id),
-                new JSONObject(item.toParams()),
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        MovimentacaoItem itemResposta = new Gson().fromJson(response.toString(), MovimentacaoItem.class);
-                        atualizarItemAdapter(itemResposta);
-                        progressDialog.dismiss();
-                        itemDialog.dismiss();
-                    }
-                }, new Response.ErrorListener() {
+        MovimentacaoItem.editar(item, new MovimentacaoItem.ApiListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void sucesso(MovimentacaoItem item) {
+                atualizarItemAdapter(item);
+                progressDialog.dismiss();
+                itemDialog.dismiss();
+            }
+
+            @Override
+            public void erro(VolleyError erro) {
                 progressDialog.hide();
-                MinhaeiroErrorHelper.alertar(error, listener);
+                MinhaeiroErrorHelper.alertar(erro, listener);
             }
         });
-        AppController.getInstance().addToRequestQueue(request);
     }
 
     @Override
@@ -274,24 +259,20 @@ public class MovimentacaoItensFragment extends Fragment implements PopupMenu.OnM
     public void excluirMovimentacaoItem(final MovimentacaoItem item) {
         progressDialog.setMessage("Excluindo Movimentação...");
         progressDialog.show();
-        StringRequest request = new StringRequest(
-                Request.Method.DELETE,
-                ApiRoutes.MOVIMENTACAO_ITEM.Delete(item.movimentacao_id, item.item_id),
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        itens.remove(itemSelecionado);
-                        adapter.notifyDataSetChanged();
-                        progressDialog.hide();
-                    }
-                }, new Response.ErrorListener() {
+
+        MovimentacaoItem.excluir(item, new MovimentacaoItem.ApiListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void sucesso(MovimentacaoItem item) {
+                itens.remove(itemSelecionado);
+                adapter.notifyDataSetChanged();
                 progressDialog.hide();
-                MinhaeiroErrorHelper.alertar(error, listener);
             }
-        }
-        );
-        AppController.getInstance().addToRequestQueue(request);
+
+            @Override
+            public void erro(VolleyError erro) {
+                progressDialog.hide();
+                MinhaeiroErrorHelper.alertar(erro, listener);
+            }
+        });
     }
 }

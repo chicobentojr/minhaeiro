@@ -8,7 +8,7 @@ public class ApiRoutes {
 
 
     public static class USUARIO {
-        public static String Entrar() {
+        public static String Login() {
             return URL_BASE + "login";
         }
 
@@ -19,12 +19,17 @@ public class ApiRoutes {
         public static String Get() {
             return URL_BASE + P.autenticacao() + "/usuario/" + P.usuario_id();
         }
+
+        public static String Put() {
+            return URL_BASE + P.autenticacao() + "/usuario/" + P.usuario_id();
+        }
     }
 
     public static class CATEGORIA {
         public static String Post() {
             return URL_BASE + P.autenticacao() + "/categoria/" + P.usuario_id();
         }
+
         public static String Put(int categoria_id) {
             return URL_BASE + P.autenticacao() + "/categoria/" + P.usuario_id() + "/" + categoria_id;
         }

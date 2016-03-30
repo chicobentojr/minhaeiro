@@ -1,7 +1,6 @@
 package br.com.chicobentojr.minhaeiro.fragments;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,17 +8,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 
 import br.com.chicobentojr.minhaeiro.R;
 import br.com.chicobentojr.minhaeiro.adapters.MovimentacaoAdapter;
-import br.com.chicobentojr.minhaeiro.adapters.MovimentacaoItemAdapter;
 import br.com.chicobentojr.minhaeiro.models.Movimentacao;
-import br.com.chicobentojr.minhaeiro.models.MovimentacaoItem;
 import br.com.chicobentojr.minhaeiro.utils.DividerItemDecoration;
 import br.com.chicobentojr.minhaeiro.utils.P;
 

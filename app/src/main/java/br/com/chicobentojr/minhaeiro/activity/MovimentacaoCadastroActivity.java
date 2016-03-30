@@ -13,16 +13,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
 
-import com.android.volley.NoConnectionError;
-import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.gson.Gson;
 
-import org.json.JSONObject;
-
-import java.lang.reflect.Method;
 import java.util.Calendar;
 
 import br.com.chicobentojr.minhaeiro.R;
@@ -30,10 +22,7 @@ import br.com.chicobentojr.minhaeiro.dialogs.DatePicker;
 import br.com.chicobentojr.minhaeiro.models.Categoria;
 import br.com.chicobentojr.minhaeiro.models.Movimentacao;
 import br.com.chicobentojr.minhaeiro.models.Pessoa;
-import br.com.chicobentojr.minhaeiro.models.Requisicao;
 import br.com.chicobentojr.minhaeiro.models.Usuario;
-import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
-import br.com.chicobentojr.minhaeiro.utils.AppController;
 import br.com.chicobentojr.minhaeiro.utils.Extensoes;
 import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
 import br.com.chicobentojr.minhaeiro.utils.P;
@@ -154,41 +143,22 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
         progressDialog.setMessage("Carregando...");
         progressDialog.show();
 
-        final String url =ApiRoutes.MOVIMENTACAO.Post();
-        JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.POST,
-                url,
-                new JSONObject(movimentacao.toParams()),
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Gson gson = new Gson();
-                        Movimentacao movimentacaoResposta = gson.fromJson(response.toString(), Movimentacao.class);
-
-                        progressDialog.hide();
-                        Intent intentResposta = new Intent(getApplicationContext(), MainActivity.class);
-                        intentResposta.putExtra("movimentacao", movimentacaoResposta);
-                        setResult(RESULT_OK, intentResposta);
-                        finish();
-                    }
-                }, new Response.ErrorListener() {
+        Movimentacao.cadastrar(movimentacao, new Movimentacao.ApiListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                if(error instanceof NoConnectionError){
-                    Movimentacao m = Movimentacao.adicionar(movimentacao);
-                    Requisicao.adicionar(new Requisicao(Request.Method.POST,url,Requisicao.MOVIMENTACAO,m));
-                    Intent intentResposta = new Intent(getApplicationContext(), MainActivity.class);
-                    intentResposta.putExtra("movimentacao", m);
-                    setResult(RESULT_OK, intentResposta);
-                    finish();
-                }
-                else {
-                    MinhaeiroErrorHelper.alertar(error, MovimentacaoCadastroActivity.this);
-                }
+            public void sucesso(Movimentacao movimentacao) {
                 progressDialog.hide();
+                Intent intentResposta = new Intent(MovimentacaoCadastroActivity.this, MainActivity.class);
+                intentResposta.putExtra("movimentacao", movimentacao);
+                setResult(RESULT_OK, intentResposta);
+                finish();
+            }
+
+            @Override
+            public void erro(VolleyError erro) {
+                progressDialog.hide();
+                MinhaeiroErrorHelper.alertar(erro, MovimentacaoCadastroActivity.this);
             }
         });
-        AppController.getInstance().addToRequestQueue(request);
     }
 
     public void limparErros() {
@@ -202,7 +172,7 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
         datePicker.show(getFragmentManager(), "DatePicker");
     }
 
-    public void abrirCategoriaDialog(View view) {
+    public void abrirCadastrarCategoriaDialog(View view) {
         final AlertDialog alertDialog = new AlertDialog.Builder(this)
                 .setTitle("Nova Categoria")
                 .setView(R.layout.dialog_categoria_cadastro)
@@ -227,29 +197,22 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
                         } else {
                             progressDialog.setMessage("Carregando...");
                             progressDialog.show();
-                            JsonObjectRequest request = new JsonObjectRequest(
-                                    Request.Method.POST,
-                                    ApiRoutes.CATEGORIA.Post(),
-                                    new JSONObject(categoria.toParams()),
-                                    new Response.Listener<JSONObject>() {
-                                        @Override
-                                        public void onResponse(JSONObject response) {
-                                            Categoria categoriaResposta = new Gson().fromJson(response.toString(), Categoria.class);
-                                            adpCategoria.add(categoriaResposta);
-                                            spnCategoria.setSelection(SpinnerHelper.getSelectedItemPosition(spnCategoria, categoriaResposta));
-                                            alertDialog.dismiss();
-                                            progressDialog.dismiss();
-                                        }
-                                    },
-                                    new Response.ErrorListener() {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-                                            progressDialog.dismiss();
-                                            MinhaeiroErrorHelper.alertar(error, MovimentacaoCadastroActivity.this);
-                                        }
-                                    }
-                            );
-                            AppController.getInstance().addToRequestQueue(request);
+
+                            Categoria.cadastrar(categoria, new Categoria.ApiListener() {
+                                @Override
+                                public void sucesso(Categoria categoria) {
+                                    adpCategoria.add(categoria);
+                                    spnCategoria.setSelection(SpinnerHelper.getSelectedItemPosition(spnCategoria, categoria));
+                                    alertDialog.dismiss();
+                                    progressDialog.dismiss();
+                                }
+
+                                @Override
+                                public void erro(VolleyError error) {
+                                    progressDialog.dismiss();
+                                    MinhaeiroErrorHelper.alertar(error, MovimentacaoCadastroActivity.this);
+                                }
+                            });
                         }
                     }
                 });
@@ -258,7 +221,7 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
         alertDialog.show();
     }
 
-    public void abrirPessoaDialog(View view) {
+    public void abrirCadastrarPessoaDialog(View view) {
         final AlertDialog alertDialog = new AlertDialog.Builder(this)
                 .setTitle("Nova Pessoa")
                 .setView(R.layout.dialog_pessoa_cadastro)
@@ -283,29 +246,22 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
                         } else {
                             progressDialog.setMessage("Carregando...");
                             progressDialog.show();
-                            JsonObjectRequest request = new JsonObjectRequest(
-                                    Request.Method.POST,
-                                    ApiRoutes.PESSOA.Post(),
-                                    new JSONObject(pessoa.toParams()),
-                                    new Response.Listener<JSONObject>() {
-                                        @Override
-                                        public void onResponse(JSONObject response) {
-                                            Pessoa pessoaResposta = new Gson().fromJson(response.toString(), Pessoa.class);
-                                            adpPessoa.add(pessoaResposta);
-                                            spnPessoa.setSelection(SpinnerHelper.getSelectedItemPosition(spnPessoa, pessoaResposta));
-                                            alertDialog.dismiss();
-                                            progressDialog.dismiss();
-                                        }
-                                    },
-                                    new Response.ErrorListener() {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-                                            progressDialog.dismiss();
-                                            MinhaeiroErrorHelper.alertar(error, MovimentacaoCadastroActivity.this);
-                                        }
-                                    }
-                            );
-                            AppController.getInstance().addToRequestQueue(request);
+
+                            Pessoa.cadastrar(pessoa, new Pessoa.ApiListener() {
+                                @Override
+                                public void sucesso(Pessoa pessoa) {
+                                    adpPessoa.add(pessoa);
+                                    spnPessoa.setSelection(SpinnerHelper.getSelectedItemPosition(spnPessoa, pessoa));
+                                    alertDialog.dismiss();
+                                    progressDialog.dismiss();
+                                }
+
+                                @Override
+                                public void erro(VolleyError erro) {
+                                    progressDialog.dismiss();
+                                    MinhaeiroErrorHelper.alertar(erro, MovimentacaoCadastroActivity.this);
+                                }
+                            });
                         }
                     }
                 });

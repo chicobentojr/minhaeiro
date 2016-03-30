@@ -10,9 +10,7 @@ import android.view.View;
 import java.util.ArrayList;
 
 import br.com.chicobentojr.minhaeiro.R;
-import br.com.chicobentojr.minhaeiro.adapters.CategoriasAdapter;
 import br.com.chicobentojr.minhaeiro.adapters.PendentesAdapter;
-import br.com.chicobentojr.minhaeiro.models.Categoria;
 import br.com.chicobentojr.minhaeiro.models.Pessoa;
 import br.com.chicobentojr.minhaeiro.utils.DividerItemDecoration;
 import br.com.chicobentojr.minhaeiro.utils.ItemClickSupport;
@@ -46,7 +44,7 @@ public class PendentesActivity extends AppCompatActivity {
         definirRecyclerViewItemClicks();
     }
 
-    public void definirRecyclerViewItemClicks(){
+    public void definirRecyclerViewItemClicks() {
         ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {

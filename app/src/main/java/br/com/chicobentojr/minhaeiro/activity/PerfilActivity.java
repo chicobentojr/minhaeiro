@@ -2,30 +2,20 @@ package br.com.chicobentojr.minhaeiro.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.gson.Gson;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import br.com.chicobentojr.minhaeiro.R;
 import br.com.chicobentojr.minhaeiro.models.Usuario;
-import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
-import br.com.chicobentojr.minhaeiro.utils.AppController;
 import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
-import br.com.chicobentojr.minhaeiro.utils.MinhaeiroRetryPolicy;
 import br.com.chicobentojr.minhaeiro.utils.P;
 
 public class PerfilActivity extends AppCompatActivity implements TextView.OnEditorActionListener {
@@ -113,32 +103,25 @@ public class PerfilActivity extends AppCompatActivity implements TextView.OnEdit
     public void atualizarPerfil(Usuario usuario) {
         progressDialog.setMessage("Carregando...");
         progressDialog.show();
-        JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.PUT,
-                ApiRoutes.montar(P.autenticacao(), "usuario", P.usuario_id()),
-                new JSONObject(usuario.toParams()),
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Gson gson = new Gson();
-                        Usuario usuarioResposta = gson.fromJson(response.toString(), Usuario.class);
 
-                        P.setUsuario(usuarioResposta);
-                        P.conectarUsuario(true);
-
-                        progressDialog.hide();
-                        Snackbar.make(txtNome, "Perfil atualizado com sucesso!", Snackbar.LENGTH_LONG)
-                                .setAction("Ok", null)
-                                .show();
-                    }
-                }, new Response.ErrorListener() {
+        Usuario.editar(usuario, new Usuario.ApiListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void sucesso(Usuario usuario) {
+                P.setUsuario(usuario);
+                P.conectarUsuario(true);
+
                 progressDialog.hide();
-                MinhaeiroErrorHelper.alertar(error, PerfilActivity.this);
+                Snackbar.make(txtNome, "Perfil atualizado com sucesso!", Snackbar.LENGTH_LONG)
+                        .setAction("Ok", null)
+                        .show();
+            }
+
+            @Override
+            public void erro(VolleyError erro) {
+                progressDialog.hide();
+                MinhaeiroErrorHelper.alertar(erro, PerfilActivity.this);
             }
         });
-        AppController.getInstance().addToRequestQueue(request);
     }
 
     public void limparErros() {

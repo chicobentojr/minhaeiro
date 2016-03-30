@@ -13,13 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.gson.Gson;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -27,8 +21,6 @@ import br.com.chicobentojr.minhaeiro.R;
 import br.com.chicobentojr.minhaeiro.adapters.MovimentacaoAdapter;
 import br.com.chicobentojr.minhaeiro.models.Movimentacao;
 import br.com.chicobentojr.minhaeiro.models.Pessoa;
-import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
-import br.com.chicobentojr.minhaeiro.utils.AppController;
 import br.com.chicobentojr.minhaeiro.utils.DividerItemDecoration;
 import br.com.chicobentojr.minhaeiro.utils.Extensoes;
 import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
@@ -81,7 +73,7 @@ public class PessoasMovimentacoesActivity extends AppCompatActivity {
         }
     }
 
-    public void abrirPessoaDialog(View view) {
+    public void abrirEditarPessoaDialog(View view) {
         final AlertDialog alertDialog = new AlertDialog.Builder(PessoasMovimentacoesActivity.this)
                 .setTitle("Editar Pessoa")
                 .setView(R.layout.dialog_categoria_cadastro)
@@ -106,29 +98,22 @@ public class PessoasMovimentacoesActivity extends AppCompatActivity {
                             pessoa.nome = nome;
                             progressDialog.setMessage("Editando Pessoa...");
                             progressDialog.show();
-                            JsonObjectRequest request = new JsonObjectRequest(
-                                    Request.Method.PUT,
-                                    ApiRoutes.PESSOA.Put(pessoa.pessoa_id),
-                                    new JSONObject(pessoa.toParams()),
-                                    new Response.Listener<JSONObject>() {
-                                        @Override
-                                        public void onResponse(JSONObject response) {
-                                            Pessoa pessoaResposta = new Gson().fromJson(response.toString(), Pessoa.class);
-                                            Pessoa.editar(pessoaResposta);
-                                            alertDialog.dismiss();
-                                            progressDialog.dismiss();
-                                            finish();
-                                        }
-                                    },
-                                    new Response.ErrorListener() {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-                                            progressDialog.dismiss();
-                                            MinhaeiroErrorHelper.alertar(error, PessoasMovimentacoesActivity.this);
-                                        }
-                                    }
-                            );
-                            AppController.getInstance().addToRequestQueue(request);
+
+                            Pessoa.editar(pessoa, new Pessoa.ApiListener() {
+                                @Override
+                                public void sucesso(Pessoa pessoa) {
+                                    Pessoa.editar(pessoa);
+                                    alertDialog.dismiss();
+                                    progressDialog.dismiss();
+                                    finish();
+                                }
+
+                                @Override
+                                public void erro(VolleyError erro) {
+                                    progressDialog.dismiss();
+                                    MinhaeiroErrorHelper.alertar(erro, PessoasMovimentacoesActivity.this);
+                                }
+                            });
                         }
                     }
                 });

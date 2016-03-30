@@ -16,27 +16,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupMenu;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.google.gson.Gson;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 import br.com.chicobentojr.minhaeiro.R;
 import br.com.chicobentojr.minhaeiro.adapters.PessoasAdapter;
 import br.com.chicobentojr.minhaeiro.models.Pessoa;
-import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
-import br.com.chicobentojr.minhaeiro.utils.AppController;
 import br.com.chicobentojr.minhaeiro.utils.DividerItemDecoration;
 import br.com.chicobentojr.minhaeiro.utils.ItemClickSupport;
 import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
 import br.com.chicobentojr.minhaeiro.utils.P;
-import br.com.chicobentojr.minhaeiro.utils.SpinnerHelper;
 
 public class PessoasActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
@@ -122,7 +112,7 @@ public class PessoasActivity extends AppCompatActivity implements PopupMenu.OnMe
         });
     }
 
-    public void abrirPessoaDialog() {
+    public void abrirExcluirPessoaDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Excluir " + pessoaSelecionada.nome + "?")
                 .setMessage("Tem certeza que deseja prosseguir?\n\nTodas as movimentações desta pessoa serão excluídas também")
@@ -131,28 +121,22 @@ public class PessoasActivity extends AppCompatActivity implements PopupMenu.OnMe
                     public void onClick(DialogInterface dialog, int which) {
                         progressDialog.setMessage("Excluindo Pessoa...");
                         progressDialog.show();
-                        StringRequest request = new StringRequest(
-                                Request.Method.DELETE,
-                                ApiRoutes.PESSOA.Delete(pessoaSelecionada.pessoa_id),
-                                new Response.Listener<String>() {
-                                    @Override
-                                    public void onResponse(String response) {
-                                        Pessoa pessoaResposta = new Gson().fromJson(response, Pessoa.class);
-                                        Pessoa.remover(pessoaResposta);
-                                        pessoas.remove(pessoaResposta);
-                                        adapter.notifyDataSetChanged();
-                                        progressDialog.dismiss();
-                                    }
-                                },
-                                new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        progressDialog.dismiss();
-                                        MinhaeiroErrorHelper.alertar(error, PessoasActivity.this);
-                                    }
-                                }
-                        );
-                        AppController.getInstance().addToRequestQueue(request);
+
+                        Pessoa.excluir(pessoaSelecionada, new Pessoa.ApiListener() {
+                            @Override
+                            public void sucesso(Pessoa pessoa) {
+                                Pessoa.remover(pessoa);
+                                pessoas.remove(pessoa);
+                                adapter.notifyDataSetChanged();
+                                progressDialog.dismiss();
+                            }
+
+                            @Override
+                            public void erro(VolleyError erro) {
+                                progressDialog.dismiss();
+                                MinhaeiroErrorHelper.alertar(erro, PessoasActivity.this);
+                            }
+                        });
                     }
                 })
                 .setNegativeButton("Cancelar", null)
@@ -164,7 +148,7 @@ public class PessoasActivity extends AppCompatActivity implements PopupMenu.OnMe
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.act_excluir:
-                abrirPessoaDialog();
+                abrirExcluirPessoaDialog();
                 return true;
         }
         return false;
@@ -195,29 +179,22 @@ public class PessoasActivity extends AppCompatActivity implements PopupMenu.OnMe
                         } else {
                             progressDialog.setMessage("Carregando...");
                             progressDialog.show();
-                            JsonObjectRequest request = new JsonObjectRequest(
-                                    Request.Method.POST,
-                                    ApiRoutes.PESSOA.Post(),
-                                    new JSONObject(pessoa.toParams()),
-                                    new Response.Listener<JSONObject>() {
-                                        @Override
-                                        public void onResponse(JSONObject response) {
-                                            Pessoa pessoaResposta = new Gson().fromJson(response.toString(), Pessoa.class);
-                                            pessoas.add(pessoaResposta);
-                                            adapter.notifyDataSetChanged();
-                                            alertDialog.dismiss();
-                                            progressDialog.dismiss();
-                                        }
-                                    },
-                                    new Response.ErrorListener() {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-                                            progressDialog.dismiss();
-                                            MinhaeiroErrorHelper.alertar(error, PessoasActivity.this);
-                                        }
-                                    }
-                            );
-                            AppController.getInstance().addToRequestQueue(request);
+
+                            Pessoa.cadastrar(pessoa, new Pessoa.ApiListener() {
+                                @Override
+                                public void sucesso(Pessoa pessoa) {
+                                    pessoas.add(pessoa);
+                                    adapter.notifyDataSetChanged();
+                                    alertDialog.dismiss();
+                                    progressDialog.dismiss();
+                                }
+
+                                @Override
+                                public void erro(VolleyError erro) {
+                                    progressDialog.dismiss();
+                                    MinhaeiroErrorHelper.alertar(erro, PessoasActivity.this);
+                                }
+                            });
                         }
                     }
                 });

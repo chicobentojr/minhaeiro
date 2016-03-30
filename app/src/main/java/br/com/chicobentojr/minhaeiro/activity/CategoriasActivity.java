@@ -13,19 +13,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
 import br.com.chicobentojr.minhaeiro.R;
 import br.com.chicobentojr.minhaeiro.adapters.CategoriasAdapter;
 import br.com.chicobentojr.minhaeiro.models.Categoria;
-import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
-import br.com.chicobentojr.minhaeiro.utils.AppController;
 import br.com.chicobentojr.minhaeiro.utils.DividerItemDecoration;
 import br.com.chicobentojr.minhaeiro.utils.ItemClickSupport;
 import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
@@ -98,7 +92,7 @@ public class CategoriasActivity extends AppCompatActivity implements PopupMenu.O
         });
     }
 
-    public void abrirPessoaDialog() {
+    public void abrirExcluirCategoriaDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Excluir " + categoriaSelecionada.nome + "?")
                 .setMessage("Tem certeza que deseja prosseguir?\n\nTodas as movimentações desta categoria serão excluídas também")
@@ -107,28 +101,21 @@ public class CategoriasActivity extends AppCompatActivity implements PopupMenu.O
                     public void onClick(DialogInterface dialog, int which) {
                         progressDialog.setMessage("Excluindo Pessoa...");
                         progressDialog.show();
-                        StringRequest request = new StringRequest(
-                                Request.Method.DELETE,
-                                ApiRoutes.CATEGORIA.Delete(categoriaSelecionada.categoria_id),
-                                new Response.Listener<String>() {
-                                    @Override
-                                    public void onResponse(String response) {
-                                        Categoria categoriaResposta = new Gson().fromJson(response, Categoria.class);
-                                        Categoria.remover(categoriaResposta);
-                                        categorias.remove(categoriaResposta);
-                                        adapter.notifyDataSetChanged();
-                                        progressDialog.dismiss();
-                                    }
-                                },
-                                new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        progressDialog.dismiss();
-                                        MinhaeiroErrorHelper.alertar(error, CategoriasActivity.this);
-                                    }
-                                }
-                        );
-                        AppController.getInstance().addToRequestQueue(request);
+                        Categoria.excluir(categoriaSelecionada, new Categoria.ApiListener() {
+                            @Override
+                            public void sucesso(Categoria categoria) {
+                                Categoria.remover(categoria);
+                                categorias.remove(categoria);
+                                adapter.notifyDataSetChanged();
+                                progressDialog.dismiss();
+                            }
+
+                            @Override
+                            public void erro(VolleyError error) {
+                                progressDialog.dismiss();
+                                MinhaeiroErrorHelper.alertar(error, CategoriasActivity.this);
+                            }
+                        });
                     }
                 })
                 .setNegativeButton("Cancelar", null)
@@ -140,10 +127,10 @@ public class CategoriasActivity extends AppCompatActivity implements PopupMenu.O
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.act_excluir:
-                abrirPessoaDialog();
+                abrirExcluirCategoriaDialog();
                 return true;
             case R.id.act_editar:
-                Intent intent = new Intent(this,CategoriaEditarActivity.class);
+                Intent intent = new Intent(this, CategoriaEditarActivity.class);
                 intent.putExtra("categoria", categoriaSelecionada);
                 startActivity(intent);
                 return true;

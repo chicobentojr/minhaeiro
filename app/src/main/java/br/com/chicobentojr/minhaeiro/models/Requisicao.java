@@ -29,14 +29,14 @@ public class Requisicao {
     public int requestMethod;
     public String url;
     public int modelo;
-    public Object objeto;
+    public String objeto;
 
     public static final int MOVIMENTACAO = 1;
     public static final int MOVIMENTACAO_ITEM = 2;
     public static final int CATEGORIA = 3;
     public static final int PESSOA = 4;
 
-    public Requisicao(int requestMethod, String url, int modelo, Object objeto) {
+    public Requisicao(int requestMethod, String url, int modelo, String objeto) {
         requisicoes = getRequisicoesInstance();
 
         this.id = requisicoes.size() > 0 ? requisicoes.get(requisicoes.size() - 1).id + 1 : 1;
@@ -100,7 +100,7 @@ public class Requisicao {
 
                 switch (requisicao.modelo){
                     case Requisicao.MOVIMENTACAO:
-                        Movimentacao m = (Movimentacao) requisicao.objeto;
+                        Movimentacao m = new Gson().fromJson(requisicao.objeto,Movimentacao.class);
                         objetoJson = new JSONObject(m.toParams());
                         break;
                 }

@@ -132,7 +132,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.btn_floating);
-        fab.setOnClickListener(new BtnFloatingOnClick());
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(MainActivity.this, MovimentacaoCadastroActivity.class), P.REQUEST.MOVIMENTACAO_CADASTRO);
+            }
+        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -164,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         progressDialog.setMessage("Carregando Movimentações...");
         progressDialog.show();
 
-        Usuario.listar(new Usuario.ObterListener() {
+        Usuario.listar(new Usuario.ApiListener() {
             @Override
             public void sucesso(Usuario usuario) {
                 movimentacoes = usuario.Movimentacao;
@@ -175,6 +180,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void erro(VolleyError erro) {
+                progressDialog.hide();
                 MinhaeiroErrorHelper.alertar(erro, MainActivity.this);
             }
         });
@@ -184,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         progressDialog.setMessage("Excluindo Movimentação...");
         progressDialog.show();
 
-        Movimentacao.excluir(movimentacao, new Movimentacao.ObterListener() {
+        Movimentacao.excluir(movimentacao, new Movimentacao.ApiListener() {
             @Override
             public void sucesso(Movimentacao movimentacao) {
                 movimentacoes.remove(movimentacao);
@@ -264,13 +270,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return false;
     }
 
-    private class BtnFloatingOnClick implements View.OnClickListener {
-
-        @Override
-        public void onClick(View v) {
-            /*Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();*/
-            startActivityForResult(new Intent(MainActivity.this, MovimentacaoCadastroActivity.class), P.REQUEST.MOVIMENTACAO_CADASTRO);
-        }
-    }
 }

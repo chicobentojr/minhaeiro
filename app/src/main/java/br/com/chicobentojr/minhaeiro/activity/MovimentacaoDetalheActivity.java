@@ -126,7 +126,7 @@ public class MovimentacaoDetalheActivity extends AppCompatActivity {
 
     }
 
-    public void abrirCadastroItemDialog(View view) {
+    public void abrirCadastrarItemDialog(View view) {
         itemDialog = new AlertDialog.Builder(this)
                 .setTitle("Novo Item")
                 .setView(R.layout.dialog_movimentacao_item_cadastro)

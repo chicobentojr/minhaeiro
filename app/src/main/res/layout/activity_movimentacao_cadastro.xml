@@ -41,7 +41,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
                 android:background="@android:color/transparent"
-                android:onClick="abrirCategoriaDialog"
+                android:onClick="abrirCadastrarCategoriaDialog"
                 android:src="@drawable/ic_button_categoria_adicionar" />
         </LinearLayout>
 
@@ -71,7 +71,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
                 android:background="@android:color/transparent"
-                android:onClick="abrirPessoaDialog"
+                android:onClick="abrirCadastrarPessoaDialog"
                 android:src="@drawable/ic_button_pessoa_adicionar" />
 
         </LinearLayout>

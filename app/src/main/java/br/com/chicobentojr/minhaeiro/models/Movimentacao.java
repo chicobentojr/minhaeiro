@@ -4,7 +4,11 @@ import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.text.ParseException;
@@ -198,16 +202,17 @@ public class Movimentacao implements Serializable {
         P.setUsuario(usuario);
     }
 
-    public interface ObterListener {
+    public interface ApiListener {
         void sucesso(Movimentacao movimentacao);
 
         void erro(VolleyError erro);
     }
 
-    public static void excluir(final Movimentacao movimentacao, final ObterListener listener) {
+    public static void excluir(final Movimentacao movimentacao, final ApiListener listener) {
         final String url = ApiRoutes.MOVIMENTACAO.Delete(movimentacao.movimentacao_id);
+        final int metodo = Request.Method.DELETE;
         StringRequest request = new StringRequest(
-                Request.Method.DELETE,
+                metodo,
                 url,
                 new Response.Listener<String>() {
                     @Override
@@ -220,7 +225,7 @@ public class Movimentacao implements Serializable {
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof NoConnectionError) {
                     Movimentacao.excluir(movimentacao);
-                    Requisicao.adicionar(new Requisicao(Request.Method.DELETE, url, Requisicao.MOVIMENTACAO, movimentacao));
+                    Requisicao.adicionar(new Requisicao(metodo, url, Requisicao.MOVIMENTACAO, new Gson().toJson(movimentacao)));
                     listener.sucesso(movimentacao);
                 } else {
                     listener.erro(error);
@@ -228,6 +233,56 @@ public class Movimentacao implements Serializable {
             }
         }
         );
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    public static void cadastrar(final Movimentacao movimentacao, final ApiListener listener) {
+        final String url = ApiRoutes.MOVIMENTACAO.Post();
+        final int metodo = Request.Method.POST;
+        JsonObjectRequest request = new JsonObjectRequest(
+                metodo,
+                url,
+                new JSONObject(movimentacao.toParams()),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Movimentacao resposta = new Gson().fromJson(response.toString(), Movimentacao.class);
+                        listener.sucesso(resposta);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error instanceof NoConnectionError) {
+                    Movimentacao m = Movimentacao.adicionar(movimentacao);
+                    Requisicao.adicionar(new Requisicao(metodo, url, Requisicao.MOVIMENTACAO, new Gson().toJson(m)));
+                    listener.sucesso(m);
+                } else {
+                    listener.erro(error);
+                }
+            }
+        });
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    public static void editar(final Movimentacao movimentacao, final ApiListener listener) {
+        final String url = ApiRoutes.MOVIMENTACAO.Put(movimentacao.movimentacao_id);
+        final int metodo = Request.Method.PUT;
+        JsonObjectRequest request = new JsonObjectRequest(
+                metodo,
+                url,
+                new JSONObject(movimentacao.toParams()),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Movimentacao resposta = new Gson().fromJson(response.toString(), Movimentacao.class);
+                        listener.sucesso(resposta);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                listener.erro(error);
+            }
+        });
         AppController.getInstance().addToRequestQueue(request);
     }
 

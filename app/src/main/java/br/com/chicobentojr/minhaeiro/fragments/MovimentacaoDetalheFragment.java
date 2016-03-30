@@ -14,22 +14,13 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Switch;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.gson.Gson;
-
-import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import br.com.chicobentojr.minhaeiro.R;
 import br.com.chicobentojr.minhaeiro.activity.MainActivity;
@@ -38,8 +29,6 @@ import br.com.chicobentojr.minhaeiro.models.Categoria;
 import br.com.chicobentojr.minhaeiro.models.Movimentacao;
 import br.com.chicobentojr.minhaeiro.models.Pessoa;
 import br.com.chicobentojr.minhaeiro.models.Usuario;
-import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
-import br.com.chicobentojr.minhaeiro.utils.AppController;
 import br.com.chicobentojr.minhaeiro.utils.Extensoes;
 import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
 import br.com.chicobentojr.minhaeiro.utils.P;
@@ -199,31 +188,23 @@ public class MovimentacaoDetalheFragment extends Fragment implements DatePicker.
         progressDialog.setMessage("Carregando...");
         progressDialog.show();
 
-        JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.PUT,
-                ApiRoutes.MOVIMENTACAO.Put(movimentacao.movimentacao_id),
-                new JSONObject(movimentacao.toParams()),
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Gson gson = new Gson();
-                        Movimentacao movimentacaoResposta = gson.fromJson(response.toString(), Movimentacao.class);
-
-                        progressDialog.hide();
-                        Intent intentResposta = new Intent(getContext(), MainActivity.class);
-                        intentResposta.putExtra("movimentacao", movimentacaoResposta);
-                        intentResposta.putExtra("item_posicao", item_posicao);
-                        listener.setResult(Activity.RESULT_OK, intentResposta);
-                        listener.finish();
-                    }
-                }, new Response.ErrorListener() {
+        Movimentacao.editar(movimentacao, new Movimentacao.ApiListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void sucesso(Movimentacao movimentacao) {
                 progressDialog.hide();
-                MinhaeiroErrorHelper.alertar(error, listener);
+                Intent intentResposta = new Intent(getContext(), MainActivity.class);
+                intentResposta.putExtra("movimentacao", movimentacao);
+                intentResposta.putExtra("item_posicao", item_posicao);
+                listener.setResult(Activity.RESULT_OK, intentResposta);
+                listener.finish();
+            }
+
+            @Override
+            public void erro(VolleyError erro) {
+                progressDialog.hide();
+                MinhaeiroErrorHelper.alertar(erro, listener);
             }
         });
-        AppController.getInstance().addToRequestQueue(request);
     }
 
     public void limparErros() {

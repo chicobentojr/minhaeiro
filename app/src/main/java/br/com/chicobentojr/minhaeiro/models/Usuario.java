@@ -1,8 +1,10 @@
 package br.com.chicobentojr.minhaeiro.models;
 
 import com.android.volley.NoConnectionError;
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 
@@ -52,13 +54,13 @@ public class Usuario implements Serializable {
         return retorno;
     }
 
-    public interface ObterListener {
+    public interface ApiListener {
         void sucesso(Usuario usuario);
 
         void erro(VolleyError erro);
     }
 
-    public static void listar(final ObterListener listener) {
+    public static void listar(final ApiListener listener) {
         StringRequest request = new StringRequest(
                 ApiRoutes.USUARIO.Get(),
                 new Response.Listener<String>() {
@@ -83,6 +85,70 @@ public class Usuario implements Serializable {
             }
         }
         );
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    public static void cadastrar(final Usuario usuario, final ApiListener listener) {
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                ApiRoutes.USUARIO.Post(),
+                new JSONObject(usuario.toParams()),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Usuario usuarioResposta = new Gson().fromJson(response.toString(), Usuario.class);
+                        listener.sucesso(usuarioResposta);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                listener.erro(error);
+            }
+        });
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    public static void login(final Usuario usuario, final ApiListener listener) {
+        String url = ApiRoutes.USUARIO.Login();
+        int metodo = Request.Method.POST;
+        JsonObjectRequest request = new JsonObjectRequest(
+                metodo,
+                url,
+                new JSONObject(usuario.toParams()),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Usuario resposta = new Gson().fromJson(response.toString(), Usuario.class);
+                        listener.sucesso(resposta);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                listener.erro(error);
+            }
+        });
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    public static void editar(final Usuario usuario, final ApiListener listener) {
+        String url = ApiRoutes.USUARIO.Put();
+        int metodo = Request.Method.PUT;
+        JsonObjectRequest request = new JsonObjectRequest(
+                metodo,
+                url,
+                new JSONObject(usuario.toParams()),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Usuario resposta = new Gson().fromJson(response.toString(), Usuario.class);
+                        listener.sucesso(resposta);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                listener.erro(error);
+            }
+        });
         AppController.getInstance().addToRequestQueue(request);
     }
 }
