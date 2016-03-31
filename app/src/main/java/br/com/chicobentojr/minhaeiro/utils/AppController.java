@@ -8,8 +8,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-import java.util.ArrayList;
-
 import br.com.chicobentojr.minhaeiro.models.Requisicao;
 
 /**
@@ -50,12 +48,11 @@ public class AppController extends Application {
         request.setTag(TAG);
 
         //Código para enviar as requisições, caso o app tenha sido usado sem conexão com a internet
-        ArrayList<Request> requests = Requisicao.enviar();
-        for (Request r : requests) {
-            getRequestQueue().add(r);
+        Request requisicaoEnviar = Requisicao.enviar();
+        if (requisicaoEnviar != null) {
+            getRequestQueue().add(requisicaoEnviar);
         }
         //Fim do Código
-
         getRequestQueue().add(request);
     }
 

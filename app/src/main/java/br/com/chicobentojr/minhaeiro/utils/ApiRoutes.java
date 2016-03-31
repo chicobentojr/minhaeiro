@@ -23,6 +23,10 @@ public class ApiRoutes {
         public static String Put() {
             return URL_BASE + P.autenticacao() + "/usuario/" + P.usuario_id();
         }
+
+        public static String Sincronizar() {
+            return URL_BASE + P.autenticacao() + "/sincronizar/" + P.usuario_id();
+        }
     }
 
     public static class CATEGORIA {

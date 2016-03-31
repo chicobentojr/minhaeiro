@@ -225,7 +225,7 @@ public class Movimentacao implements Serializable {
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof NoConnectionError) {
                     Movimentacao.excluir(movimentacao);
-                    Requisicao.adicionar(new Requisicao(metodo, url, Requisicao.MOVIMENTACAO, new Gson().toJson(movimentacao)));
+                    Requisicao.adicionar(new Requisicao(metodo, Requisicao.MOVIMENTACAO, new Gson().toJson(movimentacao)));
                     listener.sucesso(movimentacao);
                 } else {
                     listener.erro(error);
@@ -254,7 +254,7 @@ public class Movimentacao implements Serializable {
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof NoConnectionError) {
                     Movimentacao m = Movimentacao.adicionar(movimentacao);
-                    Requisicao.adicionar(new Requisicao(metodo, url, Requisicao.MOVIMENTACAO, new Gson().toJson(m)));
+                    Requisicao.adicionar(new Requisicao(metodo, Requisicao.MOVIMENTACAO, new Gson().toJson(m)));
                     listener.sucesso(m);
                 } else {
                     listener.erro(error);

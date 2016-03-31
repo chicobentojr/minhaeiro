@@ -1,23 +1,18 @@
 package br.com.chicobentojr.minhaeiro.models;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
-
-import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
-import br.com.chicobentojr.minhaeiro.activity.MainActivity;
-import br.com.chicobentojr.minhaeiro.utils.AppController;
-import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
+import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
 import br.com.chicobentojr.minhaeiro.utils.P;
 
 /**
@@ -26,8 +21,7 @@ import br.com.chicobentojr.minhaeiro.utils.P;
 public class Requisicao {
 
     public int id;
-    public int requestMethod;
-    public String url;
+    public int metodo;
     public int modelo;
     public String objeto;
 
@@ -36,19 +30,27 @@ public class Requisicao {
     public static final int CATEGORIA = 3;
     public static final int PESSOA = 4;
 
-    public Requisicao(int requestMethod, String url, int modelo, String objeto) {
+    public Requisicao(int metodo, int modelo, String objeto) {
         requisicoes = getRequisicoesInstance();
 
         this.id = requisicoes.size() > 0 ? requisicoes.get(requisicoes.size() - 1).id + 1 : 1;
-        this.requestMethod = requestMethod;
-        this.url = url;
+        this.metodo = metodo;
         this.modelo = modelo;
         this.objeto = objeto;
     }
 
-    public static ArrayList<Requisicao> requisicoes;
+    public HashMap<String, String> toParams() {
+        HashMap<String, String> params = new HashMap<>();
 
-    private static SharedPreferences prefs = P.prefs;
+        params.put("id", String.valueOf(this.id));
+        params.put("metodo", String.valueOf(this.metodo));
+        params.put("modelo", String.valueOf(this.modelo));
+        params.put("objeto", this.objeto);
+
+        return params;
+    }
+
+    public static ArrayList<Requisicao> requisicoes;
 
     private static final String REQUISICAO_JSON = "shared_preference_requisicao_JSON";
 
@@ -71,9 +73,7 @@ public class Requisicao {
 
         String requisicoesJson = new Gson().toJson(requisicoes);
 
-        prefs.edit()
-                .putString(REQUISICAO_JSON, requisicoesJson)
-                .apply();
+        P.inserir(REQUISICAO_JSON, requisicoesJson);
     }
 
     public static void remover(Requisicao requisicao) {
@@ -83,42 +83,50 @@ public class Requisicao {
 
         String requisicoesJson = new Gson().toJson(getRequisicoesInstance());
 
-        prefs.edit()
-                .putString(REQUISICAO_JSON, requisicoesJson)
-                .apply();
+        P.inserir(REQUISICAO_JSON, requisicoesJson);
     }
 
-    public static ArrayList<Request> enviar() {
-        ArrayList<Request> volleyRequests = new ArrayList<Request>();
+    public static JSONObject obterObjetoJson() {
+        JSONObject jsonObject = new JSONObject();
+        requisicoes = getRequisicoesInstance();
+        for (Requisicao requisicao : requisicoes) {
+            JSONObject objetoJson = new JSONObject(requisicao.toParams());
+            try {
+                jsonObject = jsonObject.accumulate("requisicoes", objetoJson);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return jsonObject;
+    }
+
+    public static Request enviar() {
         requisicoes = getRequisicoesInstance();
 
         if (requisicoes != null && requisicoes.size() > 0) {
-            ArrayList<Requisicao> lista = requisicoes;
+            JSONObject objetoJson = Requisicao.obterObjetoJson();
 
-            for (final Requisicao requisicao : lista) {
-                JSONObject objetoJson = new JSONObject();
-
-                switch (requisicao.modelo){
-                    case Requisicao.MOVIMENTACAO:
-                        Movimentacao m = new Gson().fromJson(requisicao.objeto,Movimentacao.class);
-                        objetoJson = new JSONObject(m.toParams());
-                        break;
+            JsonObjectRequest request = new JsonObjectRequest(
+                    Request.Method.POST,
+                    ApiRoutes.USUARIO.Sincronizar(),
+                    objetoJson,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Usuario usuario = new Gson().fromJson(response.toString(), Usuario.class);
+                            P.setUsuario(usuario);
+                            P.inserir(REQUISICAO_JSON, "");
+                            requisicoes = null;
+                        }
+                    }, null){
+                @Override
+                public Priority getPriority() {
+                    return Priority.HIGH;
                 }
-
-                JsonObjectRequest request = new JsonObjectRequest(
-                        requisicao.requestMethod,
-                        requisicao.url,
-                        objetoJson,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                Requisicao.remover(requisicao);
-                            }
-                        },null);
-
-                volleyRequests.add(request);
-            }
+            };
+            return request;
         }
-        return volleyRequests;
+
+        return null;
     }
 }
