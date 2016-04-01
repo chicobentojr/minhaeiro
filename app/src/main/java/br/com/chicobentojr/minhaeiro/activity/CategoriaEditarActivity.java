@@ -77,15 +77,14 @@ public class CategoriaEditarActivity extends AppCompatActivity {
             Categoria.editar(categoria, new Categoria.ApiListener() {
                 @Override
                 public void sucesso(Categoria categoria) {
-                    Categoria.editar(categoria);
                     progressDialog.dismiss();
                     finish();
                 }
 
                 @Override
-                public void erro(VolleyError error) {
+                public void erro(VolleyError erro) {
                     progressDialog.dismiss();
-                    MinhaeiroErrorHelper.alertar(error, CategoriaEditarActivity.this);
+                    MinhaeiroErrorHelper.alertar(erro, CategoriaEditarActivity.this);
                 }
             });
         }

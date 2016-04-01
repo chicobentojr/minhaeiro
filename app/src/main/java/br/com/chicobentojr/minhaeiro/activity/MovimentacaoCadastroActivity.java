@@ -201,16 +201,16 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
                             Categoria.cadastrar(categoria, new Categoria.ApiListener() {
                                 @Override
                                 public void sucesso(Categoria categoria) {
-                                    adpCategoria.add(categoria);
+                                    adpCategoria.notifyDataSetChanged();
                                     spnCategoria.setSelection(SpinnerHelper.getSelectedItemPosition(spnCategoria, categoria));
                                     alertDialog.dismiss();
                                     progressDialog.dismiss();
                                 }
 
                                 @Override
-                                public void erro(VolleyError error) {
+                                public void erro(VolleyError erro) {
                                     progressDialog.dismiss();
-                                    MinhaeiroErrorHelper.alertar(error, MovimentacaoCadastroActivity.this);
+                                    MinhaeiroErrorHelper.alertar(erro, MovimentacaoCadastroActivity.this);
                                 }
                             });
                         }
@@ -250,7 +250,7 @@ public class MovimentacaoCadastroActivity extends AppCompatActivity implements D
                             Pessoa.cadastrar(pessoa, new Pessoa.ApiListener() {
                                 @Override
                                 public void sucesso(Pessoa pessoa) {
-                                    adpPessoa.add(pessoa);
+                                    adpPessoa.notifyDataSetChanged();
                                     spnPessoa.setSelection(SpinnerHelper.getSelectedItemPosition(spnPessoa, pessoa));
                                     alertDialog.dismiss();
                                     progressDialog.dismiss();

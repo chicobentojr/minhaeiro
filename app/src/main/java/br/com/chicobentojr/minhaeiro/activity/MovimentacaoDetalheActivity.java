@@ -35,6 +35,7 @@ import br.com.chicobentojr.minhaeiro.models.Pessoa;
 import br.com.chicobentojr.minhaeiro.models.Usuario;
 import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
 import br.com.chicobentojr.minhaeiro.utils.AppController;
+import br.com.chicobentojr.minhaeiro.utils.Extensoes;
 import br.com.chicobentojr.minhaeiro.utils.MinhaeiroErrorHelper;
 import br.com.chicobentojr.minhaeiro.utils.P;
 
@@ -153,7 +154,7 @@ public class MovimentacaoDetalheActivity extends AppCompatActivity {
     public void cadastrar(View v) {
         limparErros();
 
-        int pessoa_id = ((Pessoa) spnPessoa.getSelectedItem()).pessoa_id;
+        Pessoa pessoa = ((Pessoa) spnPessoa.getSelectedItem());
         //String movimentacao_data = txtMovimentacaoData.getText().toString();
         String valor = txtMovimentacaoValor.getText().toString();
         String descricao = txtDescricao.getText().toString();
@@ -182,8 +183,10 @@ public class MovimentacaoDetalheActivity extends AppCompatActivity {
         } else {
             MovimentacaoItem item = new MovimentacaoItem();
 
-            item.pessoa_id = pessoa_id;
-            //item.item_data = Extensoes.STRING.toBrazilianDate(movimentacao_data);
+            item.Pessoa = pessoa;
+            item.movimentacao_id = movimentacao.movimentacao_id;
+            item.pessoa_id = pessoa.pessoa_id;
+            item.item_data = movimentacao.movimentacao_data;
             item.valor = Double.parseDouble(valor);
             item.descricao = descricao;
             item.tipo = tipo;
@@ -202,27 +205,21 @@ public class MovimentacaoDetalheActivity extends AppCompatActivity {
         progressDialog.setMessage("Carregando...");
         progressDialog.show();
 
-        JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.POST,
-                ApiRoutes.MOVIMENTACAO_ITEM.Post(movimentacao.movimentacao_id),
-                new JSONObject(item.toParams()),
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        MovimentacaoItem itemResposta = new Gson().fromJson(response.toString(), MovimentacaoItem.class);
-                        MovimentacaoItensFragment fragment = (MovimentacaoItensFragment) findFragmentByPosition(FRG_ITENS_INDEX);
-                        fragment.adicionarItemAdapter(itemResposta);
-                        progressDialog.dismiss();
-                        itemDialog.dismiss();
-                    }
-                }, new Response.ErrorListener() {
+        MovimentacaoItem.cadastrar(item, new MovimentacaoItem.ApiListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void sucesso(MovimentacaoItem item) {
+                MovimentacaoItensFragment fragment = (MovimentacaoItensFragment) findFragmentByPosition(FRG_ITENS_INDEX);
+                fragment.adicionarItemAdapter(item);
+                progressDialog.dismiss();
+                itemDialog.dismiss();
+            }
+
+            @Override
+            public void erro(VolleyError erro) {
                 progressDialog.hide();
-                MinhaeiroErrorHelper.alertar(error, MovimentacaoDetalheActivity.this);
+                MinhaeiroErrorHelper.alertar(erro, MovimentacaoDetalheActivity.this);
             }
         });
-        AppController.getInstance().addToRequestQueue(request);
     }
 
     public void alternarBotao(int fragmentPosicao) {
@@ -232,7 +229,8 @@ public class MovimentacaoDetalheActivity extends AppCompatActivity {
             fabCadastrarItem.show();
         }
     }
+
     public Fragment findFragmentByPosition(int position) {
-        return getSupportFragmentManager().findFragmentByTag("android:switcher:" + viewPager.getId() + ":"+ pagerAdapter.getItemId(position));
+        return getSupportFragmentManager().findFragmentByTag("android:switcher:" + viewPager.getId() + ":" + pagerAdapter.getItemId(position));
     }
 }

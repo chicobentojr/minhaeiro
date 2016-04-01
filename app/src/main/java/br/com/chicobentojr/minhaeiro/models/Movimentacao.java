@@ -53,17 +53,6 @@ public class Movimentacao implements Serializable {
         return params;
     }
 
-    public static Movimentacao adicionar(Movimentacao movimentacao) {
-        Usuario usuario = P.getUsuarioInstance();
-        ArrayList<Movimentacao> movimentacoes = usuario.Movimentacao;
-
-        movimentacao.movimentacao_id = movimentacoes.size() > 0 ? movimentacoes.get(0).movimentacao_id + 1 : 1;
-        usuario.Movimentacao.add(0, movimentacao);
-        P.setUsuario(usuario);
-
-        return movimentacao;
-    }
-
     public static ArrayList<Movimentacao> filtrarPorPessoa(ArrayList<Movimentacao> movimentacoes, Pessoa pessoa) {
         ArrayList<Movimentacao> retorno = new ArrayList<>();
         if (movimentacoes != null) {
@@ -189,6 +178,44 @@ public class Movimentacao implements Serializable {
         return saldo;
     }
 
+    public static Movimentacao obter(int movimentacao_id) {
+        Movimentacao m = null;
+        Usuario u = P.getUsuarioInstance();
+        for (Movimentacao movimentacao : u.Movimentacao) {
+            if (movimentacao.movimentacao_id == movimentacao_id) {
+                m = movimentacao;
+                break;
+            }
+        }
+        return m;
+    }
+
+    public static Movimentacao cadastrar(Movimentacao movimentacao) {
+        Usuario usuario = P.getUsuarioInstance();
+        ArrayList<Movimentacao> movimentacoes = usuario.Movimentacao;
+
+        movimentacao.movimentacao_id = movimentacoes.size() > 0 ? movimentacoes.get(0).movimentacao_id + 1 : 1;
+        usuario.Movimentacao.add(0, movimentacao);
+        P.setUsuario(usuario);
+
+        return movimentacao;
+    }
+
+    public static Movimentacao editar(Movimentacao movimentacao) {
+        Usuario usuario = P.getUsuarioInstance();
+        Movimentacao m = null;
+        for (int i = 0, qtd = usuario.Movimentacao.size(); i < qtd; i++) {
+            m = usuario.Movimentacao.get(i);
+            if (m.movimentacao_id == movimentacao.movimentacao_id) {
+                usuario.Movimentacao.set(i, movimentacao);
+                m = usuario.Movimentacao.get(i);
+                break;
+            }
+        }
+        P.setUsuario(usuario);
+        return m;
+    }
+
     public static void excluir(Movimentacao movimentacao) {
         Usuario usuario = P.getUsuarioInstance();
         Movimentacao m;
@@ -253,7 +280,7 @@ public class Movimentacao implements Serializable {
             @Override
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof NoConnectionError) {
-                    Movimentacao m = Movimentacao.adicionar(movimentacao);
+                    Movimentacao m = Movimentacao.cadastrar(movimentacao);
                     Requisicao.adicionar(new Requisicao(metodo, Requisicao.MOVIMENTACAO, new Gson().toJson(m)));
                     listener.sucesso(m);
                 } else {
@@ -280,7 +307,13 @@ public class Movimentacao implements Serializable {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                listener.erro(error);
+                if (error instanceof NoConnectionError) {
+                    Movimentacao m = Movimentacao.editar(movimentacao);
+                    Requisicao.adicionar(new Requisicao(metodo, Requisicao.MOVIMENTACAO, new Gson().toJson(m)));
+                    listener.sucesso(m);
+                } else {
+                    listener.erro(error);
+                }
             }
         });
         AppController.getInstance().addToRequestQueue(request);

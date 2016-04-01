@@ -1,5 +1,6 @@
 package br.com.chicobentojr.minhaeiro.models;
 
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -10,6 +11,7 @@ import com.google.gson.Gson;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
@@ -57,20 +59,33 @@ public class Categoria implements Serializable {
         return c;
     }
 
-    public static void editar(Categoria categoria) {
+    public static Categoria cadastrar(Categoria categoria) {
         Usuario usuario = P.getUsuarioInstance();
-        Categoria c;
+        ArrayList<Categoria> categorias = usuario.Categoria;
+
+        categoria.categoria_id = categorias.size() > 0 ? categorias.get(categorias.size() - 1).categoria_id + 1 : 1;
+        usuario.Categoria.add(categoria);
+        P.setUsuario(usuario);
+
+        return categoria;
+    }
+
+    public static Categoria editar(Categoria categoria) {
+        Usuario usuario = P.getUsuarioInstance();
+        Categoria c = null;
         for (int i = 0, qtd = usuario.Categoria.size(); i < qtd; i++) {
             c = usuario.Categoria.get(i);
             if (c.categoria_id == categoria.categoria_id) {
                 usuario.Categoria.set(i, categoria);
+                c = usuario.Categoria.get(i);
                 break;
             }
         }
         P.setUsuario(usuario);
+        return c;
     }
 
-    public static void remover(Categoria categoria) {
+    public static void excluir(Categoria categoria) {
         Usuario usuario = P.getUsuarioInstance();
         Categoria c;
         for (int i = 0, qtd = usuario.Categoria.size(); i < qtd; i++) {
@@ -86,12 +101,42 @@ public class Categoria implements Serializable {
     public interface ApiListener {
         void sucesso(Categoria categoria);
 
-        void erro(VolleyError error);
+        void erro(VolleyError erro);
     }
 
-    public static void editar(Categoria categoria, final ApiListener listener) {
+    public static void cadastrar(final Categoria categoria, final ApiListener listener) {
+        String url = ApiRoutes.CATEGORIA.Post();
+        final int metodo = Request.Method.POST;
+        final JsonObjectRequest request = new JsonObjectRequest(
+                metodo,
+                url,
+                new JSONObject(categoria.toParams()),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Categoria resposta = new Gson().fromJson(response.toString(), Categoria.class);
+                        listener.sucesso(resposta);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error instanceof NoConnectionError) {
+                            Categoria c = Categoria.cadastrar(categoria);
+                            Requisicao.adicionar(new Requisicao(metodo,Requisicao.CATEGORIA,new Gson().toJson(c)));
+                            listener.sucesso(c);
+                        } else {
+                            listener.erro(error);
+                        }
+                    }
+                }
+        );
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    public static void editar(final Categoria categoria, final ApiListener listener) {
         String url = ApiRoutes.CATEGORIA.Put(categoria.categoria_id);
-        int metodo = Request.Method.PUT;
+        final int metodo = Request.Method.PUT;
         JsonObjectRequest request = new JsonObjectRequest(
                 metodo,
                 url,
@@ -106,16 +151,22 @@ public class Categoria implements Serializable {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        listener.erro(error);
+                        if (error instanceof NoConnectionError) {
+                            Categoria c = categoria.editar(categoria);
+                            Requisicao.adicionar(new Requisicao(metodo, Requisicao.CATEGORIA, new Gson().toJson(c)));
+                            listener.sucesso(c);
+                        } else {
+                            listener.erro(error);
+                        }
                     }
                 }
         );
         AppController.getInstance().addToRequestQueue(request);
     }
 
-    public static void excluir(Categoria categoria, final ApiListener listener) {
+    public static void excluir(final Categoria categoria, final ApiListener listener) {
         String url = ApiRoutes.CATEGORIA.Delete(categoria.categoria_id);
-        int metodo = Request.Method.DELETE;
+        final int metodo = Request.Method.DELETE;
         StringRequest request = new StringRequest(
                 metodo,
                 url,
@@ -129,35 +180,16 @@ public class Categoria implements Serializable {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        listener.erro(error);
+                        if (error instanceof NoConnectionError) {
+                            Categoria.excluir(categoria);
+                            Requisicao.adicionar(new Requisicao(metodo, Requisicao.CATEGORIA, new Gson().toJson(categoria)));
+                            listener.sucesso(categoria);
+                        } else {
+                            listener.erro(error);
+                        }
                     }
                 }
         );
         AppController.getInstance().addToRequestQueue(request);
     }
-
-    public static void cadastrar(Categoria categoria, final ApiListener listener) {
-        String url = ApiRoutes.CATEGORIA.Post();
-        int metodo = Request.Method.POST;
-        JsonObjectRequest request = new JsonObjectRequest(
-                metodo,
-                url,
-                new JSONObject(categoria.toParams()),
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Categoria resposta = new Gson().fromJson(response.toString(), Categoria.class);
-                        listener.sucesso(resposta);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        listener.erro(error);
-                    }
-                }
-        );
-        AppController.getInstance().addToRequestQueue(request);
-    }
-
 }

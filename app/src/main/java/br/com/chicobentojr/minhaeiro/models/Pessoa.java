@@ -1,5 +1,6 @@
 package br.com.chicobentojr.minhaeiro.models;
 
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -67,20 +68,34 @@ public class Pessoa implements Serializable {
         return p;
     }
 
-    public static void editar(Pessoa pessoa) {
+    public static Pessoa cadastrar(Pessoa pessoa) {
         Usuario usuario = P.getUsuarioInstance();
-        Pessoa p;
+        ArrayList<Pessoa> pessoas = usuario.Pessoa;
+
+        pessoa.pessoa_id = pessoas.size() > 0 ? pessoas.get(pessoas.size() - 1).pessoa_id + 1 : 1;
+        usuario.Pessoa.add(pessoa);
+        P.setUsuario(usuario);
+
+        return pessoa;
+    }
+
+    public static Pessoa editar(Pessoa pessoa) {
+        Usuario usuario = P.getUsuarioInstance();
+        Pessoa p = null;
         for (int i = 0, qtd = usuario.Pessoa.size(); i < qtd; i++) {
             p = usuario.Pessoa.get(i);
             if (p.pessoa_id == pessoa.pessoa_id) {
                 usuario.Pessoa.set(i, pessoa);
+                p = usuario.Pessoa.get(i);
                 break;
             }
         }
         P.setUsuario(usuario);
+
+        return p;
     }
 
-    public static void remover(Pessoa pessoa) {
+    public static void excluir(Pessoa pessoa) {
         Usuario usuario = P.getUsuarioInstance();
         Pessoa p;
         for (int i = 0, qtd = usuario.Pessoa.size(); i < qtd; i++) {
@@ -99,9 +114,9 @@ public class Pessoa implements Serializable {
         void erro(VolleyError erro);
     }
 
-    public static void excluir(Pessoa pessoa, final ApiListener listener) {
+    public static void excluir(final Pessoa pessoa, final ApiListener listener) {
         String url = ApiRoutes.PESSOA.Delete(pessoa.pessoa_id);
-        int metodo = Request.Method.DELETE;
+        final int metodo = Request.Method.DELETE;
         StringRequest request = new StringRequest(
                 metodo,
                 url,
@@ -115,16 +130,22 @@ public class Pessoa implements Serializable {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        listener.erro(error);
+                        if (error instanceof NoConnectionError) {
+                            Pessoa.excluir(pessoa);
+                            Requisicao.adicionar(new Requisicao(metodo, Requisicao.PESSOA, new Gson().toJson(pessoa)));
+                            listener.sucesso(pessoa);
+                        } else {
+                            listener.erro(error);
+                        }
                     }
                 }
         );
         AppController.getInstance().addToRequestQueue(request);
     }
 
-    public static void cadastrar(Pessoa pessoa, final ApiListener listener) {
+    public static void cadastrar(final Pessoa pessoa, final ApiListener listener) {
         String url = ApiRoutes.PESSOA.Post();
-        int metodo = Request.Method.POST;
+        final int metodo = Request.Method.POST;
         JsonObjectRequest request = new JsonObjectRequest(
                 metodo,
                 url,
@@ -139,16 +160,22 @@ public class Pessoa implements Serializable {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        listener.erro(error);
+                        if (error instanceof NoConnectionError) {
+                            Pessoa p = Pessoa.cadastrar(pessoa);
+                            Requisicao.adicionar(new Requisicao(metodo, Requisicao.PESSOA, new Gson().toJson(p)));
+                            listener.sucesso(p);
+                        } else {
+                            listener.erro(error);
+                        }
                     }
                 }
         );
         AppController.getInstance().addToRequestQueue(request);
     }
 
-    public static void editar(Pessoa pessoa, final ApiListener listener) {
+    public static void editar(final Pessoa pessoa, final ApiListener listener) {
         String url = ApiRoutes.PESSOA.Put(pessoa.pessoa_id);
-        int metodo = Request.Method.PUT;
+        final int metodo = Request.Method.PUT;
         JsonObjectRequest request = new JsonObjectRequest(
                 metodo,
                 url,
@@ -163,7 +190,13 @@ public class Pessoa implements Serializable {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        listener.erro(error);
+                        if (error instanceof NoConnectionError) {
+                            Pessoa p = Pessoa.editar(pessoa);
+                            Requisicao.adicionar(new Requisicao(metodo, Requisicao.PESSOA, new Gson().toJson(p)));
+                            listener.sucesso(p);
+                        } else {
+                            listener.erro(error);
+                        }
                     }
                 }
         );

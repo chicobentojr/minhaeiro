@@ -60,8 +60,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
+    protected void onResume() {
+        super.onResume();
         this.carregarMovimentacoes();
     }
 
@@ -244,8 +244,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == P.REQUEST.MOVIMENTACAO_CADASTRO) {
             if (resultCode == RESULT_OK && data != null) {
-                Movimentacao movimentacao = (Movimentacao) data.getSerializableExtra("movimentacao");
-                movimentacoes.add(0, movimentacao);
                 adapter.notifyDataSetChanged();
                 Snackbar.make(recyclerView, "Movimentação cadastrada com sucesso!", Snackbar.LENGTH_LONG).show();
             }

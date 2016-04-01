@@ -54,6 +54,19 @@ public class Usuario implements Serializable {
         return retorno;
     }
 
+    public static Usuario editar(Usuario usuario) {
+        Usuario u = P.getUsuarioInstance();
+
+        u.nome = usuario.nome;
+        u.login = usuario.login;
+        u.senha = usuario.senha;
+
+        P.setUsuario(u);
+
+        return u;
+
+    }
+
     public interface ApiListener {
         void sucesso(Usuario usuario);
 

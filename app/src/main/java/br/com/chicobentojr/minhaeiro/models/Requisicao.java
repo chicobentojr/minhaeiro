@@ -5,6 +5,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -86,9 +87,24 @@ public class Requisicao {
         P.inserir(REQUISICAO_JSON, requisicoesJson);
     }
 
+    public static void limpar(){
+        requisicoes = null;
+    }
+
     public static JSONObject obterObjetoJson() {
         JSONObject jsonObject = new JSONObject();
         requisicoes = getRequisicoesInstance();
+
+        if(requisicoes.size() == 1){
+            JSONObject objetoJson = new JSONObject(requisicoes.get(0).toParams());
+
+            try {
+                jsonObject.put("requisicoes",new JSONArray().put(objetoJson));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return jsonObject;
+        }
         for (Requisicao requisicao : requisicoes) {
             JSONObject objetoJson = new JSONObject(requisicao.toParams());
             try {

@@ -88,7 +88,13 @@ public class MovimentacaoItensFragment extends Fragment implements PopupMenu.OnM
         progressDialog = new ProgressDialog(listener);
         progressDialog.setCanceledOnTouchOutside(false);
 
-        itens = new ArrayList<MovimentacaoItem>(Arrays.asList(((Movimentacao) listener.getIntent().getSerializableExtra("movimentacao")).MovimentacaoItem));
+        itens = new ArrayList<MovimentacaoItem>();
+
+        Movimentacao m = (Movimentacao) listener.getIntent().getSerializableExtra("movimentacao");
+
+        if (m != null && m.MovimentacaoItem != null) {
+            itens = new ArrayList<MovimentacaoItem>(Arrays.asList(m.MovimentacaoItem));
+        }
         adapter = new MovimentacaoItemAdapter(itens);
         recyclerView.setAdapter(adapter);
 
@@ -185,7 +191,7 @@ public class MovimentacaoItensFragment extends Fragment implements PopupMenu.OnM
     public void atualizar(View v) {
         limparErros();
 
-        int pessoa_id = ((Pessoa) spnPessoa.getSelectedItem()).pessoa_id;
+        Pessoa pessoa = ((Pessoa) spnPessoa.getSelectedItem());
         String valor = txtMovimentacaoValor.getText().toString();
         String descricao = txtDescricao.getText().toString();
         char tipo = getResources().getStringArray(R.array.tipo_movimentacao_valor)[spnMovimentacaoTipo.getSelectedItemPosition()].charAt(0);
@@ -211,7 +217,8 @@ public class MovimentacaoItensFragment extends Fragment implements PopupMenu.OnM
         if (!valido) {
             focusView.requestFocus();
         } else {
-            itemSelecionado.pessoa_id = pessoa_id;
+            itemSelecionado.Pessoa = pessoa;
+            itemSelecionado.pessoa_id = pessoa.pessoa_id;
             itemSelecionado.valor = Double.parseDouble(valor);
             itemSelecionado.descricao = descricao;
             itemSelecionado.tipo = tipo;

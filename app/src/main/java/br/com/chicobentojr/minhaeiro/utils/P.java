@@ -12,8 +12,7 @@ import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import br.com.chicobentojr.minhaeiro.models.Categoria;
-import br.com.chicobentojr.minhaeiro.models.Pessoa;
+import br.com.chicobentojr.minhaeiro.models.Requisicao;
 import br.com.chicobentojr.minhaeiro.models.Usuario;
 
 /**
@@ -42,14 +41,15 @@ public class P {
 
     public static Usuario getUsuarioInstance() {
         if (usuario == null) {
-            usuario = new Gson().fromJson(P.obter(USUARIO_JSON),Usuario.class);
+            usuario = new Gson().fromJson(P.obter(USUARIO_JSON), Usuario.class);
         }
         return usuario;
     }
 
     public static void setUsuario(Usuario usuario) {
+        P.usuario = usuario;
         prefs.edit()
-                .putString(USUARIO_ID, String.valueOf( usuario.usuario_id))
+                .putString(USUARIO_ID, String.valueOf(usuario.usuario_id))
                 .putString(USUARIO_NOME, usuario.nome)
                 .putString(USUARIO_LOGIN, usuario.login)
                 .putString(USUARIO_AUTENTICACAO, usuario.autenticacao)
@@ -60,27 +60,36 @@ public class P {
     public static void inserir(String chave, String valor) {
         prefs.edit().putString(chave, valor).apply();
     }
+
     public static String obter(String chave) {
         return prefs.getString(chave, "");
     }
+
     public static void limpar() {
+        Requisicao.limpar();
         prefs.edit().clear().apply();
     }
+
     public static void conectarUsuario(boolean conectar) {
         prefs.edit().putBoolean(USUARIO_CONECTADO, conectar).apply();
     }
+
     public static boolean usuarioConectado() {
         return prefs.getBoolean(USUARIO_CONECTADO, false);
     }
+
     public static int usuario_id() {
         return Integer.valueOf(prefs.getString(USUARIO_ID, "0"));
     }
+
     public static String nome() {
         return prefs.getString(USUARIO_NOME, "");
     }
+
     public static String login() {
         return prefs.getString(USUARIO_LOGIN, "");
     }
+
     public static String autenticacao() {
         return prefs.getString(USUARIO_AUTENTICACAO, "");
     }

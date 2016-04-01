@@ -104,16 +104,16 @@ public class CategoriasActivity extends AppCompatActivity implements PopupMenu.O
                         Categoria.excluir(categoriaSelecionada, new Categoria.ApiListener() {
                             @Override
                             public void sucesso(Categoria categoria) {
-                                Categoria.remover(categoria);
+                                Categoria.excluir(categoria);
                                 categorias.remove(categoria);
                                 adapter.notifyDataSetChanged();
                                 progressDialog.dismiss();
                             }
 
                             @Override
-                            public void erro(VolleyError error) {
+                            public void erro(VolleyError erro) {
                                 progressDialog.dismiss();
-                                MinhaeiroErrorHelper.alertar(error, CategoriasActivity.this);
+                                MinhaeiroErrorHelper.alertar(erro, CategoriasActivity.this);
                             }
                         });
                     }

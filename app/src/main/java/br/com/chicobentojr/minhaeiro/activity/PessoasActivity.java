@@ -125,7 +125,7 @@ public class PessoasActivity extends AppCompatActivity implements PopupMenu.OnMe
                         Pessoa.excluir(pessoaSelecionada, new Pessoa.ApiListener() {
                             @Override
                             public void sucesso(Pessoa pessoa) {
-                                Pessoa.remover(pessoa);
+                                Pessoa.excluir(pessoa);
                                 pessoas.remove(pessoa);
                                 adapter.notifyDataSetChanged();
                                 progressDialog.dismiss();
@@ -183,7 +183,6 @@ public class PessoasActivity extends AppCompatActivity implements PopupMenu.OnMe
                             Pessoa.cadastrar(pessoa, new Pessoa.ApiListener() {
                                 @Override
                                 public void sucesso(Pessoa pessoa) {
-                                    pessoas.add(pessoa);
                                     adapter.notifyDataSetChanged();
                                     alertDialog.dismiss();
                                     progressDialog.dismiss();
