@@ -128,6 +128,7 @@ public class MovimentacaoItem implements Serializable {
                     @Override
                     public void onResponse(JSONObject response) {
                         MovimentacaoItem resposta = new Gson().fromJson(response.toString(), MovimentacaoItem.class);
+                        MovimentacaoItem.cadastrar(item);
                         listener.sucesso(resposta);
 
                     }
@@ -157,6 +158,7 @@ public class MovimentacaoItem implements Serializable {
                     @Override
                     public void onResponse(JSONObject response) {
                         MovimentacaoItem resposta = new Gson().fromJson(response.toString(), MovimentacaoItem.class);
+                        MovimentacaoItem.editar(item);
                         listener.sucesso(resposta);
                     }
                 }, new Response.ErrorListener() {
@@ -183,6 +185,7 @@ public class MovimentacaoItem implements Serializable {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        MovimentacaoItem.excluir(item);
                         listener.sucesso(null);
                     }
                 }, new Response.ErrorListener() {

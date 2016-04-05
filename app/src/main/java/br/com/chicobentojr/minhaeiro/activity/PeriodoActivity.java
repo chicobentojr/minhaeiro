@@ -18,6 +18,7 @@ public class PeriodoActivity extends AppCompatActivity {
 
     private PeriodoPagerAdapter pagerAdapter;
     private ViewPager viewPager;
+    private TabLayout tabLayout;
 
     private ArrayList<Calendar> periodos;
 
@@ -30,14 +31,20 @@ public class PeriodoActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        periodos = Movimentacao.obterPeriodos(P.getUsuarioInstance().Movimentacao);
-
-        pagerAdapter = new PeriodoPagerAdapter(getSupportFragmentManager(), periodos, this);
-
         viewPager = (ViewPager) findViewById(R.id.container);
-        viewPager.setAdapter(pagerAdapter);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+    }
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        carregarPeriodos();
+    }
+
+    public void carregarPeriodos() {
+        periodos = Movimentacao.obterPeriodos(P.getUsuarioInstance().Movimentacao);
+        pagerAdapter = new PeriodoPagerAdapter(getSupportFragmentManager(), periodos, this);
+        viewPager.setAdapter(pagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
     }
 }

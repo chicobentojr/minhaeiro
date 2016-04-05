@@ -104,7 +104,6 @@ public class CategoriasActivity extends AppCompatActivity implements PopupMenu.O
                         Categoria.excluir(categoriaSelecionada, new Categoria.ApiListener() {
                             @Override
                             public void sucesso(Categoria categoria) {
-                                Categoria.excluir(categoria);
                                 categorias.remove(categoria);
                                 adapter.notifyDataSetChanged();
                                 progressDialog.dismiss();

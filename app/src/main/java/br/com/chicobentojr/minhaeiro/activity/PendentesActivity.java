@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -35,13 +36,13 @@ public class PendentesActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-
-        pessoas = Pessoa.filtrarPendentes(P.getUsuarioInstance().Movimentacao);
-
-        adapter = new PendentesAdapter(pessoas);
-        recyclerView.setAdapter(adapter);
-
         definirRecyclerViewItemClicks();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        atualizarRecyclerView();
     }
 
     public void definirRecyclerViewItemClicks() {
@@ -54,5 +55,12 @@ public class PendentesActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    public void atualizarRecyclerView() {
+        pessoas = Pessoa.filtrarPendentes(P.getUsuarioInstance().Movimentacao);
+
+        adapter = new PendentesAdapter(pessoas);
+        recyclerView.setAdapter(adapter);
     }
 }

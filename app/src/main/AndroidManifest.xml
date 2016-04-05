@@ -129,6 +129,7 @@
         <activity
             android:name=".activity.PeriodoActivity"
             android:label="@string/title_activity_periodo"
+            android:launchMode="singleTop"
             android:parentActivityName=".activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

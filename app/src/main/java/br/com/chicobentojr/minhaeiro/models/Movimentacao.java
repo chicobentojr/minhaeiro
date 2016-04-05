@@ -21,6 +21,7 @@ import java.util.HashMap;
 
 import br.com.chicobentojr.minhaeiro.utils.ApiRoutes;
 import br.com.chicobentojr.minhaeiro.utils.AppController;
+import br.com.chicobentojr.minhaeiro.utils.Extensoes;
 import br.com.chicobentojr.minhaeiro.utils.P;
 
 public class Movimentacao implements Serializable {
@@ -195,6 +196,8 @@ public class Movimentacao implements Serializable {
         ArrayList<Movimentacao> movimentacoes = usuario.Movimentacao;
 
         movimentacao.movimentacao_id = movimentacoes.size() > 0 ? movimentacoes.get(0).movimentacao_id + 1 : 1;
+        movimentacao.movimentacao_data = Extensoes.STRING.obterDataCompleta(movimentacao.movimentacao_data);
+
         usuario.Movimentacao.add(0, movimentacao);
         P.setUsuario(usuario);
 
@@ -274,6 +277,7 @@ public class Movimentacao implements Serializable {
                     @Override
                     public void onResponse(JSONObject response) {
                         Movimentacao resposta = new Gson().fromJson(response.toString(), Movimentacao.class);
+                        Movimentacao.cadastrar(resposta);
                         listener.sucesso(resposta);
                     }
                 }, new Response.ErrorListener() {
@@ -302,6 +306,7 @@ public class Movimentacao implements Serializable {
                     @Override
                     public void onResponse(JSONObject response) {
                         Movimentacao resposta = new Gson().fromJson(response.toString(), Movimentacao.class);
+                        Movimentacao.editar(movimentacao);
                         listener.sucesso(resposta);
                     }
                 }, new Response.ErrorListener() {

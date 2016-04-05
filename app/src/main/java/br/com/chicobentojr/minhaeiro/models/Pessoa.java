@@ -124,6 +124,7 @@ public class Pessoa implements Serializable {
                     @Override
                     public void onResponse(String response) {
                         Pessoa resposta = new Gson().fromJson(response, Pessoa.class);
+                        Pessoa.excluir(pessoa);
                         listener.sucesso(resposta);
                     }
                 },
@@ -154,6 +155,7 @@ public class Pessoa implements Serializable {
                     @Override
                     public void onResponse(JSONObject response) {
                         Pessoa resposta = new Gson().fromJson(response.toString(), Pessoa.class);
+                        Pessoa.cadastrar(pessoa);
                         listener.sucesso(resposta);
                     }
                 },
@@ -184,6 +186,7 @@ public class Pessoa implements Serializable {
                     @Override
                     public void onResponse(JSONObject response) {
                         Pessoa resposta = new Gson().fromJson(response.toString(), Pessoa.class);
+                        Pessoa.editar(pessoa);
                         listener.sucesso(resposta);
                     }
                 },

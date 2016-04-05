@@ -115,6 +115,7 @@ public class Categoria implements Serializable {
                     @Override
                     public void onResponse(JSONObject response) {
                         Categoria resposta = new Gson().fromJson(response.toString(), Categoria.class);
+                        Categoria.cadastrar(categoria);
                         listener.sucesso(resposta);
                     }
                 },
@@ -145,6 +146,7 @@ public class Categoria implements Serializable {
                     @Override
                     public void onResponse(JSONObject response) {
                         Categoria resposta = new Gson().fromJson(response.toString(), Categoria.class);
+                        Categoria.editar(categoria);
                         listener.sucesso(resposta);
                     }
                 },
@@ -152,7 +154,7 @@ public class Categoria implements Serializable {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         if (error instanceof NoConnectionError) {
-                            Categoria c = categoria.editar(categoria);
+                            Categoria c = Categoria.editar(categoria);
                             Requisicao.adicionar(new Requisicao(metodo, Requisicao.CATEGORIA, new Gson().toJson(c)));
                             listener.sucesso(c);
                         } else {
@@ -174,6 +176,7 @@ public class Categoria implements Serializable {
                     @Override
                     public void onResponse(String response) {
                         Categoria resposta = new Gson().fromJson(response, Categoria.class);
+                        Categoria.excluir(categoria);
                         listener.sucesso(resposta);
                     }
                 },

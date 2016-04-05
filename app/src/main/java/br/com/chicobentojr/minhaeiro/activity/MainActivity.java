@@ -172,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Usuario.listar(new Usuario.ApiListener() {
             @Override
             public void sucesso(Usuario usuario) {
+                P.setUsuario(usuario);
                 movimentacoes = usuario.Movimentacao;
                 adapter = new MovimentacaoAdapter(movimentacoes);
                 recyclerView.setAdapter(adapter);

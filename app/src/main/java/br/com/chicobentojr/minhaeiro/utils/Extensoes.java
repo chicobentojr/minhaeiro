@@ -13,6 +13,22 @@ public class Extensoes {
             String[] values = date.split("/");
             return values[1] + "/" + values[0] + "/" + values[2];
         }
+
+        public static String obterDataCompleta(String data) {
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
+
+                if (data.length() == "dd/MM/yyyy".length()) {
+                    return sdf.format(sdf2.parse(data));
+                } else {
+                    return sdf2.format(sdf.parse(data));
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return data;
+        }
     }
 
     public static class LAYOUT {
