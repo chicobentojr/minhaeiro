@@ -3,6 +3,7 @@ package br.com.chicobentojr.minhaeiro.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * Created by Francisco on 08/02/2016.
@@ -58,17 +59,43 @@ public class Extensoes {
         }
 
         public static String data(String data) {
-            if (data.length() == "dd/MM/yyyy".length()) {
-                return data;
-            } else {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-                SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
-                try {
+            Calendar calendar = Calendar.getInstance();
+            Calendar agora = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
 
-                    return sdf2.format(sdf.parse(data));
-                } catch (ParseException e) {
-                    e.printStackTrace();
+            try {
+                if (data.length() == "dd/MM/yyyy".length()) {
+                    calendar.setTime(sdf2.parse(data));
+                } else {
+                    calendar.setTime(sdf.parse(data));
                 }
+
+                int ano = calendar.get(Calendar.YEAR);
+                int mes = calendar.get(Calendar.MONTH) + 1;
+                int dia = calendar.get(Calendar.DAY_OF_MONTH);
+
+                int anoAgora = agora.get(Calendar.YEAR);
+                int mesAgora = agora.get(Calendar.MONTH) + 1;
+                int diaAgora = agora.get(Calendar.DAY_OF_MONTH);
+
+                if (ano == anoAgora && mes == mesAgora) {
+                    if (dia == diaAgora)
+                        return "Hoje";
+                    else if (dia == diaAgora - 1)
+                        return "Ontem";
+                    else if (dia >= diaAgora - 7)
+                        return diaAgora - dia + " Dias atrás";
+                    else if (dia >= diaAgora - 7 * 4)
+                        return "Semanas atrás";
+                } else if (ano == anoAgora && mes == mesAgora - 1) {
+                    return "Meses atrás";
+                } else {
+                    return sdf2.format(calendar.getTime());
+                }
+
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
             return "";
         }
