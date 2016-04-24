@@ -84,12 +84,15 @@ public class Extensoes {
                         return "Hoje";
                     else if (dia == diaAgora - 1)
                         return "Ontem";
+                    else if (dia >= diaAgora) {
+                        return  "Daqui a " + (dia - diaAgora) + " dias";
+                    }
                     else if (dia >= diaAgora - 7)
-                        return diaAgora - dia + " Dias atrás";
+                        return diaAgora - dia + " dias atrás";
                     else if (dia >= diaAgora - 7 * 4)
                         return "Semanas atrás";
                 } else if (ano == anoAgora && mes == mesAgora - 1) {
-                    return "Meses atrás";
+                    return "Mês passado";
                 } else {
                     return sdf2.format(calendar.getTime());
                 }
