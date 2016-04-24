@@ -39,6 +39,7 @@ public class PeriodoActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         carregarPeriodos();
+        abrirPeriodoMaisRecente();
     }
 
     public void carregarPeriodos() {
@@ -46,5 +47,9 @@ public class PeriodoActivity extends AppCompatActivity {
         pagerAdapter = new PeriodoPagerAdapter(getSupportFragmentManager(), periodos, this);
         viewPager.setAdapter(pagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    public void abrirPeriodoMaisRecente() {
+        viewPager.setCurrentItem(periodos.size() - 1);
     }
 }
